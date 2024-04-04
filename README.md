@@ -6,10 +6,21 @@ A Paper 1.12.2 fork aims to provide extreme performance, bug fixes, and improvem
 
 *This project is based on Reaper 1.12.2*
 
+## Features
+
+- **Beast is a fork of [Paper-1.12.2](https://github.com/PaperMC/Paper)** designed for performance, new fun and exciting gameplay features.
+- **Contains [Lithium](https://github.com/CaffeineMC/lithium-fabric) patches** that optimizing many areas in game.
+- **Bug fixes** for several Minecraft issues.
+- **Backports** bug fixes of Mojang.
+- **Plugin compatibility** with Spigot & Paper plugins.
+- **Completely** removed Timings to save your server performance.
+- **Various optimizations** for vanilla methods.
+- **Brings back** some vanilla features.
+- **More events make your server more fun**.
 
 ## How To (Server Admins)
 
-Reaper uses the same paperclip jar system that Paper uses.
+Beast uses the same paperclip jar system that Paper uses.
 
 You can download the latest release of Beast by going [here](https://github.com/HomoMC/Beast/releases/latest) but I highly recommend to use the latest [dev build](https://nightly.link/HomoMC/Beast/workflows/dev-build/ver%2F1.12.2/Beast-JDK8.zip).
 
