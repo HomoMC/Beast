@@ -1,3 +1,5 @@
+<img src="logo.jpg" height="240" alt="Beast Face" align="right">
+
 # Beast [![Dev Build](https://github.com/HomoMC/Beast/actions/workflows/dev-build.yml/badge.svg)](https://github.com/HomoMC/Beast/actions/workflows/dev-build.yml)
 
 A Paper 1.12.2 fork aims to provide extreme performance, bug fixes, and improvements.

@@ -28,9 +28,10 @@ jobs:
           git config --global user.email "no-reply@github.com"
           git config --global user.name "Github Actions"
 
-      - name: Patch Reaper
+      - name: Patch Beast
         run: |
           git submodule update --init --recursive
+          chmod +x ./beast
           ./beast jar
 
       - uses: actions/upload-artifact@v2
