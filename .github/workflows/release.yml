@@ -56,6 +56,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: beast-paperclip.jar
+          asset_path: ./Beast-Server/target/beast-1.12.2.jar
           asset_name: beast-paperclip.jar
           asset_content_type: application/zip

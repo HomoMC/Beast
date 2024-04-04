@@ -37,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: Beast-JDK8
-          path: beast-paperclip.jar
+          path: ./Beast-Server/target/beast-1.12.2.jar
