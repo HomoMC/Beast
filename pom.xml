@@ -10,8 +10,8 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub ruViolence Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/ruViolence/Reaper</url>
+            <name>GitHub HomoMC Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/HomoMC/Beast</url>
         </repository>
     </distributionManagement>
 
