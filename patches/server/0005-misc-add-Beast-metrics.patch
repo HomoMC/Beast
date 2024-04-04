@@ -1,12 +1,12 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: ruViolence <78062896+ruViolence@users.noreply.github.com>
 Date: Wed, 1 Jun 2022 06:58:07 +0500
-Subject: [PATCH] misc: add Reaper metrics
+Subject: [PATCH] misc: add Beast metrics
 
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/Metrics.java b/src/main/java/com/github/ruviolence/reaper/Metrics.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..04ee268ec9eb44990cb440bcf24941edf0b40924
+index 0000000000000000000000000000000000000000..0c444bfeec1753f2db07bf273be10d683758c3aa
 --- /dev/null
 +++ b/src/main/java/com/github/ruviolence/reaper/Metrics.java
 @@ -0,0 +1,450 @@
@@ -67,8 +67,8 @@ index 0000000000000000000000000000000000000000..04ee268ec9eb44990cb440bcf24941ed
 +    public JsonObject getPluginData() {
 +        JsonObject data = new JsonObject();
 +
-+        data.addProperty("pluginName", "Reaper"); // Append the name of the server software
-+        data.addProperty("id", 15360); // Append the id of the server software
++        data.addProperty("pluginName", "Beast"); // Append the name of the server software
++        data.addProperty("id", 21516); // Append the id of the server software
 +        data.addProperty("pluginVersion", Metrics.class.getPackage().getImplementationVersion() != null ? Metrics.class.getPackage().getImplementationVersion() : "unknown"); // Append the version of the server software
 +        JsonArray customCharts = new JsonArray();
 +        for (CustomChart customChart : charts) {
@@ -461,7 +461,7 @@ index 0000000000000000000000000000000000000000..04ee268ec9eb44990cb440bcf24941ed
 +    }
 +}
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index aac88cdc33ce89b418a554c66568e0aec3fdc05d..726b89f392de6351484e56a3799ffc588ab176a4 100644
+index 0bfe13c9ea30a74464ab475bf323741f039bd89a..d7483c343dae1bf8ec7045adf3a9d069eed4b1de 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -28,6 +28,7 @@ public class ReaperConfig {
@@ -474,7 +474,7 @@ index aac88cdc33ce89b418a554c66568e0aec3fdc05d..726b89f392de6351484e56a3799ffc58
          CONFIG_FILE = configFile;
 @@ -54,6 +55,16 @@ public class ReaperConfig {
          for (Map.Entry<String, Command> entry : commands.entrySet()) {
-             MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Reaper", entry.getValue());
+             MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Beast", entry.getValue());
          }
 +
 +        if (!metricsStarted) {

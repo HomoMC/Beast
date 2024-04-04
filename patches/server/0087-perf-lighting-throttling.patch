@@ -24,7 +24,7 @@ index d10b64229aa5a42e345633130f504682282fe028..fd764891ad62de69b404da891f5077e6
      public boolean disableEndCredits;
      private void disableEndCredits() {
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index d293ee89253e73a9ace7a63964424263530e363c..65395526751f59846afc0b88475dd1fe27eb0cda 100644
+index 7c0e3ebfaa17e8645458f83265a7fb2afdbe160c..58ec2fa9ce5813ede7f1762e5d627bfb8a3723b7 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -5,6 +5,7 @@ import net.minecraft.server.DispenserRegistry;
@@ -150,7 +150,7 @@ index 5ada3fb0ccec92e8c6d090e2e3dd8f27b4695db0..111c421fd7c343719001b6b7c50093a0
              this.chunkLoader.saveChunk(this.world, chunk, unloaded); // Spigot
          } catch (IOException ioexception) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index c5446704642d26341d512a52510fd8cda17e270d..0e7223f59c6fe2201daaf52f4358c60cfc9ff5f0 100644
+index bca05c2b7179e1c512d35dd4a886ea3764454b73..fa4e353e83a0bcd55077d11cac48dc845bd3a176 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -486,6 +486,10 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs

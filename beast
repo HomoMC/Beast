@@ -83,10 +83,10 @@ case "$1" in
         cd "$basedir"
     ;;
     "a" | "api")
-        cd "$basedir/Reaper-API"
+        cd "$basedir/Beast-API"
     ;;
     "s" | "server")
-        cd "$basedir/Reaper-Server"
+        cd "$basedir/Beast-Server"
     ;;
     "setup")
         if [[ -f ~/.bashrc ]] ; then

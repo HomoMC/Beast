@@ -5,7 +5,7 @@ Subject: [PATCH] misc: update netty dependency
 
 
 diff --git a/pom.xml b/pom.xml
-index e23db48f4dd372e9a554fc98a0b3e51d00278d08..e10f67508c1d2dbbe41a1db8cf900a83987c88d8 100644
+index b8b3e8d65d6f30935ed14bf2f876a20d047a4f3f..219383ae227263e8b73e8d77c85b322926eb6fef 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -32,7 +32,7 @@

@@ -5,7 +5,7 @@ Subject: [PATCH] perf: configurable asynchronous JsonList saving
 
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index 26546d2280157854e28296e2356c00c09cae28de..70726e18b250570152c5f27eb924e1a0f1e8c7e8 100644
+index 9cb4eb12f2385821a9062e899c0c36849afd8fa4..45112d5fb7c1ef30549d35e83d0c4b20ce235f56 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -274,4 +274,9 @@ public class ReaperConfig {

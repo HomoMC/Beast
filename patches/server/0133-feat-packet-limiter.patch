@@ -33,7 +33,7 @@ and an action can be defined: DROP or KICK
 If interval or rate are less-than 0, the limit is ignored
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index 70726e18b250570152c5f27eb924e1a0f1e8c7e8..4bce1cb4413190670663e30fb964746fbb13fb0e 100644
+index 45112d5fb7c1ef30549d35e83d0c4b20ce235f56..ae9d81b9ceadd7bdeb12883c31b1101351171e53 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -5,21 +5,26 @@ import net.minecraft.server.DispenserRegistry;

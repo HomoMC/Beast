@@ -9,7 +9,7 @@ basedir="$(cd "$1" && pwd -P)"
 workdir="$basedir/Paper/work"
 localworkdir="$basedir/work"
 mcver=$(cat "$workdir/BuildData/info.json" | grep minecraftVersion | cut -d '"' -f 4)
-paperjar="$basedir/Reaper-Server/target/reaper-$mcver.jar"
+paperjar="$basedir/Beast-Server/target/beast-$mcver.jar"
 vanillajar="$workdir/Minecraft/$mcver/$mcver.jar"
 
 (

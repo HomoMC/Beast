@@ -7,7 +7,7 @@ Will help to get rid of the desynchronization of the number of numPlayersUsing i
 However, it modifies vanilla logic and could lead to problems with some plugins.
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index e182114ec0c5024485dcc284ea4bc927af62f449..c3dc3cb84dee84057189eee9e29a4452fb2edddd 100644
+index d541810966faf27deef179281ed1cdf00f227c5f..9d541de2840d5b1c4ee28ae9beadb28380a239a6 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -290,6 +290,11 @@ public class ReaperConfig {

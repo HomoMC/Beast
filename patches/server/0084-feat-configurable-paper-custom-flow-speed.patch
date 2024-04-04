@@ -6,7 +6,7 @@ Subject: [PATCH] feat: configurable paper custom flow speed
 Creates an unnecessary load, even when most people don't need custom flow speed
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index 647d0c930a1f1936cb975ff62687f91b6e11fd6c..342e50d12af092eb2fab2729372ecee57b99436f 100644
+index 05f851c7c5cd0e8313414ac8ffcb05ef110c72f7..3fadcf4cfb8a5f8bbe8a3c30623282846e1edaea 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -181,4 +181,9 @@ public class ReaperConfig {

@@ -73,7 +73,7 @@ index 0000000000000000000000000000000000000000..66099259d578cc6addd0342eba19ab2d
 +}
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..aac88cdc33ce89b418a554c66568e0aec3fdc05d
+index 0000000000000000000000000000000000000000..0bfe13c9ea30a74464ab475bf323741f039bd89a
 --- /dev/null
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -0,0 +1,115 @@
@@ -99,7 +99,7 @@ index 0000000000000000000000000000000000000000..aac88cdc33ce89b418a554c66568e0ae
 +public class ReaperConfig {
 +
 +    private static File CONFIG_FILE;
-+    private static final String HEADER = "This is the main configuration file for Reaper.\n"
++    private static final String HEADER = "This is the main configuration file for Beast.\n"
 +            + "As you can see, there's tons to configure. Some options may impact gameplay, so use\n"
 +            + "with caution, and make sure you know what each option does before configuring.\n";
 +    /*========================================================================*/
@@ -115,14 +115,14 @@ index 0000000000000000000000000000000000000000..aac88cdc33ce89b418a554c66568e0ae
 +            config.load(CONFIG_FILE);
 +        } catch (IOException ex) {
 +        } catch (InvalidConfigurationException ex) {
-+            Bukkit.getLogger().log(Level.SEVERE, "Could not load reaper.yml, please correct your syntax errors", ex);
++            Bukkit.getLogger().log(Level.SEVERE, "Could not load beast.yml, please correct your syntax errors", ex);
 +            throw Throwables.propagate(ex);
 +        }
 +        config.options().header(HEADER);
 +        config.options().copyDefaults(true);
 +
 +        commands = new HashMap<>();
-+        commands.put("reaper", new ReaperCommand("reaper"));
++        commands.put("beast", new ReaperCommand("beast"));
 +
 +        version = getInt("config-version", 1);
 +        set("config-version", 1);
@@ -131,7 +131,7 @@ index 0000000000000000000000000000000000000000..aac88cdc33ce89b418a554c66568e0ae
 +
 +    public static void registerCommands() {
 +        for (Map.Entry<String, Command> entry : commands.entrySet()) {
-+            MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Reaper", entry.getValue());
++            MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Beast", entry.getValue());
 +        }
 +    }
 +
@@ -205,26 +205,26 @@ index 6a8292ce4537392bc511419df565e238ac04acb1..9308ccc85f6243193e49c9a4dd8762ab
              DedicatedServer.LOGGER.info("Generating keypair");
              this.a(MinecraftEncryption.b());
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index d295fa4ceb6864a282634f33778b0e203d9b3569..eb01435894143000a26cfee4c9d9287f2fb125ea 100644
+index f4b312de0303ce726b5490b8e4c7ea69f67d1ce1..1d1e6473ea7a2460bebc4fd0669a06570d03b17a 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -975,6 +975,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
      }
  
      public static void main(final OptionSet options) { // CraftBukkit - replaces main(String[] astring)
-+        com.github.ruviolence.reaper.ReaperConfig.init((File) options.valueOf("reaper-settings")); // Reaper
++        com.github.ruviolence.reaper.ReaperConfig.init((File) options.valueOf("beast-settings")); // Reaper
          DispenserRegistry.c();
  
          try {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 3c57166598bad6907eb4b2f6a8a9e7f0b284d5d1..5deaf370fe7ba18cda3a002b864b0c514a33a939 100644
+index a0ed7bedc2d4528ae98fa42b7c9e5e6a96ff5799..273bd7e355cb41cbc8145e6f3f2d445fb20bc529 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -743,6 +743,7 @@ public final class CraftServer implements Server {
  
          org.spigotmc.SpigotConfig.init((File) console.options.valueOf("spigot-settings")); // Spigot
          com.destroystokyo.paper.PaperConfig.init((File) console.options.valueOf("paper-settings")); // Paper
-+        com.github.ruviolence.reaper.ReaperConfig.init((File) console.options.valueOf("reaper-settings")); // Reaper
++        com.github.ruviolence.reaper.ReaperConfig.init((File) console.options.valueOf("beast-settings")); // Reaper
          for (WorldServer world : console.worlds) {
              world.worldData.setDifficulty(difficulty);
              world.setSpawnFlags(monsters, animals);
@@ -241,7 +241,7 @@ index 3c57166598bad6907eb4b2f6a8a9e7f0b284d5d1..5deaf370fe7ba18cda3a002b864b0c51
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index ae2c51f5d30e143180092e2ade56f5df26e35616..9a920cc9962e03626e1dd713cf07b4b306e36d19 100644
+index ae2c51f5d30e143180092e2ade56f5df26e35616..b52041245f8391f71ecce4efee25f93eb06ef90a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -142,6 +142,14 @@ public class Main {
@@ -249,13 +249,13 @@ index ae2c51f5d30e143180092e2ade56f5df26e35616..9a920cc9962e03626e1dd713cf07b4b3
                          .describedAs("Name");
                  // Paper end
 +
-+                // Reaper start
-+                acceptsAll(asList("reaper-settings"), "File for reaper settings")
++                // Beast start
++                acceptsAll(asList("beast-settings"), "File for beast settings")
 +                        .withRequiredArg()
 +                        .ofType(File.class)
-+                        .defaultsTo(new File("reaper.yml"))
++                        .defaultsTo(new File("beast.yml"))
 +                        .describedAs("Yml file");
-+                // Reaper end
++                // Beast end
              }
          };
  

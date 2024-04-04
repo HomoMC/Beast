@@ -5,7 +5,7 @@ Subject: [PATCH] misc: update commons-lang3 dependency
 
 
 diff --git a/pom.xml b/pom.xml
-index f5657f6f862387d593f74276ca512584b029b085..acf6464cc986fd43954b7bae38f3448aa4bbc859 100644
+index 3aaaa875018096d3cbee773b1214b3320dde845b..db7f0621c09075d906cb312a7305b0aae7d34643 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -70,6 +70,14 @@

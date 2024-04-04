@@ -5,7 +5,7 @@ Subject: [PATCH] feat: configurable halloween mob feature
 
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index 454d4f88edb9eced87a796afc623b7ee8e903857..647d0c930a1f1936cb975ff62687f91b6e11fd6c 100644
+index b878c1a2c7506d23ebdef8699366edfc93925d01..05f851c7c5cd0e8313414ac8ffcb05ef110c72f7 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -176,4 +176,9 @@ public class ReaperConfig {

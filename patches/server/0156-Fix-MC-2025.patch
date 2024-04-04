@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Fri, 5 Apr 2024 00:54:17 +0800
+Subject: [PATCH] Fix-MC-2025
+
+
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index 50806baaf2c4195fcf0834d0bc6caa7b8a8a14c1..5801f67907339489a9d64ee095c9c63e6c0ca14f 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -1670,6 +1670,16 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+                 nbttagcompound.setBoolean("Paper.FromMobSpawner", true);
+             }
+             // Paper end
++
++            // Beast start - Fix MC-2025
++            AxisAlignedBB boundingBox = getBoundingBox();
++            NBTTagList boundingBoxList = new NBTTagList();
++            for (double coord : new double[]{boundingBox.a, boundingBox.b, boundingBox.c, boundingBox.d, boundingBox.e, boundingBox.f}) {
++                boundingBoxList.add(new NBTTagDouble(coord));
++            }
++            nbttagcompound.set("Beast.BoundingBox", boundingBoxList);
++            // Beast end
++
+             return nbttagcompound;
+         } catch (Throwable throwable) {
+             CrashReport crashreport = CrashReport.a(throwable, "Saving entity NBT");
+@@ -1760,6 +1770,13 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+                 this.setPosition(this.locX, this.locY, this.locZ);
+             }
+ 
++            // Beast start - Fix MC-2025
++            if (nbttagcompound.hasKey("Beast.BoundingBox")) {
++                NBTTagList boundingBox = nbttagcompound.getList("Beast.BoundingBox", 6);
++                this.a(new AxisAlignedBB(boundingBox.getDoubleAt(0), boundingBox.getDoubleAt(1), boundingBox.getDoubleAt(2), boundingBox.getDoubleAt(3), boundingBox.getDoubleAt(4), boundingBox.getDoubleAt(5)));
++            }
++            // Beast end
++
+             // CraftBukkit start
+             if (this instanceof EntityLiving) {
+                 EntityLiving entity = (EntityLiving) this;

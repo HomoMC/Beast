@@ -5,7 +5,7 @@ Subject: [PATCH] feat: add TileEntityTickEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 72b23385bc5ec9bf730217e0e591eb82435425a5..c5446704642d26341d512a52510fd8cda17e270d 100644
+index d201a4428de3120872eb70fa1e4abcf68cf3c2fc..bca05c2b7179e1c512d35dd4a886ea3764454b73 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -127,6 +127,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs

@@ -5,7 +5,7 @@ Subject: [PATCH] misc: update mysql-connector-java dependency
 
 
 diff --git a/pom.xml b/pom.xml
-index 7c611a9be8ef1adeedd37a54ed3fc1ee4e8b1fbc..b7d0ef7cb2d80c2fcaf4a868ba4a389deed625be 100644
+index 3e0ee611f77c7078214d93c56822c8e5137350de..bac1c3f6a4af7d65d75122d4c3eec299cf8b6876 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -62,7 +62,7 @@

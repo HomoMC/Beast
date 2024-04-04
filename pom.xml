@@ -1,11 +1,11 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.ruviolence</groupId>
-    <artifactId>reaper-parent</artifactId>
+    <groupId>com.homomc.beast</groupId>
+    <artifactId>beast-parent</artifactId>
     <version>dev-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Reaper (Parent)</name>
+    <name>Beast (Parent)</name>
 
     <distributionManagement>
         <repository>
@@ -31,8 +31,8 @@
         <finalName>${project.artifactId}</finalName>
     </build>
     <modules>
-        <module>Reaper-API</module>
-        <module>Reaper-Server</module>
+        <module>Beast-API</module>
+        <module>Beast-Server</module>
     </modules>
 
     <profiles>

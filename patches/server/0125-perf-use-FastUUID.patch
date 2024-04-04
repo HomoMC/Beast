@@ -5,7 +5,7 @@ Subject: [PATCH] perf: use FastUUID
 
 
 diff --git a/pom.xml b/pom.xml
-index 3ce010078065e367e04cf19c2bcc103a0cbed0a0..a39bc9d75aa5677d51a05d37d031237a84606cf0 100644
+index 8b4a2d08e4b95f782c7fb0c2f03b0a3d5d6a78aa..bfea35121ca986b396defe431d23592014cc5d48 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -157,6 +157,13 @@
@@ -268,7 +268,7 @@ index 921cddd2095f4cf131ac63992ae9aba5cfa215c5..cc83165acfdda7eef2f1511909e802e8
      public static final IDispenseBehavior b = new DispenseBehaviorItem() {
          protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 5fcba6969ea9a2fe899f86ee838a97f468883d9d..df0d975c8dcd88ed16e085d5ba810929f22d1484 100644
+index dcedfa9b4495cf5034d71484288ebb24cc475cab..f1b24bcdb778a540d02e23f2cdce4c9144c1488a 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1080,7 +1080,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
@@ -484,7 +484,7 @@ index 62d27871e6594ec87437a42cc833427ed679a587..3172f8ea4ceeb825ee1a51698d41e5e2
  
      public long getFirstPlayed() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 56ef78618da942b9074e4bcd2222efd4a624b62f..afe3e23a0567a8c229fef78f27fa3c61f21795bf 100644
+index c5e0a7272a54c7c4de1508747ac1648d6280d650..c0ae3f697cacdf668dba52f9cdd4ee802ab7f960 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1552,7 +1552,7 @@ public final class CraftServer implements Server {

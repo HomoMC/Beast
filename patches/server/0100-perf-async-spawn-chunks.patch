@@ -16,7 +16,7 @@ index 0000000000000000000000000000000000000000..8e0e7542ed6d95dc9a403d3206406519
 +    public static final Runnable NULL_RUNNABLE = () -> {};
 +}
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 04ce30a82ee7f655b23f9620fd19e912ca879c1f..2f9f7ee109a6fd50ad6ef221e09bfe9980ea1699 100644
+index cebb44c67a0116c6b281086fc84d7257028ece8e..3826c468f070b2131d4d8b3843327b17f243b2b7 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -397,7 +397,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
@@ -29,7 +29,7 @@ index 04ce30a82ee7f655b23f9620fd19e912ca879c1f..2f9f7ee109a6fd50ad6ef221e09bfe99
              }
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b800048737aa316548cd968a22ed81d6a566089e..56ef78618da942b9074e4bcd2222efd4a624b62f 100644
+index fe770f35b17ba685742f290266a9ef6086ee1148..c5e0a7272a54c7c4de1508747ac1648d6280d650 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1000,7 +1000,7 @@ public final class CraftServer implements Server {

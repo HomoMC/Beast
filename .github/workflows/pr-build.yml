@@ -28,9 +28,9 @@ jobs:
       - name: Patch Reaper
         run: |
           git submodule update --init --recursive
-          ./reaper jar
+          ./beast jar
 
       - uses: actions/upload-artifact@v2
         with:
-          name: Reaper-PR${{ github.event.pull_request.number }}-JDK8
-          path: reaper-paperclip.jar
+          name: Beast-PR${{ github.event.pull_request.number }}-JDK8
+          path: beast-paperclip.jar

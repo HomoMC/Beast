@@ -5,7 +5,7 @@ Subject: [PATCH] misc: rebrand to Reaper
 
 
 diff --git a/pom.xml b/pom.xml
-index d600217470ca22243ead794cb1415343bf2ca52d..e23db48f4dd372e9a554fc98a0b3e51d00278d08 100644
+index d600217470ca22243ead794cb1415343bf2ca52d..b8b3e8d65d6f30935ed14bf2f876a20d047a4f3f 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,12 +1,12 @@
@@ -14,14 +14,14 @@ index d600217470ca22243ead794cb1415343bf2ca52d..e23db48f4dd372e9a554fc98a0b3e51d
      <modelVersion>4.0.0</modelVersion>
 -    <groupId>com.destroystokyo.paper</groupId>
 -    <artifactId>paper</artifactId>
-+    <groupId>com.github.ruviolence</groupId>
-+    <artifactId>reaper</artifactId>
++    <groupId>com.homomc.beast</groupId>
++    <artifactId>beast</artifactId>
      <packaging>jar</packaging>
      <version>1.12.2-R0.1-SNAPSHOT</version>
 -    <name>Paper</name>
 -    <url>https://github.com/PaperMC/Paper</url>
-+    <name>Reaper</name>
-+    <url>https://github.com/ruViolence/Reaper</url>
++    <name>Beast</name>
++    <url>https://github.com/HomoMC/Beast</url>
  
      <properties>
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,8 +31,8 @@ index d600217470ca22243ead794cb1415343bf2ca52d..e23db48f4dd372e9a554fc98a0b3e51d
      <parent>
 -        <groupId>com.destroystokyo.paper</groupId>
 -        <artifactId>paper-parent</artifactId>
-+        <groupId>com.github.ruviolence</groupId>
-+        <artifactId>reaper-parent</artifactId>
++        <groupId>com.homomc.beast</groupId>
++        <artifactId>beast-parent</artifactId>
          <version>dev-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
@@ -42,8 +42,8 @@ index d600217470ca22243ead794cb1415343bf2ca52d..e23db48f4dd372e9a554fc98a0b3e51d
          <dependency>
 -            <groupId>com.destroystokyo.paper</groupId>
 -            <artifactId>paper-api</artifactId>
-+            <groupId>com.github.ruviolence</groupId>
-+            <artifactId>reaper-api</artifactId>
++            <groupId>com.homomc.beast</groupId>
++            <artifactId>beast-api</artifactId>
              <version>${project.version}</version>
              <scope>compile</scope>
          </dependency>
@@ -53,7 +53,7 @@ index d600217470ca22243ead794cb1415343bf2ca52d..e23db48f4dd372e9a554fc98a0b3e51d
      <build>
 -        <finalName>paper-${minecraft.version}</finalName>
 -        <defaultGoal>clean install</defaultGoal> <!-- Paper -->
-+        <finalName>reaper-${minecraft.version}</finalName>
++        <finalName>beast-${minecraft.version}</finalName>
 +        <defaultGoal>install</defaultGoal> <!-- Paper -->
          <plugins>
              <plugin>
@@ -62,7 +62,7 @@ index d600217470ca22243ead794cb1415343bf2ca52d..e23db48f4dd372e9a554fc98a0b3e51d
                  <version>1.3</version>
                  <configuration>
 -                    <outputPrefix>git-Paper-</outputPrefix>
-+                    <outputPrefix>git-Reaper-</outputPrefix>
++                    <outputPrefix>git-Beast-</outputPrefix>
                      <scmDirectory>..</scmDirectory>
                  </configuration>
                  <executions>
@@ -81,7 +81,7 @@ index d600217470ca22243ead794cb1415343bf2ca52d..e23db48f4dd372e9a554fc98a0b3e51d
                  </plugins>
              </build>
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
-index 116d1b3bfb899c382cb59174f05d17d84ddcdddd..642d37e9df02c48310a50ea8f4f0927d9d691b08 100644
+index 116d1b3bfb899c382cb59174f05d17d84ddcdddd..7871ec22f59c426fa5c17f410e9788ae0e801a8b 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 +++ b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 @@ -17,7 +17,7 @@ public final class PaperConsole extends SimpleTerminalConsole {
@@ -89,12 +89,12 @@ index 116d1b3bfb899c382cb59174f05d17d84ddcdddd..642d37e9df02c48310a50ea8f4f0927d
      protected LineReader buildReader(LineReaderBuilder builder) {
          return super.buildReader(builder
 -                .appName("Paper")
-+                .appName("Reaper")
++                .appName("Beast")
                  .completer(new ConsoleCommandCompleter(this.server))
          );
      }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 3b982f9906c7212779426b9fb8d9f943a8f1eb6c..d295fa4ceb6864a282634f33778b0e203d9b3569 100644
+index 3b982f9906c7212779426b9fb8d9f943a8f1eb6c..f4b312de0303ce726b5490b8e4c7ea69f67d1ce1 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1156,7 +1156,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
@@ -102,12 +102,12 @@ index 3b982f9906c7212779426b9fb8d9f943a8f1eb6c..d295fa4ceb6864a282634f33778b0e20
  
      public String getServerModName() {
 -        return "Paper"; //Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
-+        return "Reaper"; // Reaper - Reaper > // Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
++        return "Beast"; // HomoMC - Beast > // Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
      }
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 7c82e18b9ff634175749327660b256a7e8e655af..3c57166598bad6907eb4b2f6a8a9e7f0b284d5d1 100644
+index 7c82e18b9ff634175749327660b256a7e8e655af..a0ed7bedc2d4528ae98fa42b7c9e5e6a96ff5799 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -140,7 +140,7 @@ import javax.annotation.Nonnull; // Paper
@@ -115,12 +115,12 @@ index 7c82e18b9ff634175749327660b256a7e8e655af..3c57166598bad6907eb4b2f6a8a9e7f0
  
  public final class CraftServer implements Server {
 -    private final String serverName = "Paper";
-+    private final String serverName = "Reaper";
++    private final String serverName = "Beast";
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 674096cab190d62622f9947853b056f57d43a2a5..63166c2a2381e75da31216483ce2be042434e9b0 100644
+index 674096cab190d62622f9947853b056f57d43a2a5..3b50b5b6c31cf76c29d577ff3b7810d103eb1d18 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
@@ -128,12 +128,12 @@ index 674096cab190d62622f9947853b056f57d43a2a5..63166c2a2381e75da31216483ce2be04
          String result = "Unknown-Version";
  
 -        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.destroystokyo.paper/paper-api/pom.properties");
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.github.ruviolence/reaper-api/pom.properties"); // Reaper
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.homomc.beast/beast-api/pom.properties"); // Beast
          Properties properties = new Properties();
  
          if (stream != null) {
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index 93dc6983595ace9fa0d024ffbb11e4b98b5fe886..d02fc3247db80d8d059dab6a679ea777be60f2b3 100644
+index 93dc6983595ace9fa0d024ffbb11e4b98b5fe886..095654f8dcae7861d80f451de56e20a1f5818612 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
 @@ -73,9 +73,7 @@ public class WatchdogThread extends Thread
@@ -143,7 +143,7 @@ index 93dc6983595ace9fa0d024ffbb11e4b98b5fe886..d02fc3247db80d8d059dab6a679ea777
 -                log.log( Level.SEVERE, "Please report this to https://github.com/PaperMC/Paper/issues" );
 -                log.log( Level.SEVERE, "Be sure to include ALL relevant console errors and Minecraft crash reports" );
 -                log.log( Level.SEVERE, "Paper version: " + Bukkit.getServer().getVersion() );
-+                log.log( Level.SEVERE, "Reaper version: " + Bukkit.getServer().getVersion() );
++                log.log( Level.SEVERE, "Beast version: " + Bukkit.getServer().getVersion() );
                  //
                  if(net.minecraft.server.World.haveWeSilencedAPhysicsCrash)
                  {

@@ -6,7 +6,7 @@ Subject: [PATCH] feat: configurable time update period
 Allows breaking client-side tickrate meters and also slightly reduce the network load.
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index 558b724b4677ed01e61a8206a58e1ace22158770..26ff712bff29cffc2be92beab583db730fdaba19 100644
+index b634d2375f167e20b495e95fa25977c3f3a8d52c..50eec3e6050612f5e2dc430d76cddc6fa00992e1 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -249,4 +249,9 @@ public class ReaperConfig {
@@ -20,7 +20,7 @@ index 558b724b4677ed01e61a8206a58e1ace22158770..26ff712bff29cffc2be92beab583db73
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 0e7223f59c6fe2201daaf52f4358c60cfc9ff5f0..1d088d166adfb41acf611288b49d16e1d924b475 100644
+index fa4e353e83a0bcd55077d11cac48dc845bd3a176..58dcbba12e4a364c16b6e775b62bc2d73d43b46d 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -124,6 +124,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs

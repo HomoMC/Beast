@@ -5,7 +5,7 @@ Subject: [PATCH] misc: update fastutil dependency
 
 
 diff --git a/pom.xml b/pom.xml
-index b7d0ef7cb2d80c2fcaf4a868ba4a389deed625be..208fdbe93ed25bab64d62e7bda4a56af4c6152ac 100644
+index bac1c3f6a4af7d65d75122d4c3eec299cf8b6876..f1a801b64c5566bbde28c593e6cd05e022fc00b2 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -28,6 +28,14 @@

@@ -6,7 +6,7 @@ Subject: [PATCH] feat: configurable portal exit chunks generation
 Allows to disable chunk generation when searching for an exit nether portal. Since the chunks in that scenario are generated synchronously, this saves a lot of performance when exiting to ungenerated area.
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index c3dc3cb84dee84057189eee9e29a4452fb2edddd..d60b6f56625c905b32ed513c7b71b1b9d28b4f36 100644
+index 9d541de2840d5b1c4ee28ae9beadb28380a239a6..e7fe2993d6409b7119ea0940e02363e31e280327 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -295,6 +295,11 @@ public class ReaperConfig {

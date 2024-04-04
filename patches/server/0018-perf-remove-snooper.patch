@@ -36,7 +36,7 @@ index fb5822f7c2c1d96e2711fb081b632ee5d8eb3985..d743391e7061059c55774937fc6976bb
  
      public void issueCommand(String s, ICommandListener icommandlistener) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index eb01435894143000a26cfee4c9d9287f2fb125ea..1e8b3ac0bc7293ed0b6bfa258ead8c44aa4e5521 100644
+index 1d1e6473ea7a2460bebc4fd0669a06570d03b17a..27d9a798d5437d1fd0e9d727d007c4e76b68cf30 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -56,7 +56,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs

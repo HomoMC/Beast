@@ -64,7 +64,7 @@ index 354579f42865d4d989cce1a6889632581068067d..a5fe16980ba63e645f240632b16beae2
          this.world = new CraftWorld((WorldServer) this, gen, env);
          this.ticksPerAnimalSpawns = this.getServer().getTicksPerAnimalSpawns(); // CraftBukkit
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 95bc3e2e328c9faf79ef9a65a47c7b779708d564..b800048737aa316548cd968a22ed81d6a566089e 100644
+index ef5e484782bec1eee44bb498ff9c402aabae7c48..fe770f35b17ba685742f290266a9ef6086ee1148 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -760,6 +760,7 @@ public final class CraftServer implements Server {

@@ -8068,7 +8068,7 @@ index 480e2ca972bc9dedc6d77c7f2a2621e01c51f21c..3023ec12bbae5bcc32ecadce0f66d4ba
      }
  }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 1e8b3ac0bc7293ed0b6bfa258ead8c44aa4e5521..041b2f66982187c34f4de6cca7fde5851c800a75 100644
+index 27d9a798d5437d1fd0e9d727d007c4e76b68cf30..dfe5242f2acf0b85401d3d7eeb658f94c073455e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -88,7 +88,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
@@ -10716,7 +10716,7 @@ index 45217866bba8f7b8e065da7eca78776f1441dba9..62d27871e6594ec87437a42cc833427e
              }
              return new Location(server.getWorld(spawnWorld), data.getInt("SpawnX"), data.getInt("SpawnY"), data.getInt("SpawnZ"));
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 5deaf370fe7ba18cda3a002b864b0c514a33a939..ae9a6031fe04d24b1fc322b1a4747589ace2b0e5 100644
+index 273bd7e355cb41cbc8145e6f3f2d445fb20bc529..65d92e3d2b3de197f77b00aa8ef8e660ef1b66ed 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1049,7 +1049,7 @@ public final class CraftServer implements Server {

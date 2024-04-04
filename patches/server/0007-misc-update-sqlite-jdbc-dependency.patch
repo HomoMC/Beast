@@ -5,7 +5,7 @@ Subject: [PATCH] misc: update sqlite-jdbc dependency
 
 
 diff --git a/pom.xml b/pom.xml
-index e10f67508c1d2dbbe41a1db8cf900a83987c88d8..7c611a9be8ef1adeedd37a54ed3fc1ee4e8b1fbc 100644
+index 219383ae227263e8b73e8d77c85b322926eb6fef..3e0ee611f77c7078214d93c56822c8e5137350de 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -56,7 +56,7 @@

@@ -5,7 +5,7 @@ Subject: [PATCH] feat: map decorations limit
 
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index 4bce1cb4413190670663e30fb964746fbb13fb0e..e182114ec0c5024485dcc284ea4bc927af62f449 100644
+index ae9d81b9ceadd7bdeb12883c31b1101351171e53..d541810966faf27deef179281ed1cdf00f227c5f 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -285,6 +285,11 @@ public class ReaperConfig {

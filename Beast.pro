@@ -1,8 +1,8 @@
 # This is the ProGuard config, which is set to optimize.
 # If you know how to use it, go ahead :)
 
--injars './Reaper-Server/target/reaper-1.12.2.jar'
--outjars './Reaper-Server/target/reaper-1.12.2-optimized.jar'
+-injars './Beast-Server/target/beast-1.12.2.jar'
+-outjars './Beast-Server/target/beast-1.12.2-optimized.jar'
 
 -libraryjars '<java.home>/lib'
 

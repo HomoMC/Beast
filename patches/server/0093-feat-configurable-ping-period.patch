@@ -5,7 +5,7 @@ Subject: [PATCH] feat: configurable ping period
 
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index 5a2ac5cfa691f7a63b7c359fe4cbad413822e335..1a86aa0096b4450534a842ff87925875631fb215 100644
+index c226ce9ca41cbd76d31f11c76f7a43ed097e3e0c..da6dfc97cf89a07ae98482760e20d9731ff9020f 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -264,4 +264,9 @@ public class ReaperConfig {

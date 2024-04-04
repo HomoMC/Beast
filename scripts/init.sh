@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # BEGIN config
-FORK_NAME="Reaper"
+FORK_NAME="Beast"
 API_REPO=""
 SERVER_REPO=""
 PAPER_API_REPO=""

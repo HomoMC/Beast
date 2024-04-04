@@ -170,7 +170,7 @@ index 0000000000000000000000000000000000000000..0fea42d69c7762b8cd22523d667e7866
 +    }
 +}
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index 726b89f392de6351484e56a3799ffc588ab176a4..1a28b7cb137576710884eb54dcc342f4dd35688a 100644
+index d7483c343dae1bf8ec7045adf3a9d069eed4b1de..7314cb276916b3a1fd0072abe0ee7a853fa29d54 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -123,4 +123,9 @@ public class ReaperConfig {

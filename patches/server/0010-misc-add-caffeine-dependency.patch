@@ -5,7 +5,7 @@ Subject: [PATCH] misc: add caffeine dependency
 
 
 diff --git a/pom.xml b/pom.xml
-index 208fdbe93ed25bab64d62e7bda4a56af4c6152ac..7fd06792d7feaff91c1140c6655143fe9d6b892c 100644
+index f1a801b64c5566bbde28c593e6cd05e022fc00b2..58ec16aa951967c393e2d0f55cff5a2fe82614cf 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -79,6 +79,14 @@

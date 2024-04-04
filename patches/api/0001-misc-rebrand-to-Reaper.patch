@@ -5,7 +5,7 @@ Subject: [PATCH] misc: rebrand to Reaper
 
 
 diff --git a/pom.xml b/pom.xml
-index 2fa2dd7c71e4f24f60e415c38ccf734c78713cbb..f5657f6f862387d593f74276ca512584b029b085 100644
+index 2fa2dd7c71e4f24f60e415c38ccf734c78713cbb..3aaaa875018096d3cbee773b1214b3320dde845b 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -4,18 +4,18 @@
@@ -14,27 +14,27 @@ index 2fa2dd7c71e4f24f60e415c38ccf734c78713cbb..f5657f6f862387d593f74276ca512584
      <parent>
 -        <groupId>com.destroystokyo.paper</groupId>
 -        <artifactId>paper-parent</artifactId>
-+        <groupId>com.github.ruviolence</groupId>
-+        <artifactId>reaper-parent</artifactId>
++        <groupId>com.homomc.beast</groupId>
++        <artifactId>beast-parent</artifactId>
          <version>dev-SNAPSHOT</version>
      </parent>
  
 -    <groupId>com.destroystokyo.paper</groupId>
 -    <artifactId>paper-api</artifactId>
-+    <groupId>com.github.ruviolence</groupId>
-+    <artifactId>reaper-api</artifactId>
++    <groupId>com.homomc.beast</groupId>
++    <artifactId>beast-api</artifactId>
      <version>1.12.2-R0.1-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Paper-API</name>
 -    <url>https://github.com/PaperMC/Paper</url>
-+    <name>Reaper-API</name>
-+    <url>https://github.com/ruViolence/Reaper</url>
++    <name>Beast-API</name>
++    <url>https://github.com/HomoMC/Beast</url>
      <description>An enhanced plugin API for Minecraft servers.</description>
  
      <properties>
 diff --git a/src/main/java/org/bukkit/command/defaults/VersionCommand.java b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
-index 6bb7607dde6c3f20f2f2b9b8b5dad877f84f6646..4fb24db889f77909380b7a8061adc03e573087de 100644
+index 6bb7607dde6c3f20f2f2b9b8b5dad877f84f6646..75d6e005ff310ae20dc2ad4cf82d7305a693d4f0 100644
 --- a/src/main/java/org/bukkit/command/defaults/VersionCommand.java
 +++ b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
 @@ -209,8 +209,8 @@ public class VersionCommand extends BukkitCommand {
@@ -43,8 +43,8 @@ index 6bb7607dde6c3f20f2f2b9b8b5dad877f84f6646..4fb24db889f77909380b7a8061adc03e
          if (version == null) version = "Custom";
 -        if (version.startsWith("git-Paper-")) {
 -            String[] parts = version.substring("git-Paper-".length()).split("[-\\s]");
-+        if (version.startsWith("git-Reaper-")) {
-+            String[] parts = version.substring("git-Reaper-".length()).split("[-\\s]");
++        if (version.startsWith("git-Beast-")) {
++            String[] parts = version.substring("git-Beast-".length()).split("[-\\s]");
              int distance = getDistance(null, parts[0]);
              switch (distance) {
                  case -1:
@@ -60,7 +60,7 @@ index 6bb7607dde6c3f20f2f2b9b8b5dad877f84f6646..4fb24db889f77909380b7a8061adc03e
 -            return getFromRepo("PaperMC/Paper", verInfo);
 -        }
 +        verInfo = verInfo.replace("\"", "");
-+        return getFromRepo("ruViolence/Reaper", verInfo);
++        return getFromRepo("HomoMC/Beast", verInfo);
              /*
              BufferedReader reader = Resources.asCharSource(
                      new URL("https://hub.spigotmc.org/stash/rest/api/1.0/projects/SPIGOT/repos/" + repo + "/commits?since=" + URLEncoder.encode(hash, "UTF-8") + "&withCounts=true"),

@@ -1,0 +1,1745 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Fri, 5 Apr 2024 00:04:42 +0800
+Subject: [PATCH] Rebrand-to-beast
+
+
+diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperCommand.java b/src/main/java/com/github/ruviolence/reaper/BeastCommand.java
+similarity index 94%
+rename from src/main/java/com/github/ruviolence/reaper/ReaperCommand.java
+rename to src/main/java/com/github/ruviolence/reaper/BeastCommand.java
+index 7f6bd97ffab79034663705f07f367b3d070db61a..feab1f5c5945aba1030316b185f3846a6e9bcf8f 100644
+--- a/src/main/java/com/github/ruviolence/reaper/ReaperCommand.java
++++ b/src/main/java/com/github/ruviolence/reaper/BeastCommand.java
+@@ -14,9 +14,9 @@ import java.util.Collections;
+ import java.util.List;
+ import java.util.Locale;
+ 
+-public class ReaperCommand extends Command {
++public class BeastCommand extends Command {
+ 
+-    public ReaperCommand(String name) {
++    public BeastCommand(String name) {
+         super(name);
+         this.description = "Beast related commands";
+         this.usageMessage = "/beast [reload | chunksendlimit]";
+@@ -59,7 +59,7 @@ public class ReaperCommand extends Command {
+         Command.broadcastCommandMessage(sender, ChatColor.RED + "If you encounter any issues please use the /stop command to restart your server.");
+ 
+         MinecraftServer console = MinecraftServer.getServer();
+-        ReaperConfig.init((File) console.options.valueOf("reaper-settings"));
++        BeastConfig.init((File) console.options.valueOf("beast-settings"));
+ 
+         Command.broadcastCommandMessage(sender, ChatColor.GREEN + "Beast config reload complete.");
+     }
+diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/BeastConfig.java
+similarity index 98%
+rename from src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
+rename to src/main/java/com/github/ruviolence/reaper/BeastConfig.java
+index d966ab87602f81ce4ce13624eaaca7e53689a649..ca3a6c0bf6e0b1849870424bcff2dc430c1714ca 100644
+--- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
++++ b/src/main/java/com/github/ruviolence/reaper/BeastConfig.java
+@@ -19,15 +19,13 @@ import java.io.IOException;
+ import java.lang.reflect.InvocationTargetException;
+ import java.lang.reflect.Method;
+ import java.lang.reflect.Modifier;
+-import java.util.Collections;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Random;
+-import java.util.Set;
+ import java.util.logging.Level;
+ 
+-public class ReaperConfig {
++public class BeastConfig {
+ 
+     private static File CONFIG_FILE;
+     private static final String HEADER = "This is the main configuration file for Beast.\n"
+@@ -54,11 +52,11 @@ public class ReaperConfig {
+         config.options().copyDefaults(true);
+ 
+         commands = new HashMap<>();
+-        commands.put("beast", new ReaperCommand("beast"));
++        commands.put("beast", new BeastCommand("beast"));
+ 
+         version = getInt("config-version", 1);
+         set("config-version", 1);
+-        readConfig(ReaperConfig.class, null);
++        readConfig(BeastConfig.class, null);
+     }
+ 
+     public static void registerCommands() {
+diff --git a/src/main/java/com/github/ruviolence/reaper/Metrics.java b/src/main/java/com/github/ruviolence/reaper/Metrics.java
+index 1428313d192b8cdd418c882875b83cd48d9a4356..2e8f32b7454b6196df7e8b598bdc365e1b26fdea 100644
+--- a/src/main/java/com/github/ruviolence/reaper/Metrics.java
++++ b/src/main/java/com/github/ruviolence/reaper/Metrics.java
+@@ -32,7 +32,7 @@ public class Metrics {
+     public Metrics(String serverUUID) {
+         this.serverUUID = serverUUID;
+ 
+-        addCustomChart(new Metrics.SimplePie("combatSystem", () -> ReaperConfig.oldCombatEnabled ? "old" : "new"));
++        addCustomChart(new Metrics.SimplePie("combatSystem", () -> BeastConfig.oldCombatEnabled ? "old" : "new"));
+ 
+         startSubmitting();
+     }
+diff --git a/src/main/java/com/github/ruviolence/reaper/OldCombatHelper.java b/src/main/java/com/github/ruviolence/reaper/OldCombatHelper.java
+index d73ef7652b67c97987ea973b129b771db54a5921..ad5bfc6bf9a1fe7429dd973e879990de48ed2a54 100644
+--- a/src/main/java/com/github/ruviolence/reaper/OldCombatHelper.java
++++ b/src/main/java/com/github/ruviolence/reaper/OldCombatHelper.java
+@@ -7,19 +7,19 @@ import net.minecraft.server.ItemSpade;
+ import net.minecraft.server.ItemSword;
+ 
+ public class OldCombatHelper {
+-    public static final float EXHAUSTION_BLOCK_BREAK = ReaperConfig.oldCombatRegen ? 0.025F : 0.005F;
+-    public static final float EXHAUSTION_HUNGER_EFFECT = ReaperConfig.oldCombatRegen ? 0.025F : 0.005F;
+-    public static final float EXHAUSTION_HURT = ReaperConfig.oldCombatRegen ? 0.3F : 0.1F;
++    public static final float EXHAUSTION_BLOCK_BREAK = BeastConfig.oldCombatRegen ? 0.025F : 0.005F;
++    public static final float EXHAUSTION_HUNGER_EFFECT = BeastConfig.oldCombatRegen ? 0.025F : 0.005F;
++    public static final float EXHAUSTION_HURT = BeastConfig.oldCombatRegen ? 0.3F : 0.1F;
+ 
+-    public static final double POTION_MODIFIER_STRENGTH = ReaperConfig.oldCombatRegen ? 1.3D : 3.0D;
+-    public static final double POTION_MODIFIER_WEAKNESS = ReaperConfig.oldCombatRegen ? -0.5D : -4.0D;
++    public static final double POTION_MODIFIER_STRENGTH = BeastConfig.oldCombatRegen ? 1.3D : 3.0D;
++    public static final double POTION_MODIFIER_WEAKNESS = BeastConfig.oldCombatRegen ? -0.5D : -4.0D;
+ 
+-    public static final int POTION_DURATION_POISON_LONG = ReaperConfig.oldCombatPotionsDuration ? 2400 : 1800;
+-    public static final int POTION_DURATION_POISON_STRONG = ReaperConfig.oldCombatPotionsDuration ? 450 : 432;
+-    public static final int POTION_DURATION_REGENERATION_LONG = ReaperConfig.oldCombatPotionsDuration ? 2400 : 1800;
++    public static final int POTION_DURATION_POISON_LONG = BeastConfig.oldCombatPotionsDuration ? 2400 : 1800;
++    public static final int POTION_DURATION_POISON_STRONG = BeastConfig.oldCombatPotionsDuration ? 450 : 432;
++    public static final int POTION_DURATION_REGENERATION_LONG = BeastConfig.oldCombatPotionsDuration ? 2400 : 1800;
+ 
+     public static float calcItemDamage(Item item, Item.EnumToolMaterial material, float defValue) {
+-        if (!ReaperConfig.oldCombatEnabled) return defValue;
++        if (!BeastConfig.oldCombatEnabled) return defValue;
+         Class<? extends Item> itemClass = item.getClass();
+         if (ItemSword.class.isAssignableFrom(itemClass)) return 4.0F + material.c();
+         if (ItemAxe.class.isAssignableFrom(itemClass)) return 3.0F + material.c();
+diff --git a/src/main/java/net/minecraft/server/BlockCauldron.java b/src/main/java/net/minecraft/server/BlockCauldron.java
+index 5b82c9c28a9e89c59af68604337f3eb871bb2ce1..c07a73a43a674532c1aca95e95d00b2e820a6df7 100644
+--- a/src/main/java/net/minecraft/server/BlockCauldron.java
++++ b/src/main/java/net/minecraft/server/BlockCauldron.java
+@@ -3,6 +3,8 @@ package net.minecraft.server;
+ import java.util.List;
+ import java.util.Random;
+ import javax.annotation.Nullable;
++
++import com.github.ruviolence.reaper.BeastConfig;
+ import org.bukkit.event.block.CauldronLevelChangeEvent; // CraftBukkit
+ 
+ public class BlockCauldron extends Block {
+@@ -121,7 +123,7 @@ public class BlockCauldron extends Block {
+                             } else if (!entityhuman.inventory.pickup(itemstack1)) {
+                                 entityhuman.drop(itemstack1, false);
+                             } else if (entityhuman instanceof EntityPlayer) {
+-                                if (!com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) // Reaper - Reduce inventory updates
++                                if (!BeastConfig.reduceInventoryUpdates) // Reaper - Reduce inventory updates
+                                 ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
+                             }
+                         }
+@@ -143,7 +145,7 @@ public class BlockCauldron extends Block {
+                             entityhuman.b(StatisticList.J);
+                             entityhuman.a(enumhand, itemstack1);
+                             if (entityhuman instanceof EntityPlayer) {
+-                                if (!com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) // Reaper - Reduce inventory updates
++                                if (!BeastConfig.reduceInventoryUpdates) // Reaper - Reduce inventory updates
+                                 ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
+                             }
+                         }
+@@ -192,7 +194,7 @@ public class BlockCauldron extends Block {
+                             } else if (!entityhuman.inventory.pickup(itemstack1)) {
+                                 entityhuman.drop(itemstack1, false);
+                             } else if (entityhuman instanceof EntityPlayer) {
+-                                if (!com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) // Reaper - Reduce inventory updates
++                                if (!BeastConfig.reduceInventoryUpdates) // Reaper - Reduce inventory updates
+                                 ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
+                             }
+                         }
+diff --git a/src/main/java/net/minecraft/server/BlockFire.java b/src/main/java/net/minecraft/server/BlockFire.java
+index b7afac783cdb38f0133148153c1eedf9afdbd39e..a95ae4ba53027af435555e8c30883706bd60f02a 100644
+--- a/src/main/java/net/minecraft/server/BlockFire.java
++++ b/src/main/java/net/minecraft/server/BlockFire.java
+@@ -1,7 +1,7 @@
+ package net.minecraft.server;
+ 
+-import com.google.common.collect.Maps;
+-import java.util.Map;
++import com.github.ruviolence.reaper.BeastConfig;
++
+ import java.util.Random;
+ import javax.annotation.Nullable;
+ 
+@@ -335,7 +335,7 @@ public class BlockFire extends Block {
+     }
+ 
+     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+-        if (world.worldProvider.getDimensionManager().getDimensionID() > 0 || (!com.github.ruviolence.reaper.ReaperConfig.shapeCheckNetherPortal || !Blocks.PORTAL.b(world, blockposition))) { // Reaper
++        if (world.worldProvider.getDimensionManager().getDimensionID() > 0 || (!BeastConfig.shapeCheckNetherPortal || !Blocks.PORTAL.b(world, blockposition))) { // Reaper
+             if (!world.getType(blockposition.down()).q() && !this.c(world, blockposition)) {
+                 fireExtinguished(world, blockposition); // CraftBukkit - fuel block broke
+             } else {
+diff --git a/src/main/java/net/minecraft/server/BlockFlowing.java b/src/main/java/net/minecraft/server/BlockFlowing.java
+index e09ae0cf9eb6d967a3dc63f9d974fd5181df468a..60d1d7f54b1a2a30731cf6bd3b0e95412b075dd7 100644
+--- a/src/main/java/net/minecraft/server/BlockFlowing.java
++++ b/src/main/java/net/minecraft/server/BlockFlowing.java
+@@ -6,6 +6,7 @@ import java.util.Random;
+ import java.util.Set;
+ 
+ // CraftBukkit start
++import com.github.ruviolence.reaper.BeastConfig;
+ import org.bukkit.block.BlockFace;
+ import org.bukkit.event.block.BlockFromToEvent;
+ // CraftBukkit end
+@@ -280,7 +281,7 @@ public class BlockFlowing extends BlockFluids {
+      * Paper - Get flow speed. Throttle if its water and flowing adjacent to lava
+      */
+     public int getFlowSpeed(World world, BlockPosition blockposition) {
+-        if (!com.github.ruviolence.reaper.ReaperConfig.paperCustomFlowSpeed) return super.a(world); // Reaper
++        if (!BeastConfig.paperCustomFlowSpeed) return super.a(world); // Reaper
+         if (this.material == Material.LAVA) {
+             return world.worldProvider.isSkyMissing() ? world.paperConfig.lavaFlowSpeedNether : world.paperConfig.lavaFlowSpeedNormal;
+         }
+diff --git a/src/main/java/net/minecraft/server/BlockPortal.java b/src/main/java/net/minecraft/server/BlockPortal.java
+index efd57833662ec1f3cb69b6ac82c66e3ea16449ec..cbd8e8b376e253b28e615ea4235af309372b9121 100644
+--- a/src/main/java/net/minecraft/server/BlockPortal.java
++++ b/src/main/java/net/minecraft/server/BlockPortal.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.cache.LoadingCache;
+ import java.util.Random;
+ import javax.annotation.Nullable;
+@@ -98,13 +99,13 @@ public class BlockPortal extends BlockHalfTransparent {
+             blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
+             if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.width * blockportal_shape.height) {
+                 world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
+-                if (com.github.ruviolence.reaper.ReaperConfig.portalTravelInstantExpire) ((WorldServer) world).getTravelAgent().expirePortal(blockposition); // Reaper - Configurable portal travel cache
++                if (BeastConfig.portalTravelInstantExpire) ((WorldServer) world).getTravelAgent().expirePortal(blockposition); // Reaper - Configurable portal travel cache
+             }
+         } else if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z) {
+             blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
+             if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.width * blockportal_shape.height) {
+                 world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
+-                if (com.github.ruviolence.reaper.ReaperConfig.portalTravelInstantExpire) ((WorldServer) world).getTravelAgent().expirePortal(blockposition); // Reaper - Configurable portal travel cache
++                if (BeastConfig.portalTravelInstantExpire) ((WorldServer) world).getTravelAgent().expirePortal(blockposition); // Reaper - Configurable portal travel cache
+             }
+         }
+ 
+diff --git a/src/main/java/net/minecraft/server/BlockSkull.java b/src/main/java/net/minecraft/server/BlockSkull.java
+index 4c357da8f6f3f3a5f44a9d040679f20097764823..577f2e0af9b0c266cafca33e8153844627c3fe0f 100644
+--- a/src/main/java/net/minecraft/server/BlockSkull.java
++++ b/src/main/java/net/minecraft/server/BlockSkull.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.base.Predicate;
+ import java.util.Iterator;
+ import java.util.Random;
+@@ -160,7 +161,7 @@ public class BlockSkull extends BlockTileEntity {
+     }
+ 
+     public void a(World world, BlockPosition blockposition, TileEntitySkull tileentityskull) {
+-        if (!com.github.ruviolence.reaper.ReaperConfig.shapeCheckWither) return; // Reaper
++        if (!BeastConfig.shapeCheckWither) return; // Reaper
+         if (world.captureBlockStates) return; // CraftBukkit
+         if (tileentityskull.getSkullType() == 1 && blockposition.getY() >= 2 && world.getDifficulty() != EnumDifficulty.PEACEFUL) { // Reaper - Remove isClientSide check
+             ShapeDetector shapedetector = this.g();
+diff --git a/src/main/java/net/minecraft/server/Chunk.java b/src/main/java/net/minecraft/server/Chunk.java
+index fa5c5ff7e34e79a4bb366f44455a5e807566333c..7591189919e6bc94875be2e97ac488d7c24fa05b 100644
+--- a/src/main/java/net/minecraft/server/Chunk.java
++++ b/src/main/java/net/minecraft/server/Chunk.java
+@@ -6,11 +6,10 @@ import java.util.HashMap;
+ import java.util.UUID;
+ // Paper end
+ import com.destroystokyo.paper.exception.ServerInternalException;
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.base.Predicate;
+-import com.google.common.collect.Maps;
+ import com.google.common.collect.Queues;
+ import java.util.Arrays;
+-import java.util.Collection;
+ import java.util.Iterator;
+ import java.util.List;
+ import java.util.Map;
+@@ -1603,8 +1602,8 @@ public class Chunk {
+ 
+     // Reaper start
+     public void runOrQueueLightUpdate(int x, int y, int z, int type) {
+-        if (com.github.ruviolence.reaper.ReaperConfig.queueLightUpdates
+-                && (type != 0 || !com.github.ruviolence.reaper.ReaperConfig.lightThrottlingAllowBlockRelight)) {
++        if (BeastConfig.queueLightUpdates
++                && (type != 0 || !BeastConfig.lightThrottlingAllowBlockRelight)) {
+             lightingQueue.schedule(x, y, z, type);
+         } else {
+             runLightTaskByType(x, y, z, type);
+diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
+index 08ffa55a509b9e726ffa3d5e7f1749f1075e75b0..f1d0d2ea5a152dd6503f0498e5332c27493981db 100644
+--- a/src/main/java/net/minecraft/server/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/DedicatedServer.java
+@@ -1,18 +1,14 @@
+ package net.minecraft.server;
+ 
+-import com.google.common.collect.Lists;
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.mojang.authlib.GameProfileRepository;
+ import com.mojang.authlib.minecraft.MinecraftSessionService;
+ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+-import java.io.BufferedReader;
++
+ import java.io.File;
+ import java.io.IOException;
+-import java.io.InputStreamReader;
+ import java.net.InetAddress;
+ import java.net.Proxy;
+-import java.nio.charset.StandardCharsets;
+-import java.util.Collections;
+-import java.util.List;
+ import java.util.Random;
+ import java.util.concurrent.TimeUnit;
+ import java.util.regex.Pattern;
+@@ -20,10 +16,8 @@ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+ 
+ // CraftBukkit start
+-import java.io.PrintStream;
+ import org.apache.logging.log4j.Level;
+ 
+-import org.bukkit.craftbukkit.LoggerOutputStream;
+ import org.bukkit.event.server.ServerCommandEvent;
+ import org.bukkit.craftbukkit.util.Waitable;
+ import org.bukkit.event.server.RemoteServerCommandEvent;
+@@ -200,7 +194,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+             com.destroystokyo.paper.PaperConfig.registerCommands();
+             com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // load version history now
+             // Paper end
+-            com.github.ruviolence.reaper.ReaperConfig.registerCommands(); // Reaper
++            BeastConfig.registerCommands(); // Reaper
+ 
+             DedicatedServer.LOGGER.info("Generating keypair");
+             this.a(MinecraftEncryption.b());
+diff --git a/src/main/java/net/minecraft/server/EnchantmentManager.java b/src/main/java/net/minecraft/server/EnchantmentManager.java
+index d6ecadf9f4a00a86f002bd18706564e85e8e1971..60716ccaf5b59860ea188bbbdc3b08e5e497d832 100644
+--- a/src/main/java/net/minecraft/server/EnchantmentManager.java
++++ b/src/main/java/net/minecraft/server/EnchantmentManager.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Maps;
+ import java.util.ArrayList;
+@@ -112,7 +113,7 @@ public class EnchantmentManager {
+ 
+     public static int a(Iterable<ItemStack> iterable, DamageSource damagesource) {
+         // Reaper start - Old combat
+-        if (com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) {
++        if (BeastConfig.oldCombatEnabled) {
+             EnchantmentManager.a.a = 0;
+             EnchantmentManager.a.b = damagesource;
+             a(EnchantmentManager.a, iterable);
+@@ -122,7 +123,7 @@ public class EnchantmentManager {
+             } else if (EnchantmentManager.a.a < 0) {
+                 EnchantmentManager.a.a = 0;
+             }
+-            return (EnchantmentManager.a.a + 1 >> 1) + com.github.ruviolence.reaper.ReaperConfig.oldCombatRandom.nextInt((EnchantmentManager.a.a >> 1) + 1);
++            return (EnchantmentManager.a.a + 1 >> 1) + BeastConfig.oldCombatRandom.nextInt((EnchantmentManager.a.a >> 1) + 1);
+         }
+         // Reaper end
+         EnchantmentManager.a.a = 0;
+diff --git a/src/main/java/net/minecraft/server/EnchantmentProtection.java b/src/main/java/net/minecraft/server/EnchantmentProtection.java
+index a53c08794777198bdba34ae27337d661393bd256..048d4091c39cef805d766bde16f3b2d8e22dbc73 100644
+--- a/src/main/java/net/minecraft/server/EnchantmentProtection.java
++++ b/src/main/java/net/minecraft/server/EnchantmentProtection.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ public class EnchantmentProtection extends Enchantment {
+ 
+     public final EnchantmentProtection.DamageType a;
+@@ -27,7 +29,7 @@ public class EnchantmentProtection extends Enchantment {
+ 
+     public int a(int i, DamageSource damagesource) {
+         // Reaper start - Old combat
+-        if (com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) {
++        if (BeastConfig.oldCombatEnabled) {
+             if (damagesource.ignoresInvulnerability()) return 0;
+             float lvl = (6 + i * i) / 3.0F;
+             if (this.a == EnchantmentProtection.DamageType.ALL) {
+diff --git a/src/main/java/net/minecraft/server/EnchantmentWeaponDamage.java b/src/main/java/net/minecraft/server/EnchantmentWeaponDamage.java
+index 0dbf25d62e5ed2a6e88ca59565ace2787be2d899..5ce2cc6d00351b7ff9961955605fa831044cf7ee 100644
+--- a/src/main/java/net/minecraft/server/EnchantmentWeaponDamage.java
++++ b/src/main/java/net/minecraft/server/EnchantmentWeaponDamage.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ public class EnchantmentWeaponDamage extends Enchantment {
+ 
+     private static final String[] e = new String[] { "all", "undead", "arthropods"};
+@@ -26,7 +28,7 @@ public class EnchantmentWeaponDamage extends Enchantment {
+     }
+ 
+     public float a(int i, EnumMonsterType enummonstertype) {
+-        if (this.a == 0 && com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) return i * 1.25F; // Reaper - Old pvp
++        if (this.a == 0 && BeastConfig.oldCombatEnabled) return i * 1.25F; // Reaper - Old pvp
+         return this.a == 0 ? 1.0F + (float) Math.max(0, i - 1) * 0.5F : (this.a == 1 && enummonstertype == EnumMonsterType.UNDEAD ? (float) i * 2.5F : (this.a == 2 && enummonstertype == EnumMonsterType.ARTHROPOD ? (float) i * 2.5F : 0.0F));
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index 14687f2703dbc2e8ce7a7c747ed1bd321d13ee09..50806baaf2c4195fcf0834d0bc6caa7b8a8a14c1 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Iterables;
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Sets;
+@@ -952,7 +953,7 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+ 
+                         this.a(this.ae(), f1, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+                     } else {
+-                        if (com.github.ruviolence.reaper.ReaperConfig.stepSounds) // Reaper
++                        if (BeastConfig.stepSounds) // Reaper
+                         this.a(blockposition, block1);
+                     }
+                 } else if (this.K > this.ay && this.ah() && iblockdata.getMaterial() == Material.AIR) {
+@@ -989,7 +990,7 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+                             this.setOnFire(event.getDuration());
+                         }
+                         // CraftBukkit end
+-                    } else if (com.github.ruviolence.reaper.ReaperConfig.oldCombatFireCombust) this.setOnFire(8); // Reaper - Old combat
++                    } else if (BeastConfig.oldCombatFireCombust) this.setOnFire(8); // Reaper - Old combat
+                 }
+             } else if (this.fireTicks <= 0) {
+                 this.fireTicks = -this.getMaxFireTicks();
+diff --git a/src/main/java/net/minecraft/server/EntityArrow.java b/src/main/java/net/minecraft/server/EntityArrow.java
+index 05d03acbd21cf0a8f3cf3274bc1bf50f156e1777..2c14d45ffa0f72af4fcf96e9668ac4a1b17370f5 100644
+--- a/src/main/java/net/minecraft/server/EntityArrow.java
++++ b/src/main/java/net/minecraft/server/EntityArrow.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.base.Predicate;
+ import com.google.common.base.Predicates;
+ import java.util.List;
+@@ -86,7 +87,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
+         float f7 = MathHelper.cos(f1 * 0.017453292F) * MathHelper.cos(f * 0.017453292F);
+ 
+         this.shoot((double) f5, (double) f6, (double) f7, f3, f4);
+-        if (com.github.ruviolence.reaper.ReaperConfig.relativeArrowMotion) { // Reaper start
++        if (BeastConfig.relativeArrowMotion) { // Reaper start
+         this.motX += entity.motX;
+         this.motZ += entity.motZ;
+         if (!entity.onGround) {
+diff --git a/src/main/java/net/minecraft/server/EntityBat.java b/src/main/java/net/minecraft/server/EntityBat.java
+index 94f68e8c6dbf25179b2c5f6b93fe77913e426511..318433dc08cc71115736aae60e90d9e61e4761a3 100644
+--- a/src/main/java/net/minecraft/server/EntityBat.java
++++ b/src/main/java/net/minecraft/server/EntityBat.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ import java.util.Calendar;
+ import javax.annotation.Nullable;
+ 
+@@ -175,7 +177,7 @@ public class EntityBat extends EntityAmbient {
+             int i = this.world.getLightLevel(blockposition);
+             byte b0 = 4;
+ 
+-            if (com.github.ruviolence.reaper.ReaperConfig.halloweenMobFeature && this.a(this.world.ae())) { // Reaper
++            if (BeastConfig.halloweenMobFeature && this.a(this.world.ae())) { // Reaper
+                 b0 = 7;
+             } else if (this.random.nextBoolean()) {
+                 return false;
+diff --git a/src/main/java/net/minecraft/server/EntityFishingHook.java b/src/main/java/net/minecraft/server/EntityFishingHook.java
+index 1808c91debc1c8d60d5dbd8d5a3c61a85f221ce0..0ddc4e157ae77d4aaa53167eb0fa3ae8ccaf33f6 100644
+--- a/src/main/java/net/minecraft/server/EntityFishingHook.java
++++ b/src/main/java/net/minecraft/server/EntityFishingHook.java
+@@ -3,6 +3,7 @@ package net.minecraft.server;
+ import java.util.Iterator;
+ import java.util.List;
+ // CraftBukkit start
++import com.github.ruviolence.reaper.BeastConfig;
+ import org.bukkit.entity.Player;
+ import org.bukkit.entity.Fish;
+ import org.bukkit.event.player.PlayerFishEvent;
+@@ -286,7 +287,7 @@ public class EntityFishingHook extends Entity {
+             org.bukkit.craftbukkit.event.CraftEventFactory.callProjectileHitEvent(this, movingobjectposition); // Craftbukkit - Call event
+             if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
+                 // Reaper start - Old combat
+-                if (com.github.ruviolence.reaper.ReaperConfig.oldCombatFishingHooksKnockback) {
++                if (BeastConfig.oldCombatFishingHooksKnockback) {
+                     movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.owner), 0.0F);
+                 }
+                 // Reaper end
+diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
+index 76b9b90af9ec33255462a2178a8d97f5fd90d4e1..9fdfd9e824eecdb546d40da0e58b6eeba78dd758 100644
+--- a/src/main/java/net/minecraft/server/EntityHuman.java
++++ b/src/main/java/net/minecraft/server/EntityHuman.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.base.Predicate;
+ import com.google.common.collect.Lists;
+ import com.mojang.authlib.GameProfile;
+@@ -973,10 +974,10 @@ public abstract class EntityHuman extends EntityLiving {
+                     f1 = EnchantmentManager.a(this.getItemInMainHand(), EnumMonsterType.UNDEFINED);
+                 }
+ 
+-                float f2 = com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled ? 1 : this.n(0.5F); // Reaper - Old combat
++                float f2 = BeastConfig.oldCombatEnabled ? 1 : this.n(0.5F); // Reaper - Old combat
+ 
+                 // Reaper start - Old combat
+-                if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) {
++                if (!BeastConfig.oldCombatEnabled) {
+                     f *= 0.2F + f2 * f2 * 0.8F;
+                     f1 *= f2;
+                 }
+@@ -989,7 +990,7 @@ public abstract class EntityHuman extends EntityLiving {
+                     int i = b0 + EnchantmentManager.b((EntityLiving) this);
+ 
+                     if (this.isSprinting() && flag) {
+-                        if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatDisableSounds) // Reaper - Old combat
++                        if (!BeastConfig.oldCombatDisableSounds) // Reaper - Old combat
+                         sendSoundEffect(this, this.locX, this.locY, this.locZ, SoundEffects.fw, this.bK(), 1.0F, 1.0F); // Paper - send while respecting visibility
+                         ++i;
+                         flag1 = true;
+@@ -997,7 +998,7 @@ public abstract class EntityHuman extends EntityLiving {
+ 
+                     boolean flag2 = flag && this.fallDistance > 0.0F && !this.onGround && !this.m_() && !this.isInWater() && !this.hasEffect(MobEffects.BLINDNESS) && !this.isPassenger() && entity instanceof EntityLiving;
+                     flag2 = flag2 && !world.paperConfig.disablePlayerCrits; // Paper
+-                    if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) // Reaper - Old combat
++                    if (!BeastConfig.oldCombatEnabled) // Reaper - Old combat
+                     flag2 = flag2 && !this.isSprinting();
+                     if (flag2) {
+                         f *= 1.5F;
+@@ -1007,7 +1008,7 @@ public abstract class EntityHuman extends EntityLiving {
+                     boolean flag3 = false;
+                     double d0 = (double) (this.J - this.I);
+ 
+-                    if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) // Reaper - Old combat
++                    if (!BeastConfig.oldCombatEnabled) // Reaper - Old combat
+                     if (flag && !flag2 && !flag1 && this.onGround && d0 < (double) this.cy()) {
+                         ItemStack itemstack = this.b(EnumHand.MAIN_HAND);
+ 
+@@ -1043,7 +1044,7 @@ public abstract class EntityHuman extends EntityLiving {
+                     if (flag5) {
+                         if (i > 0) {
+                             // Reaper start - Old combat
+-                            if (com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) {
++                            if (BeastConfig.oldCombatEnabled) {
+                                 entity.f(-MathHelper.sin(this.yaw * 0.017453292F) * i * 0.5F, 0.1D, MathHelper.cos(this.yaw * 0.017453292F) * i * 0.5F);
+                             } else {
+                                 if (entity instanceof EntityLiving) {
+@@ -1110,12 +1111,12 @@ public abstract class EntityHuman extends EntityLiving {
+                         }
+ 
+                         if (flag2) {
+-                            if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatDisableSounds) // Reaper - Old combat
++                            if (!BeastConfig.oldCombatDisableSounds) // Reaper - Old combat
+                             sendSoundEffect(this, this.locX, this.locY, this.locZ, SoundEffects.fv, this.bK(), 1.0F, 1.0F); // Paper - send while respecting visibility
+                             this.a(entity);
+                         }
+ 
+-                        if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatDisableSounds) // Reaper - Old combat
++                        if (!BeastConfig.oldCombatDisableSounds) // Reaper - Old combat
+                         if (!flag2 && !flag3) {
+                             if (flag) {
+                                 sendSoundEffect(this, this.locX, this.locY, this.locZ, SoundEffects.fy, this.bK(), 1.0F, 1.0F); // Paper - send while respecting visibility
+@@ -1167,7 +1168,7 @@ public abstract class EntityHuman extends EntityLiving {
+                                 // CraftBukkit end
+                             }
+ 
+-                            if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatDisableDamageIndicator) // Reaper - Old combat
++                            if (!BeastConfig.oldCombatDisableDamageIndicator) // Reaper - Old combat
+                             if (this.world instanceof WorldServer && f5 > 2.0F) {
+                                 int k = (int) ((double) f5 * 0.5D);
+ 
+@@ -1177,7 +1178,7 @@ public abstract class EntityHuman extends EntityLiving {
+ 
+                         this.applyExhaustion(world.spigotConfig.combatExhaustion); // Spigot - Change to use configurable value
+                     } else {
+-                        if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatDisableSounds) // Reaper - Old combat
++                        if (!BeastConfig.oldCombatDisableSounds) // Reaper - Old combat
+                         sendSoundEffect(this, this.locX, this.locY, this.locZ, SoundEffects.fx, this.bK(), 1.0F, 1.0F); // Paper - send while respecting visibility
+                         if (flag4) {
+                             entity.extinguish();
+@@ -1185,7 +1186,7 @@ public abstract class EntityHuman extends EntityLiving {
+                         // CraftBukkit start - resync on cancelled event
+                         if (this instanceof EntityPlayer) {
+                             // Reaper start - Reduce inventory updates
+-                            if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                            if (BeastConfig.reduceInventoryUpdates) {
+                                 com.github.ruviolence.reaper.InventoryUpdateHelper.onLeftClick((EntityPlayer) this, EnumHand.MAIN_HAND, this.b(EnumHand.MAIN_HAND));
+                             } else
+                             // Reaper end - Reduce inventory updates
+@@ -1200,7 +1201,7 @@ public abstract class EntityHuman extends EntityLiving {
+     }
+ 
+     public void m(boolean flag) {
+-        if (com.github.ruviolence.reaper.ReaperConfig.oldCombatBlockingModifier) return; // Reaper - Old combat
++        if (BeastConfig.oldCombatBlockingModifier) return; // Reaper - Old combat
+         float f = 0.25F + (float) EnchantmentManager.getDigSpeedEnchantmentLevel(this) * 0.05F;
+ 
+         if (flag) {
+@@ -1987,7 +1988,7 @@ public abstract class EntityHuman extends EntityLiving {
+     }
+ 
+     public float n(float f) {
+-        if (com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) return 1; // Reaper - Old combat
++        if (BeastConfig.oldCombatEnabled) return 1; // Reaper - Old combat
+         return MathHelper.a(((float) this.aE + f) / this.dr(), 0.0F, 1.0F);
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index c68d13e558167afbbed69460ed96b67747cde376..ff38a4e0ae2efe4fa2ad2f50e59af2d6206848a2 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -1,6 +1,7 @@
+ package net.minecraft.server;
+ 
+ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.base.Objects;
+ import com.google.common.collect.Maps;
+ import java.util.Collection;
+@@ -1210,7 +1211,7 @@ public abstract class EntityLiving extends Entity {
+             this.motZ /= 2.0D;
+             this.motX -= d0 / (double) f1 * (double) f;
+             this.motZ -= d1 / (double) f1 * (double) f;
+-            if (this.onGround || com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) { // Reaper - Old combat
++            if (this.onGround || BeastConfig.oldCombatEnabled) { // Reaper - Old combat
+                 this.motY /= 2.0D;
+                 this.motY += (double) f;
+                 if (this.motY > 0.4000000059604645D) {
+@@ -1322,7 +1323,7 @@ public abstract class EntityLiving extends Entity {
+ 
+     protected float applyArmorModifier(DamageSource damagesource, float f) {
+         if (!damagesource.ignoresArmor()) {
+-            if (com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) return f * (25 - this.getArmorStrength()) / 25.0F; // Reaper - Old combat
++            if (BeastConfig.oldCombatEnabled) return f * (25 - this.getArmorStrength()) / 25.0F; // Reaper - Old combat
+             // this.damageArmor(f); // CraftBukkit - Moved into damageEntity0(DamageSource, float)
+             f = CombatMath.a(f, (float) this.getArmorStrength(), (float) this.getAttributeInstance(GenericAttributes.i).getValue());
+         }
+@@ -1351,7 +1352,7 @@ public abstract class EntityLiving extends Entity {
+                 i = EnchantmentManager.a(this.getArmorItems(), damagesource);
+                 if (i > 0) {
+                     // Reaper start - Old combat
+-                    if (com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled) {
++                    if (BeastConfig.oldCombatEnabled) {
+                         if (i > 20) i = 20;
+                         return f * (25 - i) / 25.0F;
+                     }
+@@ -1386,7 +1387,7 @@ public abstract class EntityLiving extends Entity {
+                 @Override
+                 public Double apply(Double f) {
+                     // Reaper start - Old combat
+-                    if (com.github.ruviolence.reaper.ReaperConfig.oldCombatBlockingModifier) {
++                    if (BeastConfig.oldCombatBlockingModifier) {
+                         return human && !damagesource.ignoresArmor() && EntityLiving.this.isBlocking() && f > 0.0D ? -(f - (1.0D + f) * 0.5D) : -0.0D;
+                     }
+                     // Reaper end
+@@ -1497,9 +1498,9 @@ public abstract class EntityLiving extends Entity {
+                         CriterionTriggers.g.a((EntityPlayer) damagesource.getEntity(), this, damagesource, f, originalDamage, true);
+                     }
+ 
+-                    return com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled; // Reaper - Old combat
++                    return BeastConfig.oldCombatEnabled; // Reaper - Old combat
+                 } else {
+-                    return originalDamage > 0 || com.github.ruviolence.reaper.ReaperConfig.oldCombatEnabled; // Reaper - Old combat
++                    return originalDamage > 0 || BeastConfig.oldCombatEnabled; // Reaper - Old combat
+                 }
+                 // CraftBukkit end
+             }
+@@ -2532,7 +2533,7 @@ public abstract class EntityLiving extends Entity {
+                 if (event.isCancelled()) {
+                     // Update client
+                     // Reaper start - Reduce inventory updates
+-                    if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                    if (BeastConfig.reduceInventoryUpdates) {
+                         com.github.ruviolence.reaper.InventoryUpdateHelper.updateHeld((EntityPlayer) this, this.cH());
+                     } else
+                     // Reaper end - Reduce inventory updates
+@@ -2560,7 +2561,7 @@ public abstract class EntityLiving extends Entity {
+             // Paper start - if the replacement is anything but the default, update the client inventory
+             if (this instanceof EntityPlayer && !com.google.common.base.Objects.equal(defaultReplacement, itemstack)) {
+                 // Reaper start - Reduce inventory updates
+-                if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                if (BeastConfig.reduceInventoryUpdates) {
+                     com.github.ruviolence.reaper.InventoryUpdateHelper.updateHeld((EntityPlayer) this, this.cH());
+                 } else
+                 // Reaper end - Reduce inventory updates
+diff --git a/src/main/java/net/minecraft/server/EntityMonster.java b/src/main/java/net/minecraft/server/EntityMonster.java
+index d4278e92b125c403ea8445b5a3c824b97d68d480..0abd9f226b3bb61b4aae959805f183a4b99b8f28 100644
+--- a/src/main/java/net/minecraft/server/EntityMonster.java
++++ b/src/main/java/net/minecraft/server/EntityMonster.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import org.bukkit.event.entity.EntityCombustByEntityEvent; // CraftBukkit
+ 
+ public abstract class EntityMonster extends EntityCreature implements IMonster {
+@@ -87,7 +88,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
+                 // CraftBukkit end
+             }
+ 
+-            if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatBlockingModifier) // Reaper - Old combat
++            if (!BeastConfig.oldCombatBlockingModifier) // Reaper - Old combat
+             if (entity instanceof EntityHuman) {
+                 EntityHuman entityhuman = (EntityHuman) entity;
+                 ItemStack itemstack = this.getItemInMainHand();
+diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
+index 60944b5044ff714b05869d8747c2a71dab083a91..6ad7e9037dc0b7b12578d954a207b4587b6ebfe4 100644
+--- a/src/main/java/net/minecraft/server/EntityPlayer.java
++++ b/src/main/java/net/minecraft/server/EntityPlayer.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Lists;
+ import com.mojang.authlib.GameProfile;
+ import io.netty.buffer.Unpooled;
+@@ -124,9 +125,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+     }
+ 
+     public void initDelayedChunksList() {
+-        if (com.github.ruviolence.reaper.ReaperConfig.delayedChunksEnabled) {
++        if (BeastConfig.delayedChunksEnabled) {
+             delayedChunks = new ArrayList<>();
+-            chunkSendLimit = com.github.ruviolence.reaper.ReaperConfig.delayedChunksLimit;
++            chunkSendLimit = BeastConfig.delayedChunksLimit;
+         } else {
+             delayedChunks = null;
+             chunkSendLimitLeft = 0;
+@@ -139,7 +140,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+     }
+ 
+     public void setChunkSendLimit(int limit) {
+-        if (!com.github.ruviolence.reaper.ReaperConfig.delayedChunksEnabled) return;
++        if (!BeastConfig.delayedChunksEnabled) return;
+         this.chunkSendLimit = limit > 0 ? limit : 1;
+     }
+     // Reaper end
+@@ -1389,7 +1390,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+         this.cl = EnumChatVisibility.FULL; // Reaper - Always full chat visibility
+         this.cm = packetplayinsettings.d();
+         // Reaper start - Dynamic view distance
+-        if (com.github.ruviolence.reaper.ReaperConfig.dynamicViewDistance) {
++        if (BeastConfig.dynamicViewDistance) {
+             if (viewDistance != packetplayinsettings.getViewDistance() && nextViewDistanceUpdateTick < MinecraftServer.currentTick) {
+                 this.nextViewDistanceUpdateTick = MinecraftServer.currentTick + (20 * 15);
+                 this.clientsideViewDistance = packetplayinsettings.getViewDistance();
+diff --git a/src/main/java/net/minecraft/server/EntityProjectile.java b/src/main/java/net/minecraft/server/EntityProjectile.java
+index 1feba1c699ceef1039e9e7d42894fcc7ee2f379f..bc8359a1d2a319d0af16fa11c706085a5f6679b8 100644
+--- a/src/main/java/net/minecraft/server/EntityProjectile.java
++++ b/src/main/java/net/minecraft/server/EntityProjectile.java
+@@ -1,7 +1,8 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ import java.util.List;
+-import java.util.UUID;
+ import javax.annotation.Nullable;
+ 
+ public abstract class EntityProjectile extends Entity implements IProjectile {
+@@ -46,7 +47,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
+         float f7 = MathHelper.cos(f1 * 0.017453292F) * MathHelper.cos(f * 0.017453292F);
+ 
+         this.shoot((double) f5, (double) f6, (double) f7, f3, f4);
+-        if (com.github.ruviolence.reaper.ReaperConfig.oldCombatProjectileMotion) return; // Reaper - Old combat
++        if (BeastConfig.oldCombatProjectileMotion) return; // Reaper - Old combat
+         this.motX += entity.motX;
+         this.motZ += entity.motZ;
+         if (!entity.onGround) {
+diff --git a/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java b/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
+index ee8376aef967349cfb4246b7a936ebe61282830d..683d0f6e256af4a0f131b0fdcedef0eb7521d345 100644
+--- a/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
++++ b/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
+@@ -2,6 +2,8 @@ package net.minecraft.server;
+ 
+ import java.util.Calendar;
+ import javax.annotation.Nullable;
++
++import com.github.ruviolence.reaper.BeastConfig;
+ import org.bukkit.event.entity.EntityCombustEvent; // CraftBukkit
+ 
+ public abstract class EntitySkeletonAbstract extends EntityMonster implements IRangedEntity {
+@@ -118,7 +120,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
+         this.b(difficultydamagescaler);
+         this.dm();
+         this.m(this.random.nextFloat() < 0.55F * difficultydamagescaler.d());
+-        if (com.github.ruviolence.reaper.ReaperConfig.halloweenMobFeature && this.getEquipment(EnumItemSlot.HEAD).isEmpty()) { // Reaper
++        if (BeastConfig.halloweenMobFeature && this.getEquipment(EnumItemSlot.HEAD).isEmpty()) { // Reaper
+             Calendar calendar = this.world.ae();
+ 
+             if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && this.random.nextFloat() < 0.25F) {
+diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+index ffeb964579ef5487e23f571fbc9ac6d327714911..361ecb4fea584c29c228d069472c01cad79a9814 100644
+--- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+@@ -1,6 +1,7 @@
+ package net.minecraft.server;
+ 
+-import com.google.common.collect.Sets;
++import com.github.ruviolence.reaper.BeastConfig;
++
+ import java.util.Collection;
+ import java.util.Collections;
+ import java.util.Iterator;
+@@ -513,17 +514,17 @@ public class EntityTrackerEntry {
+         double d0 = entityplayer.locX - this.tracker.locX;
+         double d1 = entityplayer.locZ - this.tracker.locZ;
+         // Reaper end
+-        int i = Math.min(this.e, com.github.ruviolence.reaper.ReaperConfig.dynamicViewDistance ? entityplayer.getFurthestViewableBlock() : this.f); // Reaper - Dynamic view distance
++        int i = Math.min(this.e, BeastConfig.dynamicViewDistance ? entityplayer.getFurthestViewableBlock() : this.f); // Reaper - Dynamic view distance
+ 
+         // Reaper start
+-        if (com.github.ruviolence.reaper.ReaperConfig.entityTrackerCheckY) {
++        if (BeastConfig.entityTrackerCheckY) {
+             double y0 = entityplayer.locY - this.tracker.locY;
+             if (y0 < -i || y0 > i) {
+                 return false;
+             }
+         } // Reaper end
+         return d0 >= (double) (-i) && d0 <= (double) i && d1 >= (double) (-i) && d1 <= (double) i && this.tracker.a(entityplayer)
+-                && (!com.github.ruviolence.reaper.ReaperConfig.delayedChunksEnabled || !entityplayer.getDelayedChunks().contains(new ChunkCoordIntPair(this.tracker.ab, this.tracker.ad))); // Reaper - Delayed chunks
++                && (!BeastConfig.delayedChunksEnabled || !entityplayer.getDelayedChunks().contains(new ChunkCoordIntPair(this.tracker.ab, this.tracker.ad))); // Reaper - Delayed chunks
+     }
+ 
+     private boolean e(EntityPlayer entityplayer) {
+diff --git a/src/main/java/net/minecraft/server/EntityZombie.java b/src/main/java/net/minecraft/server/EntityZombie.java
+index c62aeed29d81b2a3eb36db1981465af0e8aaf04e..be4bdf820cab1fa64b7c81223bb34fc2ab38df05 100644
+--- a/src/main/java/net/minecraft/server/EntityZombie.java
++++ b/src/main/java/net/minecraft/server/EntityZombie.java
+@@ -6,6 +6,7 @@ import java.util.UUID;
+ import javax.annotation.Nullable;
+ 
+ //CraftBukkit start
++import com.github.ruviolence.reaper.BeastConfig;
+ import org.bukkit.event.entity.CreatureSpawnEvent;
+ import org.bukkit.event.entity.EntityCombustByEntityEvent;
+ import org.bukkit.event.entity.EntityCombustEvent;
+@@ -364,7 +365,7 @@ public class EntityZombie extends EntityMonster {
+         this.p(this.random.nextFloat() < f * 0.1F);
+         this.a(difficultydamagescaler);
+         this.b(difficultydamagescaler);
+-        if (com.github.ruviolence.reaper.ReaperConfig.halloweenMobFeature && this.getEquipment(EnumItemSlot.HEAD).isEmpty()) { // Reaper
++        if (BeastConfig.halloweenMobFeature && this.getEquipment(EnumItemSlot.HEAD).isEmpty()) { // Reaper
+             Calendar calendar = this.world.ae();
+ 
+             if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && this.random.nextFloat() < 0.25F) {
+diff --git a/src/main/java/net/minecraft/server/FoodMetaData.java b/src/main/java/net/minecraft/server/FoodMetaData.java
+index 0b295ba05caca6b780f8740e77ffa5e163d97801..64dcda36c955f3dfbb00ed4973bb7710e780e6e7 100644
+--- a/src/main/java/net/minecraft/server/FoodMetaData.java
++++ b/src/main/java/net/minecraft/server/FoodMetaData.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ public class FoodMetaData {
+ 
+     public int foodLevel = 20;
+@@ -60,7 +62,7 @@ public class FoodMetaData {
+ 
+         boolean flag = entityhuman.world.getGameRules().getBoolean("naturalRegeneration");
+ 
+-        if (flag && !com.github.ruviolence.reaper.ReaperConfig.oldCombatRegen && this.saturationLevel > 0.0F && entityhuman.dj() && this.foodLevel >= 20) { // Reaper - Old combat
++        if (flag && !BeastConfig.oldCombatRegen && this.saturationLevel > 0.0F && entityhuman.dj() && this.foodLevel >= 20) { // Reaper - Old combat
+             ++this.foodTickTimer;
+             if (this.foodTickTimer >= 10) {
+                 float f = Math.min(this.saturationLevel, 6.0F);
+diff --git a/src/main/java/net/minecraft/server/ItemBow.java b/src/main/java/net/minecraft/server/ItemBow.java
+index 3aaf861c1eca67de4460266b1bce83928de1b6db..0cbee650a2fd17c007898c4bab975e7ef54e93a5 100644
+--- a/src/main/java/net/minecraft/server/ItemBow.java
++++ b/src/main/java/net/minecraft/server/ItemBow.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import org.bukkit.craftbukkit.inventory.CraftItemStack;
+ import org.bukkit.event.entity.EntityCombustEvent; // CraftBukkit
+ 
+@@ -111,7 +112,7 @@ public class ItemBow extends Item {
+                             if (!world.addEntity(entityarrow)) {
+                                 if (entityhuman instanceof EntityPlayer) {
+                                     // Reaper start - Reduce inventory updates
+-                                    if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                                    if (BeastConfig.reduceInventoryUpdates) {
+                                         com.github.ruviolence.reaper.InventoryUpdateHelper.onBowShoot((EntityPlayer) entityhuman);
+                                     } else
+                                     // Reaper end - Reduce inventory updates
+diff --git a/src/main/java/net/minecraft/server/ItemEnderEye.java b/src/main/java/net/minecraft/server/ItemEnderEye.java
+index a6bbf8ae41282c83e1d45660fdde086450640db1..30ead1d666a42a8a27e3ac7d22e74c95fc968193 100644
+--- a/src/main/java/net/minecraft/server/ItemEnderEye.java
++++ b/src/main/java/net/minecraft/server/ItemEnderEye.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ public class ItemEnderEye extends Item {
+ 
+     public ItemEnderEye() {
+@@ -32,7 +34,7 @@ public class ItemEnderEye extends Item {
+                 */ // Reaper end
+ 
+                 world.a((EntityHuman) null, blockposition, SoundEffects.bp, SoundCategory.BLOCKS, 1.0F, 1.0F);
+-                if (!com.github.ruviolence.reaper.ReaperConfig.shapeCheckEndPortal) return EnumInteractionResult.SUCCESS; // Reaper
++                if (!BeastConfig.shapeCheckEndPortal) return EnumInteractionResult.SUCCESS; // Reaper
+                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockEnderPortalFrame.e().a(world, blockposition);
+ 
+                 if (shapedetector_shapedetectorcollection != null) {
+diff --git a/src/main/java/net/minecraft/server/ItemEnderPearl.java b/src/main/java/net/minecraft/server/ItemEnderPearl.java
+index d6ab73de664b8e527c432384377c7ca84fb4a1d0..f22d641ca15847f3ea33b9113c845cf85c3508f2 100644
+--- a/src/main/java/net/minecraft/server/ItemEnderPearl.java
++++ b/src/main/java/net/minecraft/server/ItemEnderPearl.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ public class ItemEnderPearl extends Item {
+ 
+     public ItemEnderPearl() {
+@@ -18,7 +20,7 @@ public class ItemEnderPearl extends Item {
+             if (!world.addEntity(entityenderpearl)) {
+                 if (entityhuman instanceof EntityPlayer) {
+                     // Reaper start - Reduce inventory updates
+-                    if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                    if (BeastConfig.reduceInventoryUpdates) {
+                         com.github.ruviolence.reaper.InventoryUpdateHelper.updateHeld((EntityPlayer) entityhuman, enumhand);
+                     } else
+                     // Reaper end - Reduce inventory updates
+@@ -33,7 +35,7 @@ public class ItemEnderPearl extends Item {
+         }
+ 
+         world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bn, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.j.nextFloat() * 0.4F + 0.8F));
+-        if (!com.github.ruviolence.reaper.ReaperConfig.oldCombatDisablePearlCooldown) // Reaper - Old combat
++        if (!BeastConfig.oldCombatDisablePearlCooldown) // Reaper - Old combat
+         entityhuman.getCooldownTracker().a(this, 20);
+         // CraftBukkit end
+ 
+diff --git a/src/main/java/net/minecraft/server/ItemGoldenApple.java b/src/main/java/net/minecraft/server/ItemGoldenApple.java
+index ffc42539a1a2840748bf1e5e1ec8dbd416e52032..d5a066f62e75257c25b862a0e35cbac08977e884 100644
+--- a/src/main/java/net/minecraft/server/ItemGoldenApple.java
++++ b/src/main/java/net/minecraft/server/ItemGoldenApple.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ public class ItemGoldenApple extends ItemFood {
+ 
+     public ItemGoldenApple(int i, float f, boolean flag) {
+@@ -14,7 +16,7 @@ public class ItemGoldenApple extends ItemFood {
+     protected void a(ItemStack itemstack, World world, EntityHuman entityhuman) {
+         if (true) { // Reaper - Remove isClientSide check
+             // Reaper start - Old combat
+-            if (com.github.ruviolence.reaper.ReaperConfig.oldCombatGoldenApple) {
++            if (BeastConfig.oldCombatGoldenApple) {
+                 entityhuman.addEffect(new MobEffect(MobEffects.ABSORBTION, 2400, 0));
+                 if (itemstack.getData() > 0) {
+                     entityhuman.addEffect(new MobEffect(MobEffects.REGENERATION, 600, 4));
+diff --git a/src/main/java/net/minecraft/server/ItemSnowball.java b/src/main/java/net/minecraft/server/ItemSnowball.java
+index 4d938dd7406f25ad3ae212362f9bed213c6af7a7..56ede2c02df237aa6d27f2e427c6ff6c2122d569 100644
+--- a/src/main/java/net/minecraft/server/ItemSnowball.java
++++ b/src/main/java/net/minecraft/server/ItemSnowball.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ public class ItemSnowball extends Item {
+ 
+     public ItemSnowball() {
+@@ -30,7 +32,7 @@ public class ItemSnowball extends Item {
+                 world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.hp, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemSnowball.j.nextFloat() * 0.4F + 0.8F));
+             } else if (entityhuman instanceof EntityPlayer) {
+                 // Reaper start - Reduce inventory updates
+-                if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                if (BeastConfig.reduceInventoryUpdates) {
+                     com.github.ruviolence.reaper.InventoryUpdateHelper.updateHeld((EntityPlayer) entityhuman, enumhand);
+                 } else
+                 // Reaper end - Reduce inventory updates
+diff --git a/src/main/java/net/minecraft/server/ItemStack.java b/src/main/java/net/minecraft/server/ItemStack.java
+index 68486a0d814f472d02ad39c2db3c12309f596e14..ca38ff1f3b1accf15630afb6b249224ac5808eca 100644
+--- a/src/main/java/net/minecraft/server/ItemStack.java
++++ b/src/main/java/net/minecraft/server/ItemStack.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.HashMultimap;
+ import com.google.common.collect.Multimap;
+ import java.text.DecimalFormat;
+@@ -244,7 +245,7 @@ public final class ItemStack {
+                 enuminteractionresult = EnumInteractionResult.FAIL; // cancel placement
+                 // PAIL: Remove this when MC-99075 fixed
+                 // Reaper start - Reduce inventory updates
+-                if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                if (BeastConfig.reduceInventoryUpdates) {
+                     com.github.ruviolence.reaper.InventoryUpdateHelper.updateHeld((EntityPlayer) entityhuman, enumhand);
+                 } else
+                 // Reaper end - Reduce inventory updates
+@@ -441,7 +442,7 @@ public final class ItemStack {
+                     org.bukkit.Bukkit.getServer().getPluginManager().callEvent(event);
+                     if (i != event.getDamage() || event.isCancelled()) {
+                         // Reaper start - Reduce inventory updates
+-                        if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                        if (BeastConfig.reduceInventoryUpdates) {
+                             com.github.ruviolence.reaper.InventoryUpdateHelper.updateHeld(entityplayer);
+                         } else
+                         // Reaper end - Reduce inventory updates
+diff --git a/src/main/java/net/minecraft/server/JsonList.java b/src/main/java/net/minecraft/server/JsonList.java
+index 621dd6154238ab39b88a4df795a279f3fd9489c4..103cc590130feebb39463df596922d2819433c3a 100644
+--- a/src/main/java/net/minecraft/server/JsonList.java
++++ b/src/main/java/net/minecraft/server/JsonList.java
+@@ -1,6 +1,6 @@
+ package net.minecraft.server;
+ 
+-import com.google.common.collect.Lists;
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Maps;
+ import com.google.common.io.Files;
+ import com.google.gson.Gson;
+@@ -21,7 +21,6 @@ import java.io.Reader;
+ import java.lang.reflect.ParameterizedType;
+ import java.lang.reflect.Type;
+ import java.nio.charset.StandardCharsets;
+-import java.util.ArrayList;
+ import java.util.Collection;
+ import java.util.Iterator;
+ import java.util.List;
+@@ -182,7 +181,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
+             IOUtils.closeQuietly(bufferedwriter);
+         }
+         };
+-        if (com.github.ruviolence.reaper.ReaperConfig.saveJsonAsync) {
++        if (BeastConfig.saveJsonAsync) {
+             MCUtil.scheduleAsyncTask(runnable);
+         } else {
+             runnable.run();
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index db77495770595c42aa917a568991a8b6b2cbebb8..b7864248dfac800958ef256664fe9f291c0fbadc 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -1,7 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Lists;
+-import com.google.common.collect.Queues;
+ import com.google.common.util.concurrent.Futures;
+ import com.google.common.util.concurrent.ListenableFuture;
+ import com.google.common.util.concurrent.ListenableFutureTask;
+@@ -13,7 +13,7 @@ import io.netty.buffer.ByteBuf;
+ import io.netty.buffer.ByteBufOutputStream;
+ import io.netty.buffer.Unpooled;
+ import io.netty.handler.codec.base64.Base64;
+-import java.awt.GraphicsEnvironment;
++
+ import java.awt.image.BufferedImage;
+ import java.io.File;
+ import java.io.IOException;
+@@ -27,7 +27,6 @@ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.Collections;
+ import java.util.Date;
+-import java.util.Iterator;
+ import java.util.List;
+ import java.util.Queue;
+ import java.util.Random;
+@@ -35,7 +34,6 @@ import java.util.UUID;
+ import java.util.concurrent.Callable;
+ import java.util.concurrent.Executors;
+ import java.util.concurrent.FutureTask;
+-import java.util.function.Supplier;
+ import javax.annotation.Nullable;
+ import javax.imageio.ImageIO;
+ import org.apache.commons.lang3.Validate;
+@@ -43,9 +41,6 @@ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+ // CraftBukkit start
+ import joptsimple.OptionSet;
+-import org.bukkit.Bukkit;
+-import org.bukkit.craftbukkit.CraftServer;
+-import org.bukkit.craftbukkit.Main;
+ // CraftBukkit end
+ import org.spigotmc.SlackActivityAccountant; // Spigot
+ 
+@@ -889,7 +884,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
+         org.bukkit.craftbukkit.chunkio.ChunkIOExecutor.tick();
+ 
+         // Send time updates to everyone, it will get the right time from the world the player is in.
+-        if (++this.timeUpdateTicks > com.github.ruviolence.reaper.ReaperConfig.timeUpdatePeriod) { this.timeUpdateTicks = 0; // Reaper - Custom time update period
++        if (++this.timeUpdateTicks > BeastConfig.timeUpdatePeriod) { this.timeUpdateTicks = 0; // Reaper - Custom time update period
+             for (int i = 0; i < this.getPlayerList().players.size(); ++i) {
+                 EntityPlayer entityplayer = (EntityPlayer) this.getPlayerList().players.get(i);
+                 entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(entityplayer.world.getTime(), entityplayer.getPlayerTime(), entityplayer.world.getGameRules().getBoolean("doDaylightCycle"))); // Add support for per player time
+@@ -1020,7 +1015,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
+     }
+ 
+     public static void main(final OptionSet options) { // CraftBukkit - replaces main(String[] astring)
+-        com.github.ruviolence.reaper.ReaperConfig.init((File) options.valueOf("beast-settings")); // Reaper
++        BeastConfig.init((File) options.valueOf("beast-settings")); // Reaper
+         DispenserRegistry.c();
+ 
+         try {
+diff --git a/src/main/java/net/minecraft/server/NetworkManager.java b/src/main/java/net/minecraft/server/NetworkManager.java
+index 434c74fb21ce2417ca655c80c5530a8e3925b6b3..e9ad4c43b4989abf2486e5f718939baf61daa719 100644
+--- a/src/main/java/net/minecraft/server/NetworkManager.java
++++ b/src/main/java/net/minecraft/server/NetworkManager.java
+@@ -1,6 +1,6 @@
+ package net.minecraft.server;
+ 
+-import com.github.ruviolence.reaper.ReaperConfig;
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Queues;
+ import com.google.common.util.concurrent.ThreadFactoryBuilder;
+ import io.netty.channel.Channel;
+@@ -22,7 +22,7 @@ import java.util.Queue;
+ import java.util.concurrent.locks.ReentrantReadWriteLock;
+ import javax.annotation.Nullable;
+ import javax.crypto.SecretKey;
+-import org.apache.commons.lang3.ArrayUtils;
++
+ import org.apache.commons.lang3.Validate;
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+@@ -120,14 +120,14 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
+     // Reaper end - allow controlled flushing
+     // Paper start - packet limiter
+     protected final Object PACKET_LIMIT_LOCK = new Object();
+-    protected final @Nullable io.papermc.paper.util.IntervalledCounter allPacketCounts = com.github.ruviolence.reaper.ReaperConfig.packetLimiterAllPackets.isEnabled() ? new io.papermc.paper.util.IntervalledCounter(
+-            (long)(com.github.ruviolence.reaper.ReaperConfig.packetLimiterAllPackets.interval * 1.0e9)
++    protected final @Nullable io.papermc.paper.util.IntervalledCounter allPacketCounts = BeastConfig.packetLimiterAllPackets.isEnabled() ? new io.papermc.paper.util.IntervalledCounter(
++            (long)(BeastConfig.packetLimiterAllPackets.interval * 1.0e9)
+     ) : null;
+     protected final java.util.Map<Class<? extends net.minecraft.server.Packet<?>>, io.papermc.paper.util.IntervalledCounter> packetSpecificLimits = new java.util.HashMap<>();
+ 
+     private boolean stopReadingPackets;
+     private void killForPacketSpam() {
+-        ChatComponentText kickReason = new ChatComponentText(ReaperConfig.packetLimiterKickMessage);
++        ChatComponentText kickReason = new ChatComponentText(BeastConfig.packetLimiterKickMessage);
+         this.sendPacket(new PacketPlayOutKickDisconnect(kickReason), new GenericFutureListener() {
+             public void operationComplete(Future future) throws Exception {
+                 close(kickReason);
+@@ -199,20 +199,20 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
+                 return;
+             }
+             if (this.allPacketCounts != null ||
+-                    com.github.ruviolence.reaper.ReaperConfig.packetLimiterOverrides.containsKey(packet.getClass())) {
++                    BeastConfig.packetLimiterOverrides.containsKey(packet.getClass())) {
+                 long time = System.nanoTime();
+                 synchronized (PACKET_LIMIT_LOCK) {
+                     if (this.allPacketCounts != null) {
+                         this.allPacketCounts.updateAndAdd(1, time);
+-                        if (this.allPacketCounts.getRate() >= com.github.ruviolence.reaper.ReaperConfig.packetLimiterAllPackets.maxPacketRate) {
++                        if (this.allPacketCounts.getRate() >= BeastConfig.packetLimiterAllPackets.maxPacketRate) {
+                             this.killForPacketSpam();
+                             return;
+                         }
+                     }
+ 
+                     for (Class<?> check = packet.getClass(); check != Object.class; check = check.getSuperclass()) {
+-                        com.github.ruviolence.reaper.ReaperConfig.PacketLimit packetSpecificLimit =
+-                            com.github.ruviolence.reaper.ReaperConfig.packetLimiterOverrides.get(check);
++                        BeastConfig.PacketLimit packetSpecificLimit =
++                            BeastConfig.packetLimiterOverrides.get(check);
+                         if (packetSpecificLimit == null || !packetSpecificLimit.isEnabled()) {
+                             continue;
+                         }
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutPlayerInfo.java b/src/main/java/net/minecraft/server/PacketPlayOutPlayerInfo.java
+index f244441f879368a0d71751e6163e1d864dabb8a6..f11460b5f94c383d92a4d1adab2a3a3b358bf6dd 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutPlayerInfo.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutPlayerInfo.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.base.MoreObjects;
+ import com.google.common.collect.Lists;
+ import com.mojang.authlib.GameProfile;
+@@ -193,7 +194,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
+ 
+         public int b() {
+             // Reaper start
+-            if (com.github.ruviolence.reaper.ReaperConfig.roundPlayerPing) {
++            if (BeastConfig.roundPlayerPing) {
+                 int ping = this.b;
+ 
+                 if (ping < 150) {
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSetSlot.java b/src/main/java/net/minecraft/server/PacketPlayOutSetSlot.java
+index 5eb99a574e192116856c2be0d07b9b30161f8d99..0cfa28308f80d646058893bd3fdc4b2ba9ba4118 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutSetSlot.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSetSlot.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ import java.io.IOException;
+ 
+ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
+@@ -33,7 +35,7 @@ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
+         packetdataserializer.writeByte(this.a);
+         packetdataserializer.writeShort(this.b);
+         // Reaper start - Old combat
+-        if (com.github.ruviolence.reaper.ReaperConfig.oldCombatHideAttributes) {
++        if (BeastConfig.oldCombatHideAttributes) {
+             packetdataserializer.writeItemStackWithHidedAttributes(this.c);
+             return;
+         }
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutUpdateAttributes.java b/src/main/java/net/minecraft/server/PacketPlayOutUpdateAttributes.java
+index 6490e08ca41493dc182e5a67cfeedd2a3e70bc6f..a7fb37683f9879a963eb21231ba5d821884acf9b 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutUpdateAttributes.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutUpdateAttributes.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Lists;
+ import java.io.IOException;
+ import java.util.ArrayList;
+@@ -23,7 +24,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
+             AttributeInstance attributeinstance = (AttributeInstance) iterator.next();
+ 
+             // Reaper start - Old combat
+-            if (com.github.ruviolence.reaper.ReaperConfig.oldCombatAttackSpeed) {
++            if (BeastConfig.oldCombatAttackSpeed) {
+                 if (attributeinstance.getAttribute().getName().equals("generic.attackSpeed")) {
+                     this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot("generic.attackSpeed", 127, java.util.Collections.emptyList()));
+                     continue;
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutWindowItems.java b/src/main/java/net/minecraft/server/PacketPlayOutWindowItems.java
+index 9276b54b19f9061a0c921d6d8c8027edbb413ae8..77cabd543db168cd807ccfd93c55b521c104a628 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutWindowItems.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutWindowItems.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
++
+ import java.io.IOException;
+ import java.util.Iterator;
+ import java.util.List;
+@@ -50,7 +52,7 @@ public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
+         Iterator iterator = this.b.iterator();
+ 
+         // Reaper start - Old combat
+-        if (com.github.ruviolence.reaper.ReaperConfig.oldCombatHideAttributes) {
++        if (BeastConfig.oldCombatHideAttributes) {
+             while (iterator.hasNext()) {
+                 ItemStack itemstack = (ItemStack) iterator.next();
+                 packetdataserializer.writeItemStackWithHidedAttributes(itemstack);
+diff --git a/src/main/java/net/minecraft/server/PersistentVillage.java b/src/main/java/net/minecraft/server/PersistentVillage.java
+index 8290d50e12356b88fe090c7750c5fb70cb7718ee..b7a7df44ac2b46ff56352fa9c0f91f13cb5249c6 100644
+--- a/src/main/java/net/minecraft/server/PersistentVillage.java
++++ b/src/main/java/net/minecraft/server/PersistentVillage.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Lists;
+ import java.util.Iterator;
+ import java.util.List;
+@@ -22,7 +23,7 @@ public class PersistentVillage extends PersistentBase {
+         this.world = world;
+         this.c();
+         // Reaper start
+-        if (com.github.ruviolence.reaper.ReaperConfig.disableVillages) {
++        if (BeastConfig.disableVillages) {
+             ((java.util.ArrayList<?>) c).trimToSize();
+             ((java.util.ArrayList<?>) d).trimToSize();
+             ((java.util.ArrayList<?>) villages).trimToSize();
+@@ -43,7 +44,7 @@ public class PersistentVillage extends PersistentBase {
+     }
+ 
+     public void a(BlockPosition blockposition) {
+-        if (com.github.ruviolence.reaper.ReaperConfig.disableVillages) return; // Reaper
++        if (BeastConfig.disableVillages) return; // Reaper
+         if (this.c.size() <= 64) {
+             if (!this.e(blockposition)) {
+                 this.c.add(blockposition);
+@@ -90,7 +91,7 @@ public class PersistentVillage extends PersistentBase {
+     }
+ 
+     public Village getClosestVillage(BlockPosition blockposition, int i) {
+-        if (com.github.ruviolence.reaper.ReaperConfig.disableVillages) return null; // Reaper
++        if (BeastConfig.disableVillages) return null; // Reaper
+         Village village = null;
+         double d0 = 3.4028234663852886E38D;
+         Iterator iterator = this.villages.iterator();
+@@ -247,7 +248,7 @@ public class PersistentVillage extends PersistentBase {
+     }
+ 
+     public void a(NBTTagCompound nbttagcompound) {
+-        if (com.github.ruviolence.reaper.ReaperConfig.disableVillages) return; // Reaper
++        if (BeastConfig.disableVillages) return; // Reaper
+         this.time = nbttagcompound.getInt("Tick");
+         NBTTagList nbttaglist = nbttagcompound.getList("Villages", 10);
+ 
+diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+index 4ec5f145018bcf334640a95684672cff6bb0cbf5..90b5b348f40481197b18c50020c1ba230e3d84bf 100644
+--- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
++++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.base.Predicate;
+ import com.google.common.collect.AbstractIterator;
+ import com.google.common.collect.ComparisonChain;
+@@ -53,7 +54,7 @@ public class PlayerChunkMap {
+ 
+     public PlayerChunkMap(WorldServer worldserver) {
+         this.world = worldserver;
+-        this.a(com.github.ruviolence.reaper.ReaperConfig.dynamicViewDistance ? 3 : worldserver.spigotConfig.viewDistance); // Spigot // Reaper - Dynamic view distance
++        this.a(BeastConfig.dynamicViewDistance ? 3 : worldserver.spigotConfig.viewDistance); // Spigot // Reaper - Dynamic view distance
+     }
+ 
+     public WorldServer getWorld() {
+@@ -292,7 +293,7 @@ public class PlayerChunkMap {
+         }
+ 
+         // Reaper start - Delayed chunks
+-        if (com.github.ruviolence.reaper.ReaperConfig.delayedChunksEnabled) {
++        if (BeastConfig.delayedChunksEnabled) {
+             for (int h = 0; h < chunkList.size(); h++) {
+                 ChunkCoordIntPair pair = chunkList.get(h);
+                 entityplayer.addDelayedChunk(pair.x, pair.z);
+@@ -321,7 +322,7 @@ public class PlayerChunkMap {
+         for (int k = i - viewDistance; k <= i + viewDistance; ++k) {
+             for (int l = j - viewDistance; l <= j + viewDistance; ++l) {
+                 // Paper end
+-                if (com.github.ruviolence.reaper.ReaperConfig.delayedChunksEnabled && entityplayer.removeDelayedChunk(k, l)) continue; // Reaper - Delayed chunks
++                if (BeastConfig.delayedChunksEnabled && entityplayer.removeDelayedChunk(k, l)) continue; // Reaper - Delayed chunks
+                 PlayerChunk playerchunk = this.getChunk(k, l);
+ 
+                 if (playerchunk != null) {
+@@ -352,7 +353,7 @@ public class PlayerChunkMap {
+             int k = (int) entityplayer.d >> 4;
+             int l = (int) entityplayer.e >> 4;
+             final int viewDistance = entityplayer.getViewDistance(); // Paper - Player view distance API
+-            int i1 = com.github.ruviolence.reaper.ReaperConfig.dynamicViewDistance ? viewDistance : Math.max(getViewDistance(), viewDistance); // Paper - Player view distance API // Reaper - Dynamic view distance
++            int i1 = BeastConfig.dynamicViewDistance ? viewDistance : Math.max(getViewDistance(), viewDistance); // Paper - Player view distance API // Reaper - Dynamic view distance
+ 
+             int j1 = i - k;
+             int k1 = j - l;
+@@ -371,7 +372,7 @@ public class PlayerChunkMap {
+                         int x = l1 - j1;
+                         int z = i2 - k1;
+                         if (!this.a(x, z, i, j, i1)) {
+-                            if (com.github.ruviolence.reaper.ReaperConfig.delayedChunksEnabled && entityplayer.removeDelayedChunk(x, z)) continue;
++                            if (BeastConfig.delayedChunksEnabled && entityplayer.removeDelayedChunk(x, z)) continue;
+                             PlayerChunk playerchunk = this.getChunk(x, z);
+                             // Reaper end
+ 
+@@ -386,7 +387,7 @@ public class PlayerChunkMap {
+                 entityplayer.e = entityplayer.locZ;
+                 this.e();
+                 // Reaper start - Delayed chunks
+-                if (com.github.ruviolence.reaper.ReaperConfig.delayedChunksEnabled) {
++                if (BeastConfig.delayedChunksEnabled) {
+                     for (int h = 0; h < chunksToLoad.size(); h++) {
+                         ChunkCoordIntPair pair = chunksToLoad.get(h);
+                         entityplayer.addDelayedChunk(pair.x, pair.z);
+@@ -449,7 +450,7 @@ public class PlayerChunkMap {
+             // Reaper end
+             int i1;
+             int j1;
+-            boolean delayedChunksEnabled = com.github.ruviolence.reaper.ReaperConfig.delayedChunksEnabled; // Reaper
++            boolean delayedChunksEnabled = BeastConfig.delayedChunksEnabled; // Reaper
+ 
+             if (j > 0) {
+                 for (i1 = k - i; i1 <= k + i; ++i1) {
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index e2181ed3f05711d915863de824f8a282c66a79c8..f8e27ac02b0ae793a391395a9c0dc858fdcd8332 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -1,16 +1,13 @@
+ package net.minecraft.server;
+ 
+-import com.google.common.collect.Lists;
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.primitives.Doubles;
+ import com.google.common.primitives.Floats;
+-import com.google.common.util.concurrent.Futures;
+ import io.netty.util.concurrent.Future;
+ import io.netty.util.concurrent.GenericFutureListener;
+ import java.io.IOException;
+ import java.util.ArrayList;
+ import java.util.Collections;
+-import java.util.Iterator;
+-import java.util.List;
+ import java.util.Set;
+ import org.apache.commons.lang3.StringUtils;
+ import org.apache.logging.log4j.LogManager;
+@@ -192,7 +189,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+                 this.disconnect(new ChatMessage("disconnect.timeout"));
+             }
+         } else {
+-            if (elapsedTime >= com.github.ruviolence.reaper.ReaperConfig.pingPeriod) { // Reaper
++            if (elapsedTime >= BeastConfig.pingPeriod) { // Reaper
+                 this.setPendingPing(true);
+                 this.setLastPing(currentTime);
+                 this.setKeepAliveID(currentTime);
+@@ -618,7 +615,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+                             }
+ 
+                             // Reaper start - Configurable collision check
+-                            boolean checkCollision = !com.github.ruviolence.reaper.ReaperConfig.disableCollisionCheck;
++                            boolean checkCollision = !BeastConfig.disableCollisionCheck;
+                             boolean flag = checkCollision && worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(0.0625D)).isEmpty(); // Reaper - Configurable collision check
+                             // Reaper end - Configurable collision check
+ 
+@@ -1030,7 +1027,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+         PlayerConnectionUtils.ensureMainThread(packetplayinuseitem, this, this.player.x());
+         if (this.player.isFrozen()) return; // CraftBukkit
+         if (!checkLimit(packetplayinuseitem.timestamp)) return; // Spigot - check limit
+-        if (player.activeContainer != player.defaultContainer && com.github.ruviolence.reaper.ReaperConfig.dropUsePacketsInInventory) return; // Reaper
++        if (player.activeContainer != player.defaultContainer && BeastConfig.dropUsePacketsInInventory) return; // Reaper
+         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
+         EnumHand enumhand = packetplayinuseitem.c();
+         ItemStack itemstack = this.player.b(enumhand);
+@@ -1115,7 +1112,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+ 
+             if (cancelled) {
+                 // Reaper start - Reduce inventory updates
+-                if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                if (BeastConfig.reduceInventoryUpdates) {
+                     com.github.ruviolence.reaper.InventoryUpdateHelper.onRightClick(this.player, enumhand, itemstack);
+                 } else
+                 // Reaper end - Reduce inventory updates
+@@ -1752,7 +1749,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+ 
+                     if (event.isCancelled()) {
+                         // Reaper start - Reduce inventory updates
+-                        if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                        if (BeastConfig.reduceInventoryUpdates) {
+                             com.github.ruviolence.reaper.InventoryUpdateHelper.onRightClick(this.player, packetplayinuseentity.b(), itemInHand);
+                         } else
+                         // Reaper end - Reduce inventory updates
+@@ -1770,7 +1767,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+                     // CraftBukkit start
+                     if (!itemInHand.isEmpty() && itemInHand.getCount() <= -1) {
+                         // Reaper start - Reduce inventory updates
+-                        if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                        if (BeastConfig.reduceInventoryUpdates) {
+                             com.github.ruviolence.reaper.InventoryUpdateHelper.onRightClick(this.player, enumhand, itemInHand);
+                         } else
+                         // Reaper end - Reduce inventory updates
+@@ -1784,7 +1781,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+                     // CraftBukkit start
+                     if (!itemInHand.isEmpty() && itemInHand.getCount() <= -1) {
+                         // Reaper start - Reduce inventory updates
+-                        if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                        if (BeastConfig.reduceInventoryUpdates) {
+                             com.github.ruviolence.reaper.InventoryUpdateHelper.onRightClick(this.player, enumhand, itemInHand);
+                         } else
+                         // Reaper end - Reduce inventory updates
+@@ -1804,7 +1801,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+                     // CraftBukkit start
+                     if (!itemInHand.isEmpty() && itemInHand.getCount() <= -1) {
+                         // Reaper start - Reduce inventory updates
+-                        if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                        if (BeastConfig.reduceInventoryUpdates) {
+                             com.github.ruviolence.reaper.InventoryUpdateHelper.onRightClick(this.player, packetplayinuseentity.b(), itemInHand);
+                         } else
+                         // Reaper end - Reduce inventory updates
+diff --git a/src/main/java/net/minecraft/server/PlayerInteractManager.java b/src/main/java/net/minecraft/server/PlayerInteractManager.java
+index 91f6e31ec1a3ffb6c274c405cfe5788f4bc94f38..4f33c5d8df3166314b795372eb31c7fe5a12424b 100644
+--- a/src/main/java/net/minecraft/server/PlayerInteractManager.java
++++ b/src/main/java/net/minecraft/server/PlayerInteractManager.java
+@@ -2,6 +2,8 @@ package net.minecraft.server;
+ 
+ // CraftBukkit start
+ import java.util.ArrayList;
++
++import com.github.ruviolence.reaper.BeastConfig;
+ import org.bukkit.event.block.BlockBreakEvent;
+ import org.bukkit.craftbukkit.event.CraftEventFactory;
+ import org.bukkit.event.Event;
+@@ -455,7 +457,7 @@ public class PlayerInteractManager {
+ 
+                 if (!entityhuman.isHandRaised()) {
+                     // Reaper start - Reduce inventory updates
+-                    if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                    if (BeastConfig.reduceInventoryUpdates) {
+                         com.github.ruviolence.reaper.InventoryUpdateHelper.onRightClick((EntityPlayer) entityhuman, enumhand, itemstack1);
+                     } else
+                     // Reaper end - Reduce inventory updates
+@@ -526,7 +528,7 @@ public class PlayerInteractManager {
+                     if (tileentity != null) {
+                         player.playerConnection.sendPacket(tileentity.getUpdatePacket());
+                         // Reaper start - Reduce inventory updates
+-                        if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                        if (BeastConfig.reduceInventoryUpdates) {
+                             if (!((TileEntityFlowerPot) tileentity).getContents().isEmpty()) {
+                                 com.github.ruviolence.reaper.InventoryUpdateHelper.onPotInteract(player);
+                             }
+@@ -536,7 +538,7 @@ public class PlayerInteractManager {
+                 // Paper end - extend Player Interact cancellation
+                 }
+                 // Reaper start - Reduce inventory updates
+-                if (com.github.ruviolence.reaper.ReaperConfig.reduceInventoryUpdates) {
++                if (BeastConfig.reduceInventoryUpdates) {
+                     com.github.ruviolence.reaper.InventoryUpdateHelper.updateHeld((EntityPlayer) entityhuman, enumhand);
+                 } else
+                 // Reaper end - Reduce inventory updates
+diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
+index bf84375f4d624243814791c6a47cee0e8c5c3eb8..a916162ab75645c4b407687b1f4bab71b39eecce 100644
+--- a/src/main/java/net/minecraft/server/PlayerList.java
++++ b/src/main/java/net/minecraft/server/PlayerList.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Maps;
+ import com.google.common.collect.Sets;
+@@ -1043,7 +1044,7 @@ public abstract class PlayerList {
+     public void tick() {
+         if (++this.v > 600) {
+             // Reaper start - Async PlayerList
+-            if (com.github.ruviolence.reaper.ReaperConfig.asyncPlayerList) {
++            if (BeastConfig.asyncPlayerList) {
+                 List<Tuple<EntityPlayer, Packet<?>>> packetEntries = new ArrayList<>(this.players.size());
+ 
+                 for (int i = 0; i < this.players.size(); ++i) {
+diff --git a/src/main/java/net/minecraft/server/PortalTravelAgent.java b/src/main/java/net/minecraft/server/PortalTravelAgent.java
+index ddc63f844198e94bbb75bafb88f934e4aac560b7..266254a67a7cc569f6b67cbde9c57f8353625f7f 100644
+--- a/src/main/java/net/minecraft/server/PortalTravelAgent.java
++++ b/src/main/java/net/minecraft/server/PortalTravelAgent.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+ import it.unimi.dsi.fastutil.objects.ObjectIterator;
+@@ -154,7 +155,7 @@ public class PortalTravelAgent {
+         } else {
+             BlockPosition blockposition = new BlockPosition(x, y, z); // CraftBukkit
+ 
+-            java.util.Set<ChunkCoordIntPair> notGeneratedChunks = com.github.ruviolence.reaper.ReaperConfig.generatePortalExitChunks ? null : new HashSet<>(); // Reaper
++            java.util.Set<ChunkCoordIntPair> notGeneratedChunks = BeastConfig.generatePortalExitChunks ? null : new HashSet<>(); // Reaper
+             for (int l = -radius; l <= radius; ++l) {
+                 BlockPosition blockposition1;
+ 
+@@ -508,7 +509,7 @@ public class PortalTravelAgent {
+ 
+     public void a(long i) {
+         if (i % 100L == 0L) {
+-            long j = i - com.github.ruviolence.reaper.ReaperConfig.portalTravelCacheLife; // Reaper - Configurable portal travel cache
++            long j = i - BeastConfig.portalTravelCacheLife; // Reaper - Configurable portal travel cache
+             ObjectIterator objectiterator = this.c.values().iterator();
+ 
+             while (objectiterator.hasNext()) {
+diff --git a/src/main/java/net/minecraft/server/ReaperLightingQueue.java b/src/main/java/net/minecraft/server/ReaperLightingQueue.java
+index 0ca48fe511e35df2ea4532434a41672205b7f4da..040069f8be82064d05bb337d8aa976fbcc470b3c 100644
+--- a/src/main/java/net/minecraft/server/ReaperLightingQueue.java
++++ b/src/main/java/net/minecraft/server/ReaperLightingQueue.java
+@@ -1,6 +1,6 @@
+ package net.minecraft.server;
+ 
+-import com.github.ruviolence.reaper.ReaperConfig;
++import com.github.ruviolence.reaper.BeastConfig;
+ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+ import it.unimi.dsi.fastutil.objects.ObjectCollection;
+@@ -11,7 +11,7 @@ public class ReaperLightingQueue {
+     private static final long MAX_TIME = (long) (1000000000 / 20 * 1.15);
+ 
+     public static void processQueue(long curTime) {
+-        if (!ReaperConfig.queueLightUpdates) return;
++        if (!BeastConfig.queueLightUpdates) return;
+         final long startTime = System.nanoTime();
+         final long maxTickTime = MAX_TIME - (startTime - curTime);
+ 
+@@ -57,7 +57,7 @@ public class ReaperLightingQueue {
+                 super.addLast(task);
+             }
+ 
+-            if (ReaperConfig.lightThrottlingRedelaying && isDelayed()) {
++            if (BeastConfig.lightThrottlingRedelaying && isDelayed()) {
+                 setDelay();
+             }
+         }
+@@ -120,7 +120,7 @@ public class ReaperLightingQueue {
+         }
+ 
+         private void setDelay() {
+-            int skipDelay = ReaperConfig.lightThrottlingDelay;
++            int skipDelay = BeastConfig.lightThrottlingDelay;
+             if (skipDelay > 0) {
+                 nextAllowedTick = MinecraftServer.getServer().aq() + skipDelay;
+             }
+diff --git a/src/main/java/net/minecraft/server/WorldMap.java b/src/main/java/net/minecraft/server/WorldMap.java
+index 418dc27946225803ab73ed66721fc6fb6b268dd1..9e6d91726ace6d6c70688562bffe935986b5c4fc 100644
+--- a/src/main/java/net/minecraft/server/WorldMap.java
++++ b/src/main/java/net/minecraft/server/WorldMap.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.base.Charsets;
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Maps;
+@@ -282,7 +283,7 @@ public class WorldMap extends PersistentBase {
+             }
+         }
+ 
+-        if (countMapIcon() >= com.github.ruviolence.reaper.ReaperConfig.mapDecorationsLimit) return; // Reaper - Limit decorations
++        if (countMapIcon() >= BeastConfig.mapDecorationsLimit) return; // Reaper - Limit decorations
+         this.decorations.put(s, new MapIcon(mapicon_type, b0, b1, b2));
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
+index ca35861afc0eed8f810ad73ecf4cbd43292066d9..7eb8c21349b36479e31c23f95c5db664592dc172 100644
+--- a/src/main/java/net/minecraft/server/WorldServer.java
++++ b/src/main/java/net/minecraft/server/WorldServer.java
+@@ -1,8 +1,8 @@
+ package net.minecraft.server;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Maps;
+-import com.google.common.collect.Sets;
+ import com.google.common.util.concurrent.ListenableFuture;
+ import java.io.File;
+ import java.util.ArrayList;
+@@ -13,9 +13,7 @@ import java.util.List;
+ import java.util.Map;
+ import java.util.Random;
+ import java.util.Set;
+-import java.util.TreeSet;
+ import java.util.UUID;
+-import java.util.function.Predicate;
+ import java.util.stream.Collectors;
+ import javax.annotation.Nullable;
+ import org.apache.logging.log4j.LogManager;
+@@ -25,10 +23,8 @@ import org.apache.logging.log4j.Logger;
+ import java.util.logging.Level;
+ 
+ import org.bukkit.WeatherType;
+-import org.bukkit.block.BlockState;
+ import org.bukkit.craftbukkit.util.HashTreeSet;
+ 
+-import org.bukkit.event.block.BlockFormEvent;
+ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+ import org.bukkit.event.weather.LightningStrikeEvent;
+ // CraftBukkit end
+@@ -328,7 +324,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
+         // this.methodProfiler.c("chunkMap"); // Reaper - Remove MethodProfiler
+         this.manager.flush();
+         // this.methodProfiler.c("village"); // Reaper - Remove MethodProfiler
+-        if (!com.github.ruviolence.reaper.ReaperConfig.disableVillages) { // Reaper
++        if (!BeastConfig.disableVillages) { // Reaper
+         this.villages.tick();
+         if (paperConfig.villageSiegesEnabled) { this.siegeManager.a(); } // Paper - Allow disabling village sieges
+         } // Reaper
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index f94391ba936ad9387b375b4f0c2bb503b9b4467b..3f9442318bfbd51c6af74519d84b224798a8d8b5 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -19,10 +19,10 @@ import java.util.Set;
+ import java.util.UUID;
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
+-import java.util.regex.Pattern;
+ 
+ import javax.imageio.ImageIO;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import net.minecraft.server.*;
+ 
+ import org.bukkit.BanList;
+@@ -122,7 +122,6 @@ import com.google.common.base.Preconditions;
+ import com.google.common.collect.ImmutableList;
+ import com.google.common.collect.Iterators;
+ import com.google.common.collect.Lists;
+-import com.google.common.collect.MapMaker;
+ import com.mojang.authlib.GameProfile;
+ 
+ import io.netty.buffer.ByteBuf;
+@@ -742,7 +741,7 @@ public final class CraftServer implements Server {
+ 
+         org.spigotmc.SpigotConfig.init((File) console.options.valueOf("spigot-settings")); // Spigot
+         com.destroystokyo.paper.PaperConfig.init((File) console.options.valueOf("paper-settings")); // Paper
+-        com.github.ruviolence.reaper.ReaperConfig.init((File) console.options.valueOf("beast-settings")); // Reaper
++        BeastConfig.init((File) console.options.valueOf("beast-settings")); // Reaper
+         for (WorldServer world : console.worlds) {
+             world.worldData.setDifficulty(difficulty);
+             world.setSpawnFlags(monsters, animals);
+@@ -1875,7 +1874,7 @@ public final class CraftServer implements Server {
+ 
+         @Override
+         public YamlConfiguration getReaperConfig() {
+-            return com.github.ruviolence.reaper.ReaperConfig.config;
++            return BeastConfig.config;
+         }
+ 
+         @Override
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java b/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
+index 2c475eb1429b291ebf0bbeb43b489a39168f0163..dfbea10032ed70d828ebbeacb214a067629e2d36 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftChatMessage.java
+@@ -6,6 +6,7 @@ import java.util.Map;
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+ 
++import com.github.ruviolence.reaper.BeastConfig;
+ import net.minecraft.server.ChatClickable;
+ import net.minecraft.server.ChatComponentText;
+ import net.minecraft.server.ChatModifier;
+@@ -142,12 +143,12 @@ public final class CraftChatMessage {
+     }
+ 
+     public static IChatBaseComponent[] fromString(String message) {
+-        if (com.github.ruviolence.reaper.ReaperConfig.alternativeChatComponentParser) return fromStringFast(message, false); // Reaper
++        if (BeastConfig.alternativeChatComponentParser) return fromStringFast(message, false); // Reaper
+         return fromString(message, false);
+     }
+     
+     public static IChatBaseComponent[] fromString(String message, boolean keepNewlines) {
+-        if (com.github.ruviolence.reaper.ReaperConfig.alternativeChatComponentParser) return fromStringFast(message, keepNewlines); // Reaper
++        if (BeastConfig.alternativeChatComponentParser) return fromStringFast(message, keepNewlines); // Reaper
+         return new StringMessage(message, keepNewlines).getOutput();
+     }
+     
+diff --git a/src/main/java/org/spigotmc/SpigotWorldConfig.java b/src/main/java/org/spigotmc/SpigotWorldConfig.java
+index a1c46441f574be31ec70b7d449004747823c13f3..bbaf575bbb453dcb4b94164d6b33e01a9a457655 100644
+--- a/src/main/java/org/spigotmc/SpigotWorldConfig.java
++++ b/src/main/java/org/spigotmc/SpigotWorldConfig.java
+@@ -1,6 +1,8 @@
+ package org.spigotmc;
+ 
+ import java.util.List;
++
++import com.github.ruviolence.reaper.BeastConfig;
+ import org.bukkit.Bukkit;
+ import org.bukkit.configuration.file.YamlConfiguration;
+ 
+@@ -284,7 +286,7 @@ public class SpigotWorldConfig
+         sprintMultiplier = (float) getDouble( "hunger.sprint-multiplier", 0.1 );
+         otherMultiplier = (float) getDouble( "hunger.other-multiplier", 0.0 );
+         // Reaper start - Old combat
+-        if (com.github.ruviolence.reaper.ReaperConfig.oldCombatRegen) {
++        if (BeastConfig.oldCombatRegen) {
+             jumpWalkExhaustion = 0.2F;
+             jumpSprintExhaustion = 0.8F;
+             combatExhaustion = 0.3F;

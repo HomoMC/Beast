@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ruViolence <78062896+ruViolence@users.noreply.github.com>
+Date: Sat, 29 Jul 2023 00:35:52 +0800
+Subject: [PATCH] feat: configurable collision check
+
+
+diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
+index 39ac8388f63dd0e2ee44775f2cbcc275977e84a6..d966ab87602f81ce4ce13624eaaca7e53689a649 100644
+--- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
++++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
+@@ -305,6 +305,11 @@ public class ReaperConfig {
+         asyncPlayerList = getBoolean("async-player-list", true);
+     }
+ 
++    public static boolean disableCollisionCheck;
++    private static void disableCollisionCheck() {
++        disableCollisionCheck = getBoolean("disable-collision-check", false);
++    }
++
+     // Paper start - packet limiter
+     public static String packetLimiterKickMessage;
+     public static PacketLimit packetLimiterAllPackets;
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index b20bfb7b48358a526a568602c24ccb20e1cdd3f1..f193ea3524b793d552f037f7876ced4073e09996 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -618,7 +618,10 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+                                 }
+                             }
+ 
+-                            boolean flag = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(0.0625D)).isEmpty();
++                            // Reaper start - Configurable collision check
++                            boolean checkCollision = !com.github.ruviolence.reaper.ReaperConfig.disableCollisionCheck;
++                            boolean flag = checkCollision && worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(0.0625D)).isEmpty(); // Reaper - Configurable collision check
++                            // Reaper end - Configurable collision check
+ 
+                             d7 = d4 - this.o;
+                             d8 = d5 - this.p;
+@@ -675,7 +678,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+ 
+                             this.player.setLocation(d4, d5, d6, f, f1);
+                             this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
+-                            if (!this.player.noclip && !this.player.isSleeping()) {
++                            if (checkCollision && !this.player.noclip && !this.player.isSleeping()) { // Reaper - Configurable collision check
+                                 boolean flag2 = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(0.0625D)).isEmpty();
+ 
+                                 if (flag && (flag1 || !flag2)) {

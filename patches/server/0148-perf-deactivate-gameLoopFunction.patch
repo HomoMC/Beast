@@ -5,7 +5,7 @@ Subject: [PATCH] perf: deactivate gameLoopFunction
 
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 7e6d4ea01c76a9424ded4936be804a0b331764db..8e6870988c663fd88c376bd7926398cbac82263b 100644
+index ba3e4bf290c7308c8a961ca9232695f9b4051c37..263fd80949aa5aac573b56e0f1c4940f6c90f5ee 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1022,9 +1022,11 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs

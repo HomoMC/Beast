@@ -5,7 +5,7 @@ Subject: [PATCH] feat: configurable nether portal shape check
 
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index f6fbba7ad487d5d80dbae2d4e352f86bfeaf7d4e..454d4f88edb9eced87a796afc623b7ee8e903857 100644
+index b98b063255b5691d6d26750ff502030ac4f2f9d7..b878c1a2c7506d23ebdef8699366edfc93925d01 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -170,8 +170,10 @@ public class ReaperConfig {

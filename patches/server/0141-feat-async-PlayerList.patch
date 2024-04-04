@@ -5,7 +5,7 @@ Subject: [PATCH] feat: async PlayerList
 
 
 diff --git a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
-index d60b6f56625c905b32ed513c7b71b1b9d28b4f36..b567f78570980d4b949f1ad2fc86cb0b770ee7dd 100644
+index e7fe2993d6409b7119ea0940e02363e31e280327..39ac8388f63dd0e2ee44775f2cbcc275977e84a6 100644
 --- a/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 +++ b/src/main/java/com/github/ruviolence/reaper/ReaperConfig.java
 @@ -300,6 +300,11 @@ public class ReaperConfig {
