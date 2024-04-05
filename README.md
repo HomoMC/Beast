@@ -56,3 +56,9 @@ Beast-Server maven dependency:
     <scope>provided</scope>
 </dependency>
 ```
+
+### Great thanks to these projects:
+
+- Reaper (which is the base of Beast)
+- Leaf
+- Polpot
