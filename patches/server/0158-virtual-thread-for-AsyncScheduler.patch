@@ -1,0 +1,312 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Fri, 5 Apr 2024 11:47:01 +0800
+Subject: [PATCH] virtual-thread-for-AsyncScheduler
+
+
+diff --git a/src/main/java/com/github/ruviolence/reaper/BeastConfig.java b/src/main/java/com/github/ruviolence/reaper/BeastConfig.java
+index 5ed1e87ab91adcf7f49025747c8567e093f551a2..6a4a1a4b15ff0a52704d9ea18be896fe8dfc648a 100644
+--- a/src/main/java/com/github/ruviolence/reaper/BeastConfig.java
++++ b/src/main/java/com/github/ruviolence/reaper/BeastConfig.java
+@@ -150,6 +150,12 @@ public class BeastConfig {
+         RegionFile.deflater.setLevel(chunkCompressionLevel);
+     }
+ 
++    public static boolean virtualThreadForScheduler;
++
++    private static void virtualThreadForScheduler() {
++        virtualThreadForScheduler = getBoolean("virtual-thread-for-scheduler", false);
++    }
++
+     public static int portalTravelCacheLife;
+     public static boolean portalTravelInstantExpire;
+     private static void portalTravel() {
+diff --git a/src/main/java/com/homomc/beast/virtualthreads/DirectVirtualThreadService.java b/src/main/java/com/homomc/beast/virtualthreads/DirectVirtualThreadService.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..6bb13e68e92c3d940bd114a3ab9af14c73a0df99
+--- /dev/null
++++ b/src/main/java/com/homomc/beast/virtualthreads/DirectVirtualThreadService.java
+@@ -0,0 +1,46 @@
++package com.homomc.beast.virtualthreads;
++
++
++import java.util.concurrent.ThreadFactory;
++
++/**
++ * An implementation of {@link VirtualThreadService} that can create virtual threads directly.
++ *
++ */
++final class DirectVirtualThreadService extends VirtualThreadService {
++
++    private DirectVirtualThreadService() {
++        super();
++    }
++
++    @Override
++    public ThreadFactory createFactory() {
++        // Disabled until Minecraft requires servers to have a Java version that can read class files compiled with functionality from Java 19+ on preview / Java 21+ on stable
++        throw new UnsupportedOperationException();
++//        return Thread.ofVirtual().factory();
++    }
++
++    @Override
++    public Thread start( Runnable task) {
++        // Disabled until Minecraft requires servers to have a Java version that can read class files compiled with functionality from Java 19+ on preview / Java 21+ on stable
++        throw new UnsupportedOperationException();
++//        Objects.requireNonNull(task, "The task to start a virtual thread cannot be null");
++//        return Thread.ofVirtual().start(task);
++    }
++
++    /**
++     * @return A functional {@link DirectVirtualThreadService}.
++     * @throws Throwable If creating virtual threads directly is not supported by the current runtime.
++     * This could be any {@link Throwable}, including an {@link Exception} or an {@link Error}.
++     */
++    static DirectVirtualThreadService create() throws Throwable {
++        // Disabled until Minecraft requires servers to have a Java version that can read class files compiled with functionality from Java 19+ on preview / Java 21+ on stable
++        throw new UnsupportedOperationException();
++//        var service = new DirectVirtualThreadService();
++//        // Run some tests to verify
++//        service.runTest();
++//        // If we end up here, it works
++//        return service;
++    }
++
++}
+\ No newline at end of file
+diff --git a/src/main/java/com/homomc/beast/virtualthreads/ReflectionVirtualThreadService.java b/src/main/java/com/homomc/beast/virtualthreads/ReflectionVirtualThreadService.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..f12f96eb793ad8fc0d1c2a4bd461031e841064f0
+--- /dev/null
++++ b/src/main/java/com/homomc/beast/virtualthreads/ReflectionVirtualThreadService.java
+@@ -0,0 +1,71 @@
++package com.homomc.beast.virtualthreads;
++
++import java.lang.reflect.Method;
++import java.util.Objects;
++import java.util.concurrent.ThreadFactory;
++
++/**
++ * An implementation of {@link VirtualThreadService} that can create virtual threads using Java reflection.
++ *
++ */
++final class ReflectionVirtualThreadService extends VirtualThreadService {
++
++    /**
++     * The {@link Thread}#ofVirtual() method.
++     */
++    private final Method Thread_ofVirtual_method;
++
++    /**
++     * The {@link Thread}.Builder#factory() method.
++     */
++    private final Method Thread_Builder_factory_method;
++
++    /**
++     * The {@link Thread}.Builder#start(Runnable) method.
++     */
++    private final Method Thread_Builder_start_method;
++
++    private ReflectionVirtualThreadService() throws Throwable {
++        this.Thread_ofVirtual_method = Objects.requireNonNull(Thread.class.getMethod("ofVirtual"));
++        // The Thread.Builder class
++        Class<?> Thread_Builder_class = Objects.requireNonNull(Class.forName("java.lang.Thread$Builder"));
++        this.Thread_Builder_factory_method = Objects.requireNonNull(Thread_Builder_class.getMethod("factory"));
++        this.Thread_Builder_start_method = Objects.requireNonNull(Thread_Builder_class.getMethod("start", Runnable.class));
++    }
++
++    @Override
++    public ThreadFactory createFactory() {
++        try {
++            return (ThreadFactory) this.Thread_Builder_factory_method.invoke(this.Thread_ofVirtual_method.invoke(null));
++        } catch (Exception e) {
++            // This should not be possible because it was tested in create()
++            throw new RuntimeException(e);
++        }
++    }
++
++    @Override
++    public Thread start( Runnable task) {
++        Objects.requireNonNull(task, "The task to start a virtual thread cannot be null");
++        try {
++            return (Thread) this.Thread_Builder_start_method.invoke(this.Thread_ofVirtual_method.invoke(null), task);
++        } catch (Exception e) {
++            // This should not be possible because it was tested in create()
++            throw new RuntimeException(e);
++        }
++    }
++
++    /**
++     * @return A functional {@link ReflectionVirtualThreadService}.
++     * @throws Throwable If creating virtual threads via reflection is not supported by the current runtime.
++     * This could be any {@link Throwable}, including an {@link Exception} or an {@link Error}.
++     */
++    static ReflectionVirtualThreadService create() throws Throwable {
++        // This will already throw something if the reflection fails
++        ReflectionVirtualThreadService service = new ReflectionVirtualThreadService();
++        // Run some tests to verify
++        service.runTest();
++        // If we end up here, it works
++        return service;
++    }
++
++}
+\ No newline at end of file
+diff --git a/src/main/java/com/homomc/beast/virtualthreads/VirtualThreadService.java b/src/main/java/com/homomc/beast/virtualthreads/VirtualThreadService.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..91ff46293e9a82be0f935851f87b7d4108ec5eac
+--- /dev/null
++++ b/src/main/java/com/homomc/beast/virtualthreads/VirtualThreadService.java
+@@ -0,0 +1,94 @@
++package com.homomc.beast.virtualthreads;
++
++import java.util.concurrent.ThreadFactory;
++
++/**
++ * An abstract service to create virtual threads.
++ */
++public abstract class VirtualThreadService {
++
++    /**
++     * @return A {@link ThreadFactory} that produces virtual threads.
++     */
++    public abstract ThreadFactory createFactory();
++
++    /**
++     * @param task The runnable for the thread to execute.
++     * @return A virtual thread that has been started with the given task.
++     */
++    public abstract Thread start(Runnable task);
++
++    /**
++     * Runs a test on the {@link #createFactory} and {@link #start} methods,
++     * which certainly throws some {@link Throwable} if something goes wrong.
++     */
++    protected void runTest() throws Throwable {
++        // This will definitely throw something if it doesn't work
++        try {
++            this.start(() -> {}).join();
++        } catch (InterruptedException ignored) {} // Except InterruptedException, we don't care about that one
++        try {
++            Thread thread = this.createFactory().newThread(() -> {});
++            thread.start();
++            thread.join();
++        } catch (InterruptedException ignored) {} // Except InterruptedException, we don't care about that one
++        // If we end up here, it works
++    }
++
++    private static boolean initialized = false;
++
++    /**
++     * The {@link VirtualThreadService} for the current runtime,
++     * or null if virtual threads are not supported, or if not {@link #initialized} yet.
++     */
++    private static VirtualThreadService implementation;
++
++    /**
++     * @return Whether virtual threads are supported on the current runtime.
++     */
++    public static boolean isSupported() {
++        return get() != null;
++    }
++
++    /**
++     * @return The {@link VirtualThreadService} for the current runtime,
++     * or null if virtual threads are not {@linkplain #isSupported() supported}.
++     *
++     * This method is thread-safe only after the first time it has been fully run.
++     */
++    public static VirtualThreadService get() {
++        if (!initialized) {
++            initialized = true;
++            try {
++                implementation = DirectVirtualThreadService.create();
++            } catch (Throwable ignored) {
++                try {
++                    implementation = ReflectionVirtualThreadService.create();
++                } catch (Throwable ignored2) {}
++            }
++        }
++        return implementation;
++    }
++
++    /**
++     * The minimum major version of Java that is known to support using virtual threads
++     * (although possibly behind a feature preview flag).
++     */
++    public static final int minimumJavaMajorVersionWithFeaturePreview = 19;
++
++    /**
++     * The minimum major version of Java that is known to support using virtual threads
++     * even without any feature preview flags.
++     */
++    public static final int minimumJavaMajorVersionWithoutFeaturePreview = 21;
++
++    public static int getJavaMajorVersion() {
++        String version = System.getProperty("java.version");
++        if (version.startsWith("1.")) {
++            return version.charAt(2) - '0';
++        }
++        int dotIndex = version.indexOf(".");
++        return Integer.parseInt(dotIndex == -1 ? version : version.substring(0, dotIndex));
++    }
++
++}
+\ No newline at end of file
+diff --git a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftAsyncScheduler.java b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftAsyncScheduler.java
+index eaf8692877d95170f87cc637c30e72419206b970..06fbebbb4b4e7789e50e348304e5e311f3b8d7a4 100644
+--- a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftAsyncScheduler.java
++++ b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftAsyncScheduler.java
+@@ -25,30 +25,42 @@ package org.bukkit.craftbukkit.scheduler;
+ 
+ import com.destroystokyo.paper.ServerSchedulerReportingWrapper;
+ import com.google.common.util.concurrent.ThreadFactoryBuilder;
++import com.homomc.beast.virtualthreads.VirtualThreadService;
+ import org.bukkit.plugin.Plugin;
+ 
++import java.lang.reflect.Method;
+ import java.util.ArrayList;
+ import java.util.Iterator;
+ import java.util.List;
+-import java.util.concurrent.Executor;
+-import java.util.concurrent.Executors;
+-import java.util.concurrent.SynchronousQueue;
+-import java.util.concurrent.ThreadPoolExecutor;
+-import java.util.concurrent.TimeUnit;
++import java.util.concurrent.*;
+ 
+ public class CraftAsyncScheduler extends CraftScheduler {
+ 
+-    private final ThreadPoolExecutor executor = new ThreadPoolExecutor(
+-            4, Integer.MAX_VALUE,30L, TimeUnit.SECONDS, new SynchronousQueue<>(),
+-            new ThreadFactoryBuilder().setNameFormat("Craft Scheduler Thread - %1$d").build());
++    private Executor executor;
+     private final Executor management = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder()
+             .setNameFormat("Craft Async Scheduler Management Thread").build());
+     private final List<CraftTask> temp = new ArrayList<>();
+ 
+     CraftAsyncScheduler() {
+         super(true);
+-        executor.allowCoreThreadTimeOut(true);
+-        executor.prestartAllCoreThreads();
++        if (VirtualThreadService.getJavaMajorVersion() >= VirtualThreadService.minimumJavaMajorVersionWithoutFeaturePreview && com.github.ruviolence.reaper.BeastConfig.virtualThreadForScheduler) {
++            try {
++                Method newThreadPerTaskExecutor = Executors.class.getMethod("newThreadPerTaskExecutor", ThreadFactory.class);
++                executor = (Executor) newThreadPerTaskExecutor.invoke(null, VirtualThreadService.get().createFactory());
++                return;
++            } catch (Exception ignored) {
++                System.err.println("Failed to create Virtual Thread executor! Fallback to default executor.");
++            }
++        }
++
++        executor = new ThreadPoolExecutor(
++                4, Integer.MAX_VALUE, 30L, TimeUnit.SECONDS, new SynchronousQueue<>(),
++                new ThreadFactoryBuilder().setNameFormat("Craft Scheduler Thread - %1$d").build());
++
++        ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
++
++        threadPoolExecutor.allowCoreThreadTimeOut(true);
++        threadPoolExecutor.prestartAllCoreThreads();
+     }
+ 
+     @Override
