@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Fri, 5 Apr 2024 13:44:18 +0800
+Subject: [PATCH] Do-not-log-empty-messages-warning
+
+
+diff --git a/src/main/java/com/homomc/beast/BeastConfig.java b/src/main/java/com/homomc/beast/BeastConfig.java
+index 0cdc12c5c125b29adf643f765ec95b29d7cdcb65..62999390f81a7592e242db7b9963807f05f5c8e8 100644
+--- a/src/main/java/com/homomc/beast/BeastConfig.java
++++ b/src/main/java/com/homomc/beast/BeastConfig.java
+@@ -196,6 +196,12 @@ public class BeastConfig {
+         shapeCheckNetherPortal = getBoolean("shape-check.nether-portal", true);
+     }
+ 
++    public static boolean emptyMessageWarning;
++
++    private static void logMessages() {
++        emptyMessageWarning = getBoolean("log.empty-messages-warning", false);
++    }
++
+     public static boolean halloweenMobFeature;
+     private static void halloweenMobFeature() {
+         halloweenMobFeature = getBoolean("halloween-mob-feature", true);
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index 5c1d316a35ba7a40c06c9a74d7de89f08878489e..92ae80f58bbfd58750bfec2f41789cf4d9a1de65 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -1359,7 +1359,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+                     this.minecraftServer.server.playerCommandState = false;
+                 }
+             } else if (s.isEmpty()) {
+-                LOGGER.warn(this.player.getName() + " tried to send an empty message");
++                if (com.homomc.beast.BeastConfig.emptyMessageWarning) LOGGER.warn(this.player.getName() + " tried to send an empty message");
+             } else if (getPlayer().isConversing()) {
+                 // Spigot start
+                 final String message = s;
