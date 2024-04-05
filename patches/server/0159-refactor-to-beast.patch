@@ -16117,8 +16117,7 @@ index 040069f8be82064d05bb337d8aa976fbcc470b3c..a481302b850a9a3ca95bfc5abb1c14fd
  
  import java.util.ArrayDeque;
  
--public class ReaperLightingQueue {
-+public class BeastLightingQueue {
+public class ReaperLightingQueue {
      private static final long MAX_TIME = (long) (1000000000 / 20 * 1.15);
  
      public static void processQueue(long curTime) {
