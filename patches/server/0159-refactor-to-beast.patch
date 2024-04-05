@@ -447,6 +447,29 @@ index bd202ae956d0a0f96cc38d0c5c99e405e106d256..17dda7a400e311e6524e388d4ff6b216
      }
  
      public int compareTo(BaseBlockPosition object) { // Paper - decompile fix
+diff --git a/src/main/java/net/minecraft/server/ReaperLightingQueue.java b/src/main/java/net/minecraft/server/BeastLightingQueue.java
+similarity index 98%
+rename from src/main/java/net/minecraft/server/ReaperLightingQueue.java
+rename to src/main/java/net/minecraft/server/BeastLightingQueue.java
+index 040069f8be82064d05bb337d8aa976fbcc470b3c..a481302b850a9a3ca95bfc5abb1c14fd71b62ba7 100644
+--- a/src/main/java/net/minecraft/server/ReaperLightingQueue.java
++++ b/src/main/java/net/minecraft/server/BeastLightingQueue.java
+@@ -1,13 +1,13 @@
+ package net.minecraft.server;
+ 
+-import com.github.ruviolence.reaper.BeastConfig;
++import com.homomc.beast.BeastConfig;
+ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+ import it.unimi.dsi.fastutil.objects.ObjectCollection;
+ 
+ import java.util.ArrayDeque;
+ 
+-public class ReaperLightingQueue {
++public class BeastLightingQueue {
+     private static final long MAX_TIME = (long) (1000000000 / 20 * 1.15);
+ 
+     public static void processQueue(long curTime) {
 diff --git a/src/main/java/net/minecraft/server/BiomeForest.java b/src/main/java/net/minecraft/server/BiomeForest.java
 index 744d71350950a562353a0a0ab8be2c2a6075e38b..671ddc130236d36e174758d9647650f354bd5253 100644
 --- a/src/main/java/net/minecraft/server/BiomeForest.java
@@ -16102,26 +16125,6 @@ index 70c5d42b3b601429392da4c878a5f828017b0ea9..c5a5a90b62963bb99dd42b7eea7a6afc
          a("strong_regeneration", new PotionRegistry("regeneration", new MobEffect[] { new MobEffect(MobEffects.REGENERATION, 450, 1)}));
          a("strength", new PotionRegistry(new MobEffect[] { new MobEffect(MobEffects.INCREASE_DAMAGE, 3600)}));
          a("long_strength", new PotionRegistry("strength", new MobEffect[] { new MobEffect(MobEffects.INCREASE_DAMAGE, 9600)}));
-diff --git a/src/main/java/net/minecraft/server/ReaperLightingQueue.java b/src/main/java/net/minecraft/server/ReaperLightingQueue.java
-index 040069f8be82064d05bb337d8aa976fbcc470b3c..a481302b850a9a3ca95bfc5abb1c14fd71b62ba7 100644
---- a/src/main/java/net/minecraft/server/ReaperLightingQueue.java
-+++ b/src/main/java/net/minecraft/server/BeastLightingQueue.java
-@@ -1,13 +1,13 @@
- package net.minecraft.server;
- 
--import com.github.ruviolence.reaper.BeastConfig;
-+import com.homomc.beast.BeastConfig;
- import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
- import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
- import it.unimi.dsi.fastutil.objects.ObjectCollection;
- 
- import java.util.ArrayDeque;
- 
--public class ReaperLightingQueue {
-+public class BeastLightingQueue {
-     private static final long MAX_TIME = (long) (1000000000 / 20 * 1.15);
- 
-     public static void processQueue(long curTime) {
 diff --git a/src/main/java/net/minecraft/server/RecipeFireworks.java b/src/main/java/net/minecraft/server/RecipeFireworks.java
 index f33c7601e5a9f8690be3c5509eaf3e86286cc448..41b82d93eb4c6665bfa39b3bb873d7219c68651f 100644
 --- a/src/main/java/net/minecraft/server/RecipeFireworks.java
