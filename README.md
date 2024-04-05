@@ -18,6 +18,8 @@ A Paper 1.12.2 fork aims to provide extreme performance, bug fixes, and improvem
 - **Brings back** some vanilla features.
 - **More events make your server more fun**.
 
+### Java >= 8 is required, Java >= 21 is recommended.
+
 ## How To (Server Admins)
 
 Beast uses the same paperclip jar system that Paper uses.
