@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Fri, 5 Apr 2024 17:29:01 +0800
+Subject: [PATCH] pause-server-when-empty
+
+
+diff --git a/src/main/java/com/homomc/beast/BeastConfig.java b/src/main/java/com/homomc/beast/BeastConfig.java
+index 62999390f81a7592e242db7b9963807f05f5c8e8..e79695ae9cdca6c57430826eb706428043073da7 100644
+--- a/src/main/java/com/homomc/beast/BeastConfig.java
++++ b/src/main/java/com/homomc/beast/BeastConfig.java
+@@ -202,6 +202,12 @@ public class BeastConfig {
+         emptyMessageWarning = getBoolean("log.empty-messages-warning", false);
+     }
+ 
++    public static boolean pauseServerWhenEmpty;
++
++    private static void pauseServerWhenEmpty() {
++        pauseServerWhenEmpty = getBoolean("pause-server-when-empty", false);
++    }
++
+     public static boolean halloweenMobFeature;
+     private static void halloweenMobFeature() {
+         halloweenMobFeature = getBoolean("halloween-mob-feature", true);
+diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
+index 9c00c256f00333fa0086bfd5d3c0e613f55de595..a750dd70e01e819c6c37443ad785ee96c0623265 100644
+--- a/src/main/java/net/minecraft/server/WorldServer.java
++++ b/src/main/java/net/minecraft/server/WorldServer.java
+@@ -280,6 +280,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
+     // CraftBukkit end
+ 
+     public void doTick() {
++        if (players.isEmpty() && com.homomc.beast.BeastConfig.pauseServerWhenEmpty) return;
+         super.doTick();
+         if (this.getWorldData().isHardcore() && this.getDifficulty() != EnumDifficulty.HARD) {
+             this.getWorldData().setDifficulty(EnumDifficulty.HARD);
