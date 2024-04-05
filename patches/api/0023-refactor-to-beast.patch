@@ -1,0 +1,696 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Fri, 5 Apr 2024 13:34:08 +0800
+Subject: [PATCH] refactor-to-beast
+
+
+diff --git a/src/main/java/co/aikar/util/Counter.java b/src/main/java/co/aikar/util/Counter.java
+index 553a52e5fcc8b8f594f4e79ff9c4625a9542f102..d90c3d683a7ddbb0797993559637e653939c8b40 100644
+--- a/src/main/java/co/aikar/util/Counter.java
++++ b/src/main/java/co/aikar/util/Counter.java
+@@ -15,7 +15,7 @@ public class Counter <T> extends ForwardingMap<T, Long> {
+         return increment(key, 1);
+     }
+     public long decrement(T key, long amount) {
+-        return increment(key, -amount); // Reaper - Fix Bukkit API
++        return increment(key, -amount); // Beast - Fix Bukkit API
+     }
+     public long increment(T key, long amount) {
+         long count = this.getCount(key);
+diff --git a/src/main/java/com/destroystokyo/paper/event/player/PlayerArmorChangeEvent.java b/src/main/java/com/destroystokyo/paper/event/player/PlayerArmorChangeEvent.java
+index 22e4fb7f7f26eed702033d95c4fd2ec517819c01..8e679e10fa7c2a49f1a6b5aad09ef939f9d4c96f 100644
+--- a/src/main/java/com/destroystokyo/paper/event/player/PlayerArmorChangeEvent.java
++++ b/src/main/java/com/destroystokyo/paper/event/player/PlayerArmorChangeEvent.java
+@@ -86,7 +86,7 @@ public class PlayerArmorChangeEvent extends PlayerEvent {
+ 
+         private final Set<Material> mutableTypes = EnumSet.noneOf(Material.class);
+         private Set<Material> immutableTypes;
+-        public static final PlayerArmorChangeEvent.SlotType[] VALUES = values(); // Reaper - Single values array
++        public static final PlayerArmorChangeEvent.SlotType[] VALUES = values(); // Beast - Single values array
+ 
+         SlotType(Material... types) {
+             this.mutableTypes.addAll(Arrays.asList(types));
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/block/SpongeAbsorbEvent.java b/src/main/java/com/homomc/beast/event/block/SpongeAbsorbEvent.java
+similarity index 95%
+rename from src/main/java/com/github/ruviolence/reaper/event/block/SpongeAbsorbEvent.java
+rename to src/main/java/com/homomc/beast/event/block/SpongeAbsorbEvent.java
+index 591af04b30cae0bebc587af5374b354b207edd95..01b7139c7a1238e38ed6ffdd0166dda3cc3b5e57 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/block/SpongeAbsorbEvent.java
++++ b/src/main/java/com/homomc/beast/event/block/SpongeAbsorbEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.block;
++package com.homomc.beast.event.block;
+ 
+ import org.bukkit.block.Block;
+ import org.bukkit.event.Cancellable;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/block/TileEntityTickEvent.java b/src/main/java/com/homomc/beast/event/block/TileEntityTickEvent.java
+similarity index 94%
+rename from src/main/java/com/github/ruviolence/reaper/event/block/TileEntityTickEvent.java
+rename to src/main/java/com/homomc/beast/event/block/TileEntityTickEvent.java
+index e4c48dd4fe6822e7db591d45330fe9222f9d96ce..3bf41b2c25358f9f0901fad1d27f00fb31169e0d 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/block/TileEntityTickEvent.java
++++ b/src/main/java/com/homomc/beast/event/block/TileEntityTickEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.block;
++package com.homomc.beast.event.block;
+ 
+ import org.bukkit.block.Block;
+ import org.bukkit.event.Cancellable;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/entity/AnyEntitySpawnEvent.java b/src/main/java/com/homomc/beast/event/entity/AnyEntitySpawnEvent.java
+similarity index 97%
+rename from src/main/java/com/github/ruviolence/reaper/event/entity/AnyEntitySpawnEvent.java
+rename to src/main/java/com/homomc/beast/event/entity/AnyEntitySpawnEvent.java
+index ab25e83417f0872cfa773780109616ab7936846d..ba420ee95f5982c55b18e15eb0349cf17a00d70d 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/entity/AnyEntitySpawnEvent.java
++++ b/src/main/java/com/homomc/beast/event/entity/AnyEntitySpawnEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.entity;
++package com.homomc.beast.event.entity;
+ 
+ import org.bukkit.Location;
+ import org.bukkit.entity.Entity;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/entity/EntityArrowStuckEvent.java b/src/main/java/com/homomc/beast/event/entity/EntityArrowStuckEvent.java
+similarity index 94%
+rename from src/main/java/com/github/ruviolence/reaper/event/entity/EntityArrowStuckEvent.java
+rename to src/main/java/com/homomc/beast/event/entity/EntityArrowStuckEvent.java
+index 913e4dd1e1ba2b732ceab159c2bdd67a4e068434..a32279398c336e0ab741fbd9a661dcadcb45120e 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/entity/EntityArrowStuckEvent.java
++++ b/src/main/java/com/homomc/beast/event/entity/EntityArrowStuckEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.entity;
++package com.homomc.beast.event.entity;
+ 
+ import org.bukkit.entity.Entity;
+ import org.bukkit.event.Cancellable;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/entity/EntityMoveEvent.java b/src/main/java/com/homomc/beast/event/entity/EntityMoveEvent.java
+similarity index 98%
+rename from src/main/java/com/github/ruviolence/reaper/event/entity/EntityMoveEvent.java
+rename to src/main/java/com/homomc/beast/event/entity/EntityMoveEvent.java
+index 3a35ed92754cf0d9439bbb437065dd6ac9e8a606..77bb85388c92932305077185ec638d03e0be5522 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/entity/EntityMoveEvent.java
++++ b/src/main/java/com/homomc/beast/event/entity/EntityMoveEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.entity;
++package com.homomc.beast.event.entity;
+ 
+ import org.bukkit.Location;
+ import org.bukkit.World;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/entity/EntityTickEvent.java b/src/main/java/com/homomc/beast/event/entity/EntityTickEvent.java
+similarity index 95%
+rename from src/main/java/com/github/ruviolence/reaper/event/entity/EntityTickEvent.java
+rename to src/main/java/com/homomc/beast/event/entity/EntityTickEvent.java
+index e679d746b2eb68ef34d06f684433f4202302e0a7..d6b23cc8711db805e5dc1a8fd43b98bbb0c5c94d 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/entity/EntityTickEvent.java
++++ b/src/main/java/com/homomc/beast/event/entity/EntityTickEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.entity;
++package com.homomc.beast.event.entity;
+ 
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/inventory/PlayerAnvilDamageEvent.java b/src/main/java/com/homomc/beast/event/inventory/PlayerAnvilDamageEvent.java
+similarity index 96%
+rename from src/main/java/com/github/ruviolence/reaper/event/inventory/PlayerAnvilDamageEvent.java
+rename to src/main/java/com/homomc/beast/event/inventory/PlayerAnvilDamageEvent.java
+index 2c8eb9c1f0e07f61bcc02100e8364a3145c9f12c..6c5d6d51717abba3a0604d6a9f11f12f423863d0 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/inventory/PlayerAnvilDamageEvent.java
++++ b/src/main/java/com/homomc/beast/event/inventory/PlayerAnvilDamageEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.inventory;
++package com.homomc.beast.event.inventory;
+ 
+ import org.bukkit.block.Block;
+ import org.bukkit.entity.HumanEntity;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/player/EntityTrackedEvent.java b/src/main/java/com/homomc/beast/event/player/EntityTrackedEvent.java
+similarity index 93%
+rename from src/main/java/com/github/ruviolence/reaper/event/player/EntityTrackedEvent.java
+rename to src/main/java/com/homomc/beast/event/player/EntityTrackedEvent.java
+index 6abdcf4900ef79dabc50f09b0f08f4944fa2a052..66858b2171d8c1567369d389d37dd2b7a647601b 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/player/EntityTrackedEvent.java
++++ b/src/main/java/com/homomc/beast/event/player/EntityTrackedEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.player;
++package com.homomc.beast.event.player;
+ 
+ import org.bukkit.entity.Entity;
+ import org.bukkit.entity.Player;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/player/EntityUntrackedEvent.java b/src/main/java/com/homomc/beast/event/player/EntityUntrackedEvent.java
+similarity index 93%
+rename from src/main/java/com/github/ruviolence/reaper/event/player/EntityUntrackedEvent.java
+rename to src/main/java/com/homomc/beast/event/player/EntityUntrackedEvent.java
+index 95316e0eee3566f571a826c1ae8fb510e6071c06..26c63a025d023620518f93b9f9ec7cc649d858e3 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/player/EntityUntrackedEvent.java
++++ b/src/main/java/com/homomc/beast/event/player/EntityUntrackedEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.player;
++package com.homomc.beast.event.player;
+ 
+ import org.bukkit.entity.Entity;
+ import org.bukkit.entity.Player;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/server/ServerTickEndEvent.java b/src/main/java/com/homomc/beast/event/server/ServerTickEndEvent.java
+similarity index 94%
+rename from src/main/java/com/github/ruviolence/reaper/event/server/ServerTickEndEvent.java
+rename to src/main/java/com/homomc/beast/event/server/ServerTickEndEvent.java
+index 4a774542406df7f21e4b1c5c6c2598852b51cfd3..17b4a67d1c06cef8021a33665b27b699290eea8f 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/server/ServerTickEndEvent.java
++++ b/src/main/java/com/homomc/beast/event/server/ServerTickEndEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.server;
++package com.homomc.beast.event.server;
+ 
+ import org.bukkit.event.HandlerList;
+ import org.bukkit.event.server.ServerEvent;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/server/ServerTickStartEvent.java b/src/main/java/com/homomc/beast/event/server/ServerTickStartEvent.java
+similarity index 92%
+rename from src/main/java/com/github/ruviolence/reaper/event/server/ServerTickStartEvent.java
+rename to src/main/java/com/homomc/beast/event/server/ServerTickStartEvent.java
+index 622a271b30433df549cbc3d0f8ed30b3f969fa05..609353936a6313e1ef099abb43c02645e2fad68d 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/server/ServerTickStartEvent.java
++++ b/src/main/java/com/homomc/beast/event/server/ServerTickStartEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.server;
++package com.homomc.beast.event.server;
+ 
+ import org.bukkit.event.HandlerList;
+ import org.bukkit.event.server.ServerEvent;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/server/WorldTickEndEvent.java b/src/main/java/com/homomc/beast/event/server/WorldTickEndEvent.java
+similarity index 94%
+rename from src/main/java/com/github/ruviolence/reaper/event/server/WorldTickEndEvent.java
+rename to src/main/java/com/homomc/beast/event/server/WorldTickEndEvent.java
+index b029776223d6fa17f478bd87cd4deaee773e3997..df66a9816179f3dd2be37e598386729426c4c24a 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/server/WorldTickEndEvent.java
++++ b/src/main/java/com/homomc/beast/event/server/WorldTickEndEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.server;
++package com.homomc.beast.event.server;
+ 
+ import org.bukkit.World;
+ import org.bukkit.event.HandlerList;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/server/WorldTickStartEvent.java b/src/main/java/com/homomc/beast/event/server/WorldTickStartEvent.java
+similarity index 93%
+rename from src/main/java/com/github/ruviolence/reaper/event/server/WorldTickStartEvent.java
+rename to src/main/java/com/homomc/beast/event/server/WorldTickStartEvent.java
+index e1057697fd40e8ca33755adb333348fd584ab448..01a5fb6c40ec9414b0b7216ef2a719b93efa0527 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/server/WorldTickStartEvent.java
++++ b/src/main/java/com/homomc/beast/event/server/WorldTickStartEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.server;
++package com.homomc.beast.event.server;
+ 
+ import org.bukkit.World;
+ import org.bukkit.event.HandlerList;
+diff --git a/src/main/java/com/github/ruviolence/reaper/event/world/SoundEvent.java b/src/main/java/com/homomc/beast/event/world/SoundEvent.java
+similarity index 98%
+rename from src/main/java/com/github/ruviolence/reaper/event/world/SoundEvent.java
+rename to src/main/java/com/homomc/beast/event/world/SoundEvent.java
+index 3b3cb5196fd990b12304a8e33bf848ce924afdbc..68dbe918252e9dc19f3ae3144a5f51d1940db174 100644
+--- a/src/main/java/com/github/ruviolence/reaper/event/world/SoundEvent.java
++++ b/src/main/java/com/homomc/beast/event/world/SoundEvent.java
+@@ -1,4 +1,4 @@
+-package com.github.ruviolence.reaper.event.world;
++package com.homomc.beast.event.world;
+ 
+ import org.apache.commons.lang.Validate;
+ import org.bukkit.Location;
+diff --git a/src/main/java/org/bukkit/ChatColor.java b/src/main/java/org/bukkit/ChatColor.java
+index ffa8c6b60ee5d97e39a2d6d06d116949f3eecc37..1a2a51a87c138d789b2b2b4b7352c7ee81391435 100644
+--- a/src/main/java/org/bukkit/ChatColor.java
++++ b/src/main/java/org/bukkit/ChatColor.java
+@@ -221,7 +221,7 @@ public enum ChatColor{
+     private final char code;
+     private final boolean isFormat;
+     private final String toString;
+-    // private final static Map<Integer, ChatColor> BY_ID = Maps.newHashMap(); // Reaper - Optimize unused
++    // private final static Map<Integer, ChatColor> BY_ID = Maps.newHashMap(); // Beast - Optimize unused
+     private final static Map<Character, ChatColor> BY_CHAR = Maps.newHashMap();
+ 
+     private ChatColor(char code, int intCode) {
+@@ -364,7 +364,7 @@ public enum ChatColor{
+ 
+     static {
+         for (ChatColor color : values()) {
+-            // BY_ID.put(color.intCode, color); // Reaper - Optimize unused
++            // BY_ID.put(color.intCode, color); // Beast - Optimize unused
+             BY_CHAR.put(color.code, color);
+         }
+     }
+diff --git a/src/main/java/org/bukkit/Difficulty.java b/src/main/java/org/bukkit/Difficulty.java
+index 5f98dc6091ceaf9cbb56b026afd4c703f429c62a..d5064e2a3fe0a4c36a5c2b9eef8e4925db779ad2 100644
+--- a/src/main/java/org/bukkit/Difficulty.java
++++ b/src/main/java/org/bukkit/Difficulty.java
+@@ -35,7 +35,7 @@ public enum Difficulty {
+     HARD(3);
+ 
+     private final int value;
+-    private final static Int2ObjectOpenHashMap<Difficulty> BY_ID = new Int2ObjectOpenHashMap<>(); // Reaper - FastUtil optimization
++    private final static Int2ObjectOpenHashMap<Difficulty> BY_ID = new Int2ObjectOpenHashMap<>(); // Beast - FastUtil optimization
+ 
+     private Difficulty(final int value) {
+         this.value = value;
+diff --git a/src/main/java/org/bukkit/Effect.java b/src/main/java/org/bukkit/Effect.java
+index 11cb54dc9f0477592c75a766c9c6f82f27563db5..d6c2a9abe2c80cb61685be101886ceb774b40283 100644
+--- a/src/main/java/org/bukkit/Effect.java
++++ b/src/main/java/org/bukkit/Effect.java
+@@ -417,7 +417,7 @@ public enum Effect {
+     private final int id;
+     private final Type type;
+     private final Class<?> data;
+-    private static final Int2ObjectOpenHashMap<Effect> BY_ID = new Int2ObjectOpenHashMap<>(); // Reaper - FastUtil optimization
++    private static final Int2ObjectOpenHashMap<Effect> BY_ID = new Int2ObjectOpenHashMap<>(); // Beast - FastUtil optimization
+     private static final Map<String, Effect> BY_NAME = Maps.newHashMap();
+     private final String particleName;
+ 
+diff --git a/src/main/java/org/bukkit/GameMode.java b/src/main/java/org/bukkit/GameMode.java
+index adfe67f319f813b0dff95a8f3a4a65af74a2332c..b29fdd54e38c6578345edec625b6cc12f36c3cdc 100644
+--- a/src/main/java/org/bukkit/GameMode.java
++++ b/src/main/java/org/bukkit/GameMode.java
+@@ -36,7 +36,7 @@ public enum GameMode {
+     SPECTATOR(3);
+ 
+     private final int value;
+-    private final static Int2ObjectOpenHashMap<GameMode> BY_ID = new Int2ObjectOpenHashMap<>(); // Reaper - FastUtil optimization
++    private final static Int2ObjectOpenHashMap<GameMode> BY_ID = new Int2ObjectOpenHashMap<>(); // Beast - FastUtil optimization
+ 
+     private GameMode(final int value) {
+         this.value = value;
+diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
+index 0d6cfe3d84f7c703454a0b0f403b2ac04ef83ebc..91e89d8ec9cdc8e7e4afb63b32c7b2184f982935 100644
+--- a/src/main/java/org/bukkit/Material.java
++++ b/src/main/java/org/bukkit/Material.java
+@@ -546,10 +546,10 @@ public enum Material {
+     private final static Map<String, Material> BY_NAME = Maps.newHashMap();
+     private final int maxStack;
+     private final short durability;
+-    // Reaper start - Optimize data instantiation
++    // Beast start - Optimize data instantiation
+     private final Class<? extends MaterialData> dataClass;
+     private final MethodHandle ctorMh;
+-    // Reaper end
++    // Beast end
+ 
+     private Material(final int id) {
+         this(id, 64);
+@@ -578,13 +578,13 @@ public enum Material {
+         // try to cache the constructor for this material
+         try {
+             this.ctor = data.getConstructor(int.class, byte.class);
+-            // Reaper start - Optimize data instantiation
++            // Beast start - Optimize data instantiation
+             this.ctorMh = MethodHandles.lookup().unreflectConstructor(ctor);
+             this.dataClass = ctor.getDeclaringClass();
+-            // Reaper end
++            // Beast end
+         } catch (NoSuchMethodException ex) {
+             throw new AssertionError(ex);
+-        } catch (IllegalAccessException ex) {throw new AssertionError(ex); // Reaper
++        } catch (IllegalAccessException ex) {throw new AssertionError(ex); // Beast
+         } catch (SecurityException ex) {
+             throw new AssertionError(ex);
+         }
+@@ -625,7 +625,7 @@ public enum Material {
+      * @return MaterialData associated with this Material
+      */
+     public Class<? extends MaterialData> getData() {
+-        return dataClass; // Reaper - Optimize data instantiation
++        return dataClass; // Beast - Optimize data instantiation
+     }
+ 
+     /**
+@@ -639,7 +639,7 @@ public enum Material {
+     @Deprecated
+     public MaterialData getNewData(final byte raw) {
+         try {
+-            return (MaterialData) ctorMh.invoke(id, raw); // Reaper - Optimize data instantiation
++            return (MaterialData) ctorMh.invoke(id, raw); // Beast - Optimize data instantiation
+         } catch (InstantiationException ex) {
+             final Throwable t = ex.getCause();
+             if (t instanceof RuntimeException) {
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 7b01a35133ea25a0a2676133b4459b51a549e590..7de00d814a5086fff5d3c9febdc8d2d00478ba14 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -1015,7 +1015,7 @@ public interface Server extends PluginMessageRecipient {
+             throw new UnsupportedOperationException("Not supported yet.");
+         }
+ 
+-        public org.bukkit.configuration.file.YamlConfiguration getReaperConfig()
++        public org.bukkit.configuration.file.YamlConfiguration getBeastConfig()
+         {
+             throw new UnsupportedOperationException("Not supported yet.");
+         }
+diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
+index 206b83e8e73577cf5a51d4fcf1b71ba271286783..9d4e20ae2fb94fdbe808fcd54a66083077ab7d25 100644
+--- a/src/main/java/org/bukkit/World.java
++++ b/src/main/java/org/bukkit/World.java
+@@ -2130,7 +2130,7 @@ public interface World extends PluginMessageRecipient, Metadatable {
+         THE_END(1);
+ 
+         private final int id;
+-        private static final Int2ObjectOpenHashMap<Environment> lookup = new Int2ObjectOpenHashMap<>(); // Reaper - FastUtil optimization
++        private static final Int2ObjectOpenHashMap<Environment> lookup = new Int2ObjectOpenHashMap<>(); // Beast - FastUtil optimization
+ 
+         private Environment(int id) {
+             this.id = id;
+diff --git a/src/main/java/org/bukkit/attribute/AttributeModifier.java b/src/main/java/org/bukkit/attribute/AttributeModifier.java
+index e077857c8f978babcdbdc3e7e47b63cfc19e693f..c262956e497c62ed00ed34f5eea754e59d042945 100644
+--- a/src/main/java/org/bukkit/attribute/AttributeModifier.java
++++ b/src/main/java/org/bukkit/attribute/AttributeModifier.java
+@@ -100,6 +100,6 @@ public class AttributeModifier implements ConfigurationSerializable {
+          */
+         MULTIPLY_SCALAR_1;
+ 
+-        public static final AttributeModifier.Operation[] VALUES = values(); // Reaper - Single values array
++        public static final AttributeModifier.Operation[] VALUES = values(); // Beast - Single values array
+     }
+ }
+diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
+index 6e7611e20a3385ec79368231ef496da9f4aa1442..870d45b3b5e880a99f2a1a39ee139a2f83e5d47b 100644
+--- a/src/main/java/org/bukkit/block/Block.java
++++ b/src/main/java/org/bukkit/block/Block.java
+@@ -251,7 +251,7 @@ public interface Block extends Metadatable {
+     @Deprecated
+     boolean setTypeIdAndData(int type, byte data, boolean applyPhysics);
+ 
+-    // Reaper start
++    // Beast start
+     /**
+      * Sets the type-id of this block
+      *
+@@ -267,7 +267,7 @@ public interface Block extends Metadatable {
+      */
+     @Deprecated
+     boolean setTypeIdAndData(int type, byte data, boolean applyPhysics, boolean notify, boolean updateLight);
+-    // Reaper end
++    // Beast end
+ 
+     /**
+      * Gets the face relation of this block compared to the given block.
+diff --git a/src/main/java/org/bukkit/block/BlockFace.java b/src/main/java/org/bukkit/block/BlockFace.java
+index e2d114d3324ca8297d33cadb662c2df4d1b3d9dd..de3d7464907f0085123d201c41a24df68bd24ead 100644
+--- a/src/main/java/org/bukkit/block/BlockFace.java
++++ b/src/main/java/org/bukkit/block/BlockFace.java
+@@ -27,7 +27,7 @@ public enum BlockFace {
+     private final int modX;
+     private final int modY;
+     private final int modZ;
+-    public static final BlockFace[] VALUES = values(); // Reaper - Single values array
++    public static final BlockFace[] VALUES = values(); // Beast - Single values array
+ 
+     private BlockFace(final int modX, final int modY, final int modZ) {
+         this.modX = modX;
+diff --git a/src/main/java/org/bukkit/block/PistonMoveReaction.java b/src/main/java/org/bukkit/block/PistonMoveReaction.java
+index f22d35ebae6d07a445e459abcdf51abd786b6f25..76776a2fd7768635889a9a6d37c86737f9b55ea6 100644
+--- a/src/main/java/org/bukkit/block/PistonMoveReaction.java
++++ b/src/main/java/org/bukkit/block/PistonMoveReaction.java
+@@ -35,7 +35,7 @@ public enum PistonMoveReaction {
+     PUSH_ONLY(4);
+ 
+     private int id;
+-    private static Int2ObjectOpenHashMap<PistonMoveReaction> byId = new Int2ObjectOpenHashMap<>(); // Reaper - FastUtil optimization
++    private static Int2ObjectOpenHashMap<PistonMoveReaction> byId = new Int2ObjectOpenHashMap<>(); // Beast - FastUtil optimization
+     static {
+         for (PistonMoveReaction reaction : PistonMoveReaction.values()) {
+             byId.put(reaction.id, reaction);
+diff --git a/src/main/java/org/bukkit/entity/Arrow.java b/src/main/java/org/bukkit/entity/Arrow.java
+index 46bd563e43bdd042364a6b7d13611de916c09b81..a6da19db04edef36588a955d1679c68b310c6ca6 100644
+--- a/src/main/java/org/bukkit/entity/Arrow.java
++++ b/src/main/java/org/bukkit/entity/Arrow.java
+@@ -89,7 +89,7 @@ public interface Arrow extends Projectile {
+          */
+         CREATIVE_ONLY;
+ 
+-        public static final Arrow.PickupStatus[] VALUES = values(); // Reaper - Single values array
++        public static final Arrow.PickupStatus[] VALUES = values(); // Beast - Single values array
+     }
+ 
+     // Spigot start
+diff --git a/src/main/java/org/bukkit/entity/EnderDragon.java b/src/main/java/org/bukkit/entity/EnderDragon.java
+index dc89b4236c42646a97e5441392aa9c75868500c7..bb5ea899e3c2b410ba32236066102f825c9e76b0 100644
+--- a/src/main/java/org/bukkit/entity/EnderDragon.java
++++ b/src/main/java/org/bukkit/entity/EnderDragon.java
+@@ -61,7 +61,7 @@ public interface EnderDragon extends ComplexLivingEntity {
+          */
+         HOVER;
+ 
+-        public static final EnderDragon.Phase[] VALUES = values(); // Reaper - Single values array
++        public static final EnderDragon.Phase[] VALUES = values(); // Beast - Single values array
+     }
+ 
+     /**
+diff --git a/src/main/java/org/bukkit/entity/Evoker.java b/src/main/java/org/bukkit/entity/Evoker.java
+index 54104cae071ff0acba5f625a3d0af5cc88bcc827..86e36962eb2183215098217d9b8a4a41b953f05f 100644
+--- a/src/main/java/org/bukkit/entity/Evoker.java
++++ b/src/main/java/org/bukkit/entity/Evoker.java
+@@ -39,7 +39,7 @@ public interface Evoker extends Spellcaster {
+          */
+         BLINDNESS;
+ 
+-        public static final Evoker.Spell[] VALUES = values(); // Reaper - Single values array
++        public static final Evoker.Spell[] VALUES = values(); // Beast - Single values array
+     }
+ 
+     /**
+diff --git a/src/main/java/org/bukkit/entity/Horse.java b/src/main/java/org/bukkit/entity/Horse.java
+index 0417e95168a983e53199a50af8590b708f617644..0843b95f3b7702a1ee3568825a984f6be2ece20f 100644
+--- a/src/main/java/org/bukkit/entity/Horse.java
++++ b/src/main/java/org/bukkit/entity/Horse.java
+@@ -73,7 +73,7 @@ public interface Horse extends AbstractHorse {
+         DARK_BROWN,
+         ;
+ 
+-        public static final Horse.Color[] VALUES = values(); // Reaper - Single values array
++        public static final Horse.Color[] VALUES = values(); // Beast - Single values array
+     }
+ 
+     /**
+@@ -102,7 +102,7 @@ public interface Horse extends AbstractHorse {
+         BLACK_DOTS,
+         ;
+ 
+-        public static final Horse.Style[] VALUES = values(); // Reaper - Single values array
++        public static final Horse.Style[] VALUES = values(); // Beast - Single values array
+     }
+ 
+     /**
+diff --git a/src/main/java/org/bukkit/entity/Llama.java b/src/main/java/org/bukkit/entity/Llama.java
+index e1aab14eb77e36b43a4c4fa10bad90e9d8eb8eac..9dd47c5cc50abaf09c88487be4d8990925ebb2c7 100644
+--- a/src/main/java/org/bukkit/entity/Llama.java
++++ b/src/main/java/org/bukkit/entity/Llama.java
+@@ -30,7 +30,7 @@ public interface Llama extends ChestedHorse, RangedEntity { // Paper
+          */
+         GRAY;
+ 
+-        public static final Llama.Color[] VALUES = values(); // Reaper - Single values array
++        public static final Llama.Color[] VALUES = values(); // Beast - Single values array
+     }
+ 
+     /**
+diff --git a/src/main/java/org/bukkit/entity/Parrot.java b/src/main/java/org/bukkit/entity/Parrot.java
+index c5defef32a0ca4391b0592ebf010d38de68cffce..2910959e8866e227e414205b9c984eb127ef63b4 100644
+--- a/src/main/java/org/bukkit/entity/Parrot.java
++++ b/src/main/java/org/bukkit/entity/Parrot.java
+@@ -44,6 +44,6 @@ public interface Parrot extends Animals, Tameable, Sittable {
+          */
+         GRAY;
+ 
+-        public static final Parrot.Variant[] VALUES = values(); // Reaper - Single values array
++        public static final Parrot.Variant[] VALUES = values(); // Beast - Single values array
+     }
+ }
+diff --git a/src/main/java/org/bukkit/entity/Villager.java b/src/main/java/org/bukkit/entity/Villager.java
+index 95b3b130c2b6d0124571dd08b0948b0e99b88e84..0431d9defc6798c41c644899b09594f1af87f12e 100644
+--- a/src/main/java/org/bukkit/entity/Villager.java
++++ b/src/main/java/org/bukkit/entity/Villager.java
+@@ -125,7 +125,7 @@ public interface Villager extends Ageable, NPC, InventoryHolder, Merchant {
+         @Deprecated
+         HUSK(true);
+         private final boolean zombie;
+-        public static final Villager.Profession[] VALUES = values(); // Reaper - Single values array
++        public static final Villager.Profession[] VALUES = values(); // Beast - Single values array
+ 
+         private Profession(boolean zombie) {
+             this.zombie = zombie;
+@@ -253,7 +253,7 @@ public interface Villager extends Ageable, NPC, InventoryHolder, Merchant {
+          * profession, or an empty map if the profession was not found
+          */
+         public static List<Career> getCareers(Profession profession) {
+-            java.util.Collection<Career> cO = careerMap.get(profession); return cO != null ? ImmutableList.copyOf(cO) : ImmutableList.<Career>of(); // Reaper - Optimize map get
++            java.util.Collection<Career> cO = careerMap.get(profession); return cO != null ? ImmutableList.copyOf(cO) : ImmutableList.<Career>of(); // Beast - Optimize map get
+         }
+ 
+         static {
+diff --git a/src/main/java/org/bukkit/event/block/BlockPhysicsEvent.java b/src/main/java/org/bukkit/event/block/BlockPhysicsEvent.java
+index c003550c429e2d6b4fc5a23d31dc5ba750b6eb47..cf3cd400b4b00f854f8ce67c3701e50243ef48b4 100644
+--- a/src/main/java/org/bukkit/event/block/BlockPhysicsEvent.java
++++ b/src/main/java/org/bukkit/event/block/BlockPhysicsEvent.java
+@@ -17,7 +17,7 @@ public class BlockPhysicsEvent extends BlockEvent implements Cancellable {
+     private int sourceY;
+     private int sourceZ;
+     private Block sourceBlock;
+-    private int depth; // Reaper - Add depth API
++    private int depth; // Beast - Add depth API
+ 
+     /**
+      *
+@@ -37,7 +37,7 @@ public class BlockPhysicsEvent extends BlockEvent implements Cancellable {
+         this.sourceBlock = null;
+     }
+ 
+-    // Reaper start - Add depth API
++    // Beast start - Add depth API
+     /**
+      *
+      * @deprecated Magic value
+@@ -57,7 +57,7 @@ public class BlockPhysicsEvent extends BlockEvent implements Cancellable {
+         this.sourceBlock = null;
+         this.depth = depth;
+     }
+-    // Reaper end
++    // Beast end
+ 
+     /**
+      * Gets the source block, causing this event
+@@ -69,7 +69,7 @@ public class BlockPhysicsEvent extends BlockEvent implements Cancellable {
+     }
+     // Paper end
+ 
+-    // Reaper start - Add depth API
++    // Beast start - Add depth API
+     /**
+      * Gets the depth of the block physics trigger
+      *
+@@ -78,7 +78,7 @@ public class BlockPhysicsEvent extends BlockEvent implements Cancellable {
+     public int getDepth() {
+         return depth;
+     }
+-    // Reaper end
++    // Beast end
+ 
+     /**
+      *
+diff --git a/src/main/java/org/bukkit/event/player/PlayerResourcePackStatusEvent.java b/src/main/java/org/bukkit/event/player/PlayerResourcePackStatusEvent.java
+index 2a6b9deddc55b5736c06a3861b8c6b0100ebc6b8..02048cde4ababdbd837bb114cc0d3acc9d36e170 100644
+--- a/src/main/java/org/bukkit/event/player/PlayerResourcePackStatusEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerResourcePackStatusEvent.java
+@@ -73,6 +73,6 @@ public class PlayerResourcePackStatusEvent extends PlayerEvent {
+          */
+         ACCEPTED;
+ 
+-        public static final PlayerResourcePackStatusEvent.Status[] VALUES = values(); // Reaper - Single values array
++        public static final PlayerResourcePackStatusEvent.Status[] VALUES = values(); // Beast - Single values array
+     }
+ }
+diff --git a/src/main/java/org/bukkit/event/player/PlayerVelocityEvent.java b/src/main/java/org/bukkit/event/player/PlayerVelocityEvent.java
+index 3028a5e3c57f929bfd19a56bae86581b9dd8c841..61b0467201d0233bd9e3e5aa8bdf884af1a3e0ec 100644
+--- a/src/main/java/org/bukkit/event/player/PlayerVelocityEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerVelocityEvent.java
+@@ -41,14 +41,14 @@ public class PlayerVelocityEvent extends PlayerEvent implements Cancellable {
+      * @param velocity The velocity vector that will be sent to the player
+      */
+     public void setVelocity(Vector velocity) {
+-        // Reaper start - Catch bad plugins
++        // Beast start - Catch bad plugins
+         try {
+             velocity.checkFinite();
+             this.velocity = velocity;
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+-        // Reaper end
++        // Beast end
+     }
+ 
+     @Override
+diff --git a/src/main/java/org/bukkit/inventory/ItemFlag.java b/src/main/java/org/bukkit/inventory/ItemFlag.java
+index 432b2b9c9d98efb2dbb5e0ad84afac46ac766e2e..284439d0b6181963599425b8889b07feb5f3fa08 100644
+--- a/src/main/java/org/bukkit/inventory/ItemFlag.java
++++ b/src/main/java/org/bukkit/inventory/ItemFlag.java
+@@ -30,5 +30,5 @@ public enum ItemFlag {
+      */
+     HIDE_POTION_EFFECTS;
+ 
+-    public static final ItemFlag[] VALUES = values(); // Reaper - Single values array
++    public static final ItemFlag[] VALUES = values(); // Beast - Single values array
+ }
+diff --git a/src/main/java/org/bukkit/inventory/meta/BookMeta.java b/src/main/java/org/bukkit/inventory/meta/BookMeta.java
+index 29e090962de78c045e98ceda814ee8b43f89ec84..edcc66196ec412dd5a18c6701116a0629b2a2f55 100644
+--- a/src/main/java/org/bukkit/inventory/meta/BookMeta.java
++++ b/src/main/java/org/bukkit/inventory/meta/BookMeta.java
+@@ -32,7 +32,7 @@ public interface BookMeta extends ItemMeta {
+          */
+         TATTERED;
+ 
+-        public static final BookMeta.Generation[] VALUES = values(); // Reaper - Single values array
++        public static final BookMeta.Generation[] VALUES = values(); // Beast - Single values array
+     }
+ 
+     /**
+diff --git a/src/main/java/org/bukkit/material/types/MushroomBlockTexture.java b/src/main/java/org/bukkit/material/types/MushroomBlockTexture.java
+index 586260d81af7e345f350f19858f68c47bfd73461..03b8164e3472cfa0d5f1ddec3dfb31de07fdf2d2 100644
+--- a/src/main/java/org/bukkit/material/types/MushroomBlockTexture.java
++++ b/src/main/java/org/bukkit/material/types/MushroomBlockTexture.java
+@@ -66,7 +66,7 @@ public enum MushroomBlockTexture {
+      */
+     ALL_STEM(15, null);
+     private final static Map<Byte, MushroomBlockTexture> BY_DATA = Maps.newHashMap();
+-    private final static Map<BlockFace, MushroomBlockTexture> BY_BLOCKFACE = new EnumMap<>(BlockFace.class); // Reaper - Optimize
++    private final static Map<BlockFace, MushroomBlockTexture> BY_BLOCKFACE = new EnumMap<>(BlockFace.class); // Beast - Optimize
+ 
+     private final Byte data;
+     private final BlockFace capFace;
+diff --git a/src/main/java/org/bukkit/metadata/MetadataStoreBase.java b/src/main/java/org/bukkit/metadata/MetadataStoreBase.java
+index 10ba9ab88a1b91c609122838ded4216d0403bb48..9b793c482c3ded18243338ce6bcfd97a45429585 100644
+--- a/src/main/java/org/bukkit/metadata/MetadataStoreBase.java
++++ b/src/main/java/org/bukkit/metadata/MetadataStoreBase.java
+@@ -118,7 +118,7 @@ public abstract class MetadataStoreBase<T> {
+     public void invalidateAll(Plugin owningPlugin) {
+         Validate.notNull(owningPlugin, "Plugin cannot be null");
+         for (Map<Plugin, MetadataValue> values : metadataMap.values()) {
+-            MetadataValue vO = values.get(owningPlugin); if (vO != null) vO.invalidate(); // Reaper - Optimize map get
++            MetadataValue vO = values.get(owningPlugin); if (vO != null) vO.invalidate(); // Beast - Optimize map get
+         }
+     }
+ 
+diff --git a/src/main/java/org/bukkit/plugin/SimplePluginManager.java b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
+index 8b67593ffd4bba64f794f7e3498d1fcb1c9a4a2c..081b57231ca88e48a49dd808677de6e4bb1880b4 100644
+--- a/src/main/java/org/bukkit/plugin/SimplePluginManager.java
++++ b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
+@@ -51,7 +51,7 @@ public final class SimplePluginManager implements PluginManager {
+     private final Map<Boolean, Set<Permission>> defaultPerms = new LinkedHashMap<Boolean, Set<Permission>>();
+     private final Map<String, Map<Permissible, Boolean>> permSubs = new HashMap<String, Map<Permissible, Boolean>>();
+     private final Map<Boolean, Map<Permissible, Boolean>> defSubs = new HashMap<Boolean, Map<Permissible, Boolean>>();
+-    // private boolean useTimings = false; // Reaper - Optimize unused
++    // private boolean useTimings = false; // Beast - Optimize unused
+ 
+     public SimplePluginManager(Server instance, SimpleCommandMap commandMap) {
+         server = instance;
+diff --git a/src/main/java/org/bukkit/scoreboard/Team.java b/src/main/java/org/bukkit/scoreboard/Team.java
+index ede6b0f700986b9e2fdef7364f4bc1183505ce87..20b02a39cb929419125d0d12f1112e44fd69e263 100644
+--- a/src/main/java/org/bukkit/scoreboard/Team.java
++++ b/src/main/java/org/bukkit/scoreboard/Team.java
+@@ -325,6 +325,6 @@ public interface Team {
+          */
+         FOR_OWN_TEAM;
+ 
+-        public static final Team.OptionStatus[] VALUES = values(); // Reaper - Single values array
++        public static final Team.OptionStatus[] VALUES = values(); // Beast - Single values array
+     }
+ }
+diff --git a/src/main/java/org/bukkit/util/BlockVector.java b/src/main/java/org/bukkit/util/BlockVector.java
+index 7f0330ac2c2009ee583cfb79b5f6d93dbb1d9af6..cb17eb98c632c77c424d412deb0db133ff4cdc29 100644
+--- a/src/main/java/org/bukkit/util/BlockVector.java
++++ b/src/main/java/org/bukkit/util/BlockVector.java
+@@ -113,11 +113,11 @@ public class BlockVector extends Vector {
+         double y = 0;
+         double z = 0;
+ 
+-        // Reaper start - Optimize map get
++        // Beast start - Optimize map get
+         Object xO = args.get("x"); if (xO != null) x = (Double) xO;
+         Object yO = args.get("y"); if (yO != null) y = (Double) yO;
+         Object zO = args.get("z"); if (zO != null) z = (Double) zO;
+-        // Reaper end
++        // Beast end
+ 
+         return new BlockVector(x, y, z);
+     }
