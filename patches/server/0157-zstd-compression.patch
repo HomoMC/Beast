@@ -1,0 +1,199 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Fri, 5 Apr 2024 08:14:28 +0800
+Subject: [PATCH] zstd-compression
+
+
+diff --git a/pom.xml b/pom.xml
+index bfea35121ca986b396defe431d23592014cc5d48..f6ed279354c90e6daf631717f7ad2d63a87bcbc0 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -157,6 +157,14 @@
+             <scope>compile</scope>
+         </dependency>
+         <!-- Reaper end -->
++
++        <dependency>
++            <groupId>com.github.luben</groupId>
++            <artifactId>zstd-jni</artifactId>
++            <version>1.5.6-2</version>
++            <scope>compile</scope>
++        </dependency>
++
+         <!-- Reaper start - Add FastUUID -->
+         <dependency>
+             <groupId>com.eatthepath</groupId>
+diff --git a/src/main/java/com/github/ruviolence/reaper/BeastConfig.java b/src/main/java/com/github/ruviolence/reaper/BeastConfig.java
+index ca3a6c0bf6e0b1849870424bcff2dc430c1714ca..5ed1e87ab91adcf7f49025747c8567e093f551a2 100644
+--- a/src/main/java/com/github/ruviolence/reaper/BeastConfig.java
++++ b/src/main/java/com/github/ruviolence/reaper/BeastConfig.java
+@@ -1,12 +1,7 @@
+ package com.github.ruviolence.reaper;
+ 
+ import com.google.common.base.Throwables;
+-import net.minecraft.server.DispenserRegistry;
+-import net.minecraft.server.EntityPlayer;
+-import net.minecraft.server.MathHelper;
+-import net.minecraft.server.MinecraftServer;
+-import net.minecraft.server.Packet;
+-import net.minecraft.server.ReaperLightingQueue;
++import net.minecraft.server.*;
+ import org.bukkit.Bukkit;
+ import org.bukkit.command.Command;
+ import org.bukkit.configuration.ConfigurationSection;
+@@ -141,6 +136,19 @@ public class BeastConfig {
+     private static void dynamicViewDistance() {
+         dynamicViewDistance = getBoolean("dynamic-view-distance", true);
+     }
++    public static boolean zstdCompression;
++    private static void zstdCompression() {
++        zstdCompression = getBoolean("zstd-compression", false);
++    }
++    public static int chunkCompressionLevel = -1;
++    private static void chunkCompressionLevel() {
++        chunkCompressionLevel = getInt("compression.chunk-compression-level", -1);
++
++        if (chunkCompressionLevel < -1 || chunkCompressionLevel > 9) {
++            chunkCompressionLevel = -1;
++        }
++        RegionFile.deflater.setLevel(chunkCompressionLevel);
++    }
+ 
+     public static int portalTravelCacheLife;
+     public static boolean portalTravelInstantExpire;
+diff --git a/src/main/java/net/minecraft/server/NBTCompressedStreamTools.java b/src/main/java/net/minecraft/server/NBTCompressedStreamTools.java
+index 8b5aeb1b02eeb24b29fede44b625587826052f90..92b88432d87eeb94257dcebae4e71b05600a76c1 100644
+--- a/src/main/java/net/minecraft/server/NBTCompressedStreamTools.java
++++ b/src/main/java/net/minecraft/server/NBTCompressedStreamTools.java
+@@ -1,5 +1,9 @@
+ package net.minecraft.server;
+ 
++import com.github.luben.zstd.ZstdInputStream;
++import com.github.luben.zstd.ZstdOutputStream;
++import com.github.ruviolence.reaper.BeastConfig;
++
+ import java.io.BufferedInputStream;
+ import java.io.BufferedOutputStream;
+ import java.io.DataInput;
+@@ -15,7 +19,7 @@ import java.util.zip.GZIPOutputStream;
+ public class NBTCompressedStreamTools {
+ 
+     public static NBTTagCompound a(InputStream inputstream) throws IOException {
+-        DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new GZIPInputStream(inputstream)));
++        DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(getCompressionInputStream(inputstream)));
+ 
+         NBTTagCompound nbttagcompound;
+ 
+@@ -29,7 +33,7 @@ public class NBTCompressedStreamTools {
+     }
+ 
+     public static void a(NBTTagCompound nbttagcompound, OutputStream outputstream) throws IOException {
+-        DataOutputStream dataoutputstream = new DataOutputStream(new BufferedOutputStream(new GZIPOutputStream(outputstream)));
++        DataOutputStream dataoutputstream = new DataOutputStream(new BufferedOutputStream(getCompressionOutputStream(outputstream)));
+ 
+         try {
+             a(nbttagcompound, (DataOutput) dataoutputstream);
+@@ -94,4 +98,44 @@ public class NBTCompressedStreamTools {
+             }
+         }
+     }
++
++    public static InputStream getCompressionInputStream(InputStream inputStream) throws IOException {
++        if (BeastConfig.zstdCompression) {
++            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
++            if (!isGZipped(bufferedInputStream)) {
++                return new ZstdInputStream(bufferedInputStream);
++            } else {
++                return new GZIPInputStream(bufferedInputStream);
++            }
++        } else {
++            return new GZIPInputStream(inputStream);
++        }
++    }
++
++    public static OutputStream getCompressionOutputStream(OutputStream outputStream) throws IOException {
++        if (BeastConfig.zstdCompression) {
++            return new ZstdOutputStream(outputStream, BeastConfig.chunkCompressionLevel);
++        } else {
++            return new GZIPOutputStream(outputStream) {{
++                def.setLevel(BeastConfig.chunkCompressionLevel);
++            }};
++        }
++    }
++
++    public static boolean isGZipped(InputStream in) {
++        if (!in.markSupported()) {
++            in = new BufferedInputStream(in);
++        }
++        in.mark(2);
++        int magic = 0;
++        try {
++            magic = in.read() & 0xff | ((in.read() << 8) & 0xff00);
++            in.reset();
++        } catch (IOException e) {
++            e.printStackTrace(System.err);
++            return false;
++        }
++        return magic == GZIPInputStream.GZIP_MAGIC;
++    }
++// Beast end
+ }
+diff --git a/src/main/java/net/minecraft/server/RegionFile.java b/src/main/java/net/minecraft/server/RegionFile.java
+index 05bd5fe48889bc47eb347e941e7ec61f0b33d407..15118f81a4ad3a8c9e97797788c1219c132728b8 100644
+--- a/src/main/java/net/minecraft/server/RegionFile.java
++++ b/src/main/java/net/minecraft/server/RegionFile.java
+@@ -1,6 +1,9 @@
+ package net.minecraft.server;
+ 
+ import com.destroystokyo.paper.exception.ServerInternalException;
++import com.github.luben.zstd.ZstdInputStream;
++import com.github.luben.zstd.ZstdOutputStream;
++import com.github.ruviolence.reaper.BeastConfig;
+ import com.google.common.collect.Lists;
+ import java.io.BufferedInputStream;
+ import java.io.BufferedOutputStream;
+@@ -167,6 +170,10 @@ public class RegionFile {
+                                 abyte = new byte[j1 - 1];
+                                 this.c.read(abyte);
+                                 return new DataInputStream(new BufferedInputStream(new InflaterInputStream(new ByteArrayInputStream(abyte))));
++                            } else if (b0 == 6) {
++                                abyte = new byte[j1 - 1];
++                                this.c.read(abyte);
++                                return new DataInputStream(new BufferedInputStream(new ZstdInputStream(new ByteArrayInputStream(abyte))));
+                             } else {
+                                 return null;
+                             }
+@@ -271,7 +278,7 @@ public class RegionFile {
+     private void a(int i, byte[] abyte, int j) throws IOException {
+         this.c.seek((long) (i * 4096));
+         this.c.writeInt(j + 1);
+-        this.c.writeByte(2);
++        this.c.writeByte(BeastConfig.zstdCompression ? 6 : 2);
+         this.c.write(abyte, 0, j);
+     }
+ 
+@@ -474,6 +481,15 @@ public class RegionFile {
+             // Paper start - apply dynamic compression
+             int origLength = this.count;
+             byte[] buf = this.buf;
++            // Beast start
++            if (BeastConfig.zstdCompression) {
++                ByteArrayOutputStream out = new ByteArrayOutputStream(origLength);
++                new ZstdOutputStream(this, BeastConfig.chunkCompressionLevel).write(buf, 0, origLength);
++                byte[] outArray = out.toByteArray();
++                RegionFile.this.a(this.b, this.c, outArray, outArray.length); // Paper - change to bytes/length
++                return;
++            }
++            // Beast end
+             DirectByteArrayOutputStream out = compressData(buf, origLength);
+             byte[] bytes = out.getBuffer();
+             int length = out.size();
+@@ -483,7 +499,7 @@ public class RegionFile {
+     }
+ 
+     private static final byte[] compressionBuffer = new byte[1024 * 64]; // 64k fits most standard chunks input size even, ideally 1 pass through zlib
+-    private static final java.util.zip.Deflater deflater = new java.util.zip.Deflater();
++    public static final java.util.zip.Deflater deflater = new java.util.zip.Deflater();
+     // since file IO is single threaded, no benefit to using per-region file buffers/synchronization, we can change that later if it becomes viable.
+     private static DirectByteArrayOutputStream compressData(byte[] buf, int length) throws IOException {
+         synchronized (deflater) {
