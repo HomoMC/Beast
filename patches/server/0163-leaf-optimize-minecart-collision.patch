@@ -1,0 +1,126 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Sun, 7 Apr 2024 15:26:25 +0800
+Subject: [PATCH] leaf-optimize-minecart-collision
+
+
+diff --git a/src/main/java/com/homomc/beast/BeastConfig.java b/src/main/java/com/homomc/beast/BeastConfig.java
+index e79695ae9cdca6c57430826eb706428043073da7..85e777c8dd89e99abe55aa4785546f4e6aec565b 100644
+--- a/src/main/java/com/homomc/beast/BeastConfig.java
++++ b/src/main/java/com/homomc/beast/BeastConfig.java
+@@ -208,6 +208,14 @@ public class BeastConfig {
+         pauseServerWhenEmpty = getBoolean("pause-server-when-empty", false);
+     }
+ 
++    public static boolean optimizeMinecartCollision;
++    public static int skipTickCount;
++
++    private static void optimizeMinecartCollision() {
++        optimizeMinecartCollision = getBoolean("optimize-minecart-collision.enabled", false);
++        skipTickCount = getInt("optimize-minecart-collision.skip-tick-count", 30);
++    }
++
+     public static boolean halloweenMobFeature;
+     private static void halloweenMobFeature() {
+         halloweenMobFeature = getBoolean("halloween-mob-feature", true);
+diff --git a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
+index 81dffccdcd26d2e5acf0743a627b260b71460900..1de9514ff30f9dc24aefc59eb8d41a32debe02bf 100644
+--- a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
++++ b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
+@@ -341,56 +341,59 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
+                 this.world.getServer().getPluginManager().callEvent(new org.bukkit.event.vehicle.VehicleMoveEvent(vehicle, from, to));
+             }
+             // CraftBukkit end
+-            if (this.v() == EntityMinecartAbstract.EnumMinecartType.RIDEABLE && this.motX * this.motX + this.motZ * this.motZ > 0.01D) {
+-                List list = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, 0.0D, 0.20000000298023224D), IEntitySelector.a(this));
+-
+-                if (!list.isEmpty()) {
+-                    for (int l = 0; l < list.size(); ++l) {
+-                        Entity entity = (Entity) list.get(l);
++            // Beast start - Optimize minecart collision
++            if (!com.homomc.beast.BeastConfig.optimizeMinecartCollision || this.ticksLived % com.homomc.beast.BeastConfig.skipTickCount == 0) {
++                if (this.v() == EntityMinecartAbstract.EnumMinecartType.RIDEABLE && (com.homomc.beast.BeastConfig.optimizeMinecartCollision || this.motX * this.motX + this.motZ * this.motZ > 0.01D)) {
++                    List list = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, 0.0D, 0.20000000298023224D), IEntitySelector.a(this));
++
++                    if (!list.isEmpty()) {
++                        for (int l = 0; l < list.size(); ++l) {
++                            Entity entity = (Entity) list.get(l);
++
++                            if (!(entity instanceof EntityHuman) && !(entity instanceof EntityIronGolem) && !(entity instanceof EntityMinecartAbstract) && !this.isVehicle() && !entity.isPassenger()) {
++                                // CraftBukkit start
++                                VehicleEntityCollisionEvent collisionEvent = new VehicleEntityCollisionEvent(vehicle, entity.getBukkitEntity());
++                                this.world.getServer().getPluginManager().callEvent(collisionEvent);
++
++                                if (collisionEvent.isCancelled()) {
++                                    continue;
++                                }
++                                // CraftBukkit end
++                                entity.startRiding(this);
++                            } else {
++                                // CraftBukkit start
++                                VehicleEntityCollisionEvent collisionEvent = new VehicleEntityCollisionEvent(vehicle, entity.getBukkitEntity());
++                                this.world.getServer().getPluginManager().callEvent(collisionEvent);
++
++                                if (collisionEvent.isCancelled()) {
++                                    continue;
++                                }
++                                // CraftBukkit end
++                                entity.collide(this);
++                            }
++                        }
++                    }
++                } else {
++                    Iterator iterator = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, 0.0D, 0.20000000298023224D)).iterator();
+ 
+-                        if (!(entity instanceof EntityHuman) && !(entity instanceof EntityIronGolem) && !(entity instanceof EntityMinecartAbstract) && !this.isVehicle() && !entity.isPassenger()) {
+-                            // CraftBukkit start
+-                            VehicleEntityCollisionEvent collisionEvent = new VehicleEntityCollisionEvent(vehicle, entity.getBukkitEntity());
+-                            this.world.getServer().getPluginManager().callEvent(collisionEvent);
++                    while (iterator.hasNext()) {
++                        Entity entity1 = (Entity) iterator.next();
+ 
+-                            if (collisionEvent.isCancelled()) {
+-                                continue;
+-                            }
+-                            // CraftBukkit end
+-                            entity.startRiding(this);
+-                        } else {
++                        if (!this.w(entity1) && entity1.isCollidable() && entity1 instanceof EntityMinecartAbstract) {
+                             // CraftBukkit start
+-                            VehicleEntityCollisionEvent collisionEvent = new VehicleEntityCollisionEvent(vehicle, entity.getBukkitEntity());
++                            VehicleEntityCollisionEvent collisionEvent = new VehicleEntityCollisionEvent(vehicle, entity1.getBukkitEntity());
+                             this.world.getServer().getPluginManager().callEvent(collisionEvent);
+ 
+                             if (collisionEvent.isCancelled()) {
+                                 continue;
+                             }
+                             // CraftBukkit end
+-                            entity.collide(this);
+-                        }
+-                    }
+-                }
+-            } else {
+-                Iterator iterator = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, 0.0D, 0.20000000298023224D)).iterator();
+-
+-                while (iterator.hasNext()) {
+-                    Entity entity1 = (Entity) iterator.next();
+-
+-                    if (!this.w(entity1) && entity1.isCollidable() && entity1 instanceof EntityMinecartAbstract) {
+-                        // CraftBukkit start
+-                        VehicleEntityCollisionEvent collisionEvent = new VehicleEntityCollisionEvent(vehicle, entity1.getBukkitEntity());
+-                        this.world.getServer().getPluginManager().callEvent(collisionEvent);
+-
+-                        if (collisionEvent.isCancelled()) {
+-                            continue;
++                            entity1.collide(this);
+                         }
+-                        // CraftBukkit end
+-                        entity1.collide(this);
+                     }
+                 }
+             }
+-
++            // Beast end
+             this.aq();
+         }
+     }
