@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Sun, 7 Apr 2024 16:43:25 +0800
+Subject: [PATCH] Dionysus-prevent-IndexOutOfBounds
+
+
+diff --git a/src/main/java/net/minecraft/server/Container.java b/src/main/java/net/minecraft/server/Container.java
+index bf684956d9919e54c8ccd7a3b152c1cf8454c9bc..49d64b10a23ad5adf824f8012a7cd20cc7260a82 100644
+--- a/src/main/java/net/minecraft/server/Container.java
++++ b/src/main/java/net/minecraft/server/Container.java
+@@ -112,7 +112,13 @@ public abstract class Container {
+     }
+ 
+     public Slot getSlot(int i) {
+-        return (Slot) this.slots.get(i);
++        // Beast start - Prevent IndexOutOfBoundsException
++        try {
++            return (Slot) this.slots.get(i);
++        } catch (IndexOutOfBoundsException e) {
++            return null;
++        }
++        // Beast end
+     }
+ 
+     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
