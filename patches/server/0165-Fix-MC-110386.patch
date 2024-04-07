@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Sun, 7 Apr 2024 16:14:42 +0800
+Subject: [PATCH] Fix-MC-110386
+
+
+diff --git a/src/main/java/net/minecraft/server/PathfinderGoalHurtByTarget.java b/src/main/java/net/minecraft/server/PathfinderGoalHurtByTarget.java
+index 50c21e9a134619aa7fa2b769f21c860eecf56134..c904f8f7a049cb1014d21c1539ff674009693292 100644
+--- a/src/main/java/net/minecraft/server/PathfinderGoalHurtByTarget.java
++++ b/src/main/java/net/minecraft/server/PathfinderGoalHurtByTarget.java
+@@ -66,6 +66,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
+     }
+ 
+     protected void a(EntityCreature entitycreature, EntityLiving entityliving) {
++        if (entitycreature == entityliving) return; // Beast - Fix MC-110386
+         entitycreature.setGoalTarget(entityliving, org.bukkit.event.entity.EntityTargetEvent.TargetReason.TARGET_ATTACKED_NEARBY_ENTITY, true); // CraftBukkit - reason
+     }
+ }
