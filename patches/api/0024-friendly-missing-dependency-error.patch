@@ -1,0 +1,20 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Tue, 9 Apr 2024 00:08:34 +0800
+Subject: [PATCH] friendly-missing-dependency-error
+
+
+diff --git a/src/main/java/org/bukkit/plugin/SimplePluginManager.java b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
+index 081b57231ca88e48a49dd808677de6e4bb1880b4..019842fd93ef76c8a7b1ac6de9a3a79517d0b92b 100644
+--- a/src/main/java/org/bukkit/plugin/SimplePluginManager.java
++++ b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
+@@ -214,8 +214,7 @@ public final class SimplePluginManager implements PluginManager {
+ 
+                             server.getLogger().log(
+                                 Level.SEVERE,
+-                                "Could not load '" + entry.getValue().getPath() + "' in folder '" + directory.getPath() + "'",
+-                                new UnknownDependencyException(dependency));
++                                "Could not load '" + entry.getValue().getPath() + "' in folder '" + directory.getPath() + "' " + "Missing dependency: " + dependency);
+                             break;
+                         }
+                     }
