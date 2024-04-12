@@ -5,7 +5,7 @@ Subject: [PATCH] friendly-missing-dependency-error
 
 
 diff --git a/src/main/java/org/bukkit/plugin/SimplePluginManager.java b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
-index 081b57231ca88e48a49dd808677de6e4bb1880b4..019842fd93ef76c8a7b1ac6de9a3a79517d0b92b 100644
+index 081b57231ca88e48a49dd808677de6e4bb1880b4..263ac8763609f4537125bd1eebd13cefaa315335 100644
 --- a/src/main/java/org/bukkit/plugin/SimplePluginManager.java
 +++ b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
 @@ -214,8 +214,7 @@ public final class SimplePluginManager implements PluginManager {

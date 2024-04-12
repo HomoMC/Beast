@@ -1,0 +1,46 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Fri, 12 Apr 2024 17:26:20 +0800
+Subject: [PATCH] configurable-movement-warnings
+
+
+diff --git a/src/main/java/com/homomc/beast/BeastConfig.java b/src/main/java/com/homomc/beast/BeastConfig.java
+index 85e777c8dd89e99abe55aa4785546f4e6aec565b..52807051abe14e33e07b2cfcf0426927d4f798e7 100644
+--- a/src/main/java/com/homomc/beast/BeastConfig.java
++++ b/src/main/java/com/homomc/beast/BeastConfig.java
+@@ -197,9 +197,12 @@ public class BeastConfig {
+     }
+ 
+     public static boolean emptyMessageWarning;
+-
++    public static boolean movedWronglyWarning;
++    public static boolean movedTooQuicklyWarning;
+     private static void logMessages() {
+         emptyMessageWarning = getBoolean("log.empty-messages-warning", false);
++        movedWronglyWarning = getBoolean("log.moved-wrongly-warning", true);
++        movedTooQuicklyWarning = getBoolean("log.moved-too-quickly-warning", true);
+     }
+ 
+     public static boolean pauseServerWhenEmpty;
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index 92ae80f58bbfd58750bfec2f41789cf4d9a1de65..08d307724983d2c9e7923c773482109f7ff371ab 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -609,7 +609,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+ 
+                                 if (d11 - d10 > Math.max(f2, Math.pow((double) (org.spigotmc.SpigotConfig.movedTooQuicklyMultiplier * (float) i * speed), 2)) /*&& (!this.minecraftServer.R() || !this.minecraftServer.Q().equals(this.player.getName()))*/) { // Spigot // Beast - Remove singleplayer code
+                                 // CraftBukkit end
+-                                    PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getName(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9));
++                                    if (com.homomc.beast.BeastConfig.movedTooQuicklyWarning) PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getName(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9));
+                                     this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
+                                     return;
+                                 }
+@@ -670,7 +670,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
+ 
+                             if (!this.player.L() && d11 > org.spigotmc.SpigotConfig.movedWronglyThreshold && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative() && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR) { // Spigot
+                                 flag1 = true;
+-                                PlayerConnection.LOGGER.warn("{} moved wrongly!", this.player.getName());
++                                if (com.homomc.beast.BeastConfig.movedWronglyWarning) PlayerConnection.LOGGER.warn("{} moved wrongly!", this.player.getName());
+                             }
+ 
+                             this.player.setLocation(d4, d5, d6, f, f1);
