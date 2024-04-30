@@ -1,0 +1,194 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Tue, 30 Apr 2024 11:28:41 +0800
+Subject: [PATCH] Carpet-fast-math-round
+
+
+diff --git a/src/main/java/com/homomc/beast/math/FastMath.java b/src/main/java/com/homomc/beast/math/FastMath.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..42af7aca584bf580c11484ea179ddda1ab2efb73
+--- /dev/null
++++ b/src/main/java/com/homomc/beast/math/FastMath.java
+@@ -0,0 +1,21 @@
++package com.homomc.beast.math;
++
++public class FastMath {
++    /**
++     * @author FX - PR0CESS
++     * ~1.25x faster than {@link Math#round(float)}
++     */
++    public static int round(float a) {
++        if (true) return a > 0F ? (int)(a + .5F) : (int)(a - .5F);
++        return Math.round(a);
++    }
++
++    /**
++     * @author FX - PR0CESS
++     * ~1.28x faster than {@link Math#round(double)}
++     */
++    public static long round(double a) {
++        if (true) return a > 0D ? (long)(a + .5D) : (long)(a - .5D);
++        return Math.round(a);
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/BiomeMesa.java b/src/main/java/net/minecraft/server/BiomeMesa.java
+index 57067c0910b4de438b8b44edcfc59187da129a51..c2826f05d4cb5760424d2c36621c320ef0ff1482 100644
+--- a/src/main/java/net/minecraft/server/BiomeMesa.java
++++ b/src/main/java/net/minecraft/server/BiomeMesa.java
+@@ -248,7 +248,7 @@ public class BiomeMesa extends BiomeBase {
+     }
+ 
+     private IBlockData a(int i, int j, int k) {
+-        int l = (int) Math.round(this.H.a((double) i / 512.0D, (double) i / 512.0D) * 2.0D);
++        int l = (int) com.homomc.beast.math.FastMath.round(this.H.a((double) i / 512.0D, (double) i / 512.0D) * 2.0D);
+ 
+         return this.D[(j + l + 64) % 64];
+     }
+diff --git a/src/main/java/net/minecraft/server/BlockDaylightDetector.java b/src/main/java/net/minecraft/server/BlockDaylightDetector.java
+index e9a909080d5176f351ca71b45b3d44af5292d649..713467bfe0b47a3d7939c63308b5fe6e6edd8696 100644
+--- a/src/main/java/net/minecraft/server/BlockDaylightDetector.java
++++ b/src/main/java/net/minecraft/server/BlockDaylightDetector.java
+@@ -40,7 +40,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
+                 float f1 = f < 3.1415927F ? 0.0F : 6.2831855F;
+ 
+                 f += (f1 - f) * 0.2F;
+-                i = Math.round((float) i * MathHelper.cos(f));
++                i = com.homomc.beast.math.FastMath.round((float) i * MathHelper.cos(f));
+             }
+ 
+             i = MathHelper.clamp(i, 0, 15);
+diff --git a/src/main/java/net/minecraft/server/EnchantmentManager.java b/src/main/java/net/minecraft/server/EnchantmentManager.java
+index 563ebe80ef1317b67c0518be8de7b4c3be5f2dca..b649c84c6dd6403b833c67d98f0df03c10437327 100644
+--- a/src/main/java/net/minecraft/server/EnchantmentManager.java
++++ b/src/main/java/net/minecraft/server/EnchantmentManager.java
+@@ -323,7 +323,7 @@ public class EnchantmentManager {
+             i += 1 + random.nextInt(j / 4 + 1) + random.nextInt(j / 4 + 1);
+             float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
+ 
+-            i = MathHelper.clamp(Math.round((float) i + (float) i * f), 1, Integer.MAX_VALUE);
++            i = MathHelper.clamp(com.homomc.beast.math.FastMath.round((float) i + (float) i * f), 1, Integer.MAX_VALUE);
+             List list = a(i, itemstack, flag);
+ 
+             if (!list.isEmpty()) {
+diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
+index 727bc5c094ecaeb4b3e51764ae853c98a8a6b175..9c1fb77261eafc4bba11d9f1a3f717701852ce39 100644
+--- a/src/main/java/net/minecraft/server/EntityHuman.java
++++ b/src/main/java/net/minecraft/server/EntityHuman.java
+@@ -882,7 +882,7 @@ public abstract class EntityHuman extends EntityLiving {
+                 this.setHealth(this.getHealth() - f);
+                 this.getCombatTracker().trackDamage(damagesource, f2, f);
+                 if (f < 3.4028235E37F) {
+-                    this.a(StatisticList.z, Math.round(f * 10.0F));
++                    this.a(StatisticList.z, com.homomc.beast.math.FastMath.round(f * 10.0F));
+                 }
+ 
+             }
+@@ -1157,7 +1157,7 @@ public abstract class EntityHuman extends EntityLiving {
+                         if (entity instanceof EntityLiving) {
+                             float f5 = f3 - ((EntityLiving) entity).getHealth();
+ 
+-                            this.a(StatisticList.y, Math.round(f5 * 10.0F));
++                            this.a(StatisticList.y, com.homomc.beast.math.FastMath.round(f5 * 10.0F));
+                             if (j > 0) {
+                                 // CraftBukkit start - Call a combust event when somebody hits with a fire enchanted item
+                                 EntityCombustByEntityEvent combustEvent = new EntityCombustByEntityEvent(this.getBukkitEntity(), entity.getBukkitEntity(), j * 4);
+@@ -1498,23 +1498,23 @@ public abstract class EntityHuman extends EntityLiving {
+             int i;
+ 
+             if (this.a(Material.WATER)) {
+-                i = Math.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
++                i = com.homomc.beast.math.FastMath.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
+                 if (i > 0) {
+                     this.a(StatisticList.q, i);
+                     this.applyExhaustion(world.spigotConfig.swimMultiplier * (float) i * 0.01F); // Spigot
+                 }
+             } else if (this.isInWater()) {
+-                i = Math.round(MathHelper.sqrt(d0 * d0 + d2 * d2) * 100.0F);
++                i = com.homomc.beast.math.FastMath.round(MathHelper.sqrt(d0 * d0 + d2 * d2) * 100.0F);
+                 if (i > 0) {
+                     this.a(StatisticList.m, i);
+                     this.applyExhaustion(world.spigotConfig.swimMultiplier * (float) i * 0.01F); // Spigot
+                 }
+             } else if (this.m_()) {
+                 if (d1 > 0.0D) {
+-                    this.a(StatisticList.o, (int) Math.round(d1 * 100.0D));
++                    this.a(StatisticList.o, (int) com.homomc.beast.math.FastMath.round(d1 * 100.0D));
+                 }
+             } else if (this.onGround) {
+-                i = Math.round(MathHelper.sqrt(d0 * d0 + d2 * d2) * 100.0F);
++                i = com.homomc.beast.math.FastMath.round(MathHelper.sqrt(d0 * d0 + d2 * d2) * 100.0F);
+                 if (i > 0) {
+                     if (this.isSprinting()) {
+                         this.a(StatisticList.l, i);
+@@ -1528,10 +1528,10 @@ public abstract class EntityHuman extends EntityLiving {
+                     }
+                 }
+             } else if (this.cP()) {
+-                i = Math.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
++                i = com.homomc.beast.math.FastMath.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
+                 this.a(StatisticList.v, i);
+             } else {
+-                i = Math.round(MathHelper.sqrt(d0 * d0 + d2 * d2) * 100.0F);
++                i = com.homomc.beast.math.FastMath.round(MathHelper.sqrt(d0 * d0 + d2 * d2) * 100.0F);
+                 if (i > 25) {
+                     this.a(StatisticList.p, i);
+                 }
+@@ -1542,7 +1542,7 @@ public abstract class EntityHuman extends EntityLiving {
+ 
+     private void l(double d0, double d1, double d2) {
+         if (this.isPassenger()) {
+-            int i = Math.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
++            int i = com.homomc.beast.math.FastMath.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
+ 
+             if (i > 0) {
+                 if (this.bJ() instanceof EntityMinecartAbstract) {
+@@ -1562,7 +1562,7 @@ public abstract class EntityHuman extends EntityLiving {
+     public void e(float f, float f1) {
+         if (!this.abilities.canFly) {
+             if (f >= 2.0F) {
+-                this.a(StatisticList.n, (int) Math.round((double) f * 100.0D));
++                this.a(StatisticList.n, (int) com.homomc.beast.math.FastMath.round((double) f * 100.0D));
+             }
+ 
+             super.e(f, f1);
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index 78e5231e566f1ec7788064a3800317bfd7cfc495..c80ada2ad5d858e63755206b63c9b19a22ad4050 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -1475,7 +1475,7 @@ public abstract class EntityLiving extends Entity {
+                     // PAIL: Be sure to drag all this code from the EntityHuman subclass each update.
+                     ((EntityHuman) this).applyExhaustion(damagesource.getExhaustionCost());
+                     if (f < 3.4028235E37F) {
+-                        ((EntityHuman) this).a(StatisticList.z, Math.round(f * 10.0F));
++                        ((EntityHuman) this).a(StatisticList.z, com.homomc.beast.math.FastMath.round(f * 10.0F));
+                     }
+                 }
+                 // CraftBukkit end
+diff --git a/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java b/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
+index b28de2bc4b6da926135b9ef1f0eac307ebf11db3..d84ff1fe7b8303021c576991e4d589de2da4e2bf 100644
+--- a/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
++++ b/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
+@@ -64,7 +64,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
+     public void n() {
+         if (this.world.D()) { // Beast - Remove isClientSide check
+             float f = this.aw();
+-            BlockPosition blockposition = this.bJ() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
++            BlockPosition blockposition = this.bJ() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) com.homomc.beast.math.FastMath.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) com.homomc.beast.math.FastMath.round(this.locY), this.locZ);
+ 
+             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.h(blockposition)) {
+                 boolean flag = true;
+diff --git a/src/main/java/net/minecraft/server/WorldGenStronghold.java b/src/main/java/net/minecraft/server/WorldGenStronghold.java
+index a3b958e0109ea54e478d543324151e9972d86541..3d0317cf5df5be7829ac45bdb0f221768e2a6600 100644
+--- a/src/main/java/net/minecraft/server/WorldGenStronghold.java
++++ b/src/main/java/net/minecraft/server/WorldGenStronghold.java
+@@ -130,8 +130,8 @@ public class WorldGenStronghold extends StructureGenerator {
+         if (l < this.d.length) {
+             for (int i1 = 0; i1 < this.d.length; ++i1) {
+                 double d1 = 4.0D * this.h + this.h * (double) j * 6.0D + (random.nextDouble() - 0.5D) * this.h * 2.5D;
+-                int j1 = (int) Math.round(Math.cos(d0) * d1);
+-                int k1 = (int) Math.round(Math.sin(d0) * d1);
++                int j1 = (int) com.homomc.beast.math.FastMath.round(Math.cos(d0) * d1);
++                int k1 = (int) com.homomc.beast.math.FastMath.round(Math.sin(d0) * d1);
+                 BlockPosition blockposition = this.g.getWorldChunkManager().a((j1 << 4) + 8, (k1 << 4) + 8, 112, this.a, random);
+ 
+                 if (blockposition != null) {
