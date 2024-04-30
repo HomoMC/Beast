@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Wed, 1 May 2024 06:04:21 +0800
+Subject: [PATCH] virtual-thread-for-MC-Util
+
+
+diff --git a/src/main/java/net/minecraft/server/MCUtil.java b/src/main/java/net/minecraft/server/MCUtil.java
+index 70a1dbdb31d44fcabce54fd1b78f29b1848dcd26..7854964c3dbde193cc5b8d2fe0cc8db02d570cee 100644
+--- a/src/main/java/net/minecraft/server/MCUtil.java
++++ b/src/main/java/net/minecraft/server/MCUtil.java
+@@ -23,18 +23,17 @@ import java.util.function.Supplier;
+ import java.util.regex.Pattern;
+ 
+ public final class MCUtil {
+-    private static Executor asyncExecutor;
++    private static Executor asyncExecutor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("Paper Async Task Handler Thread - %1$d").build());
+ 
+     static {
+         if (VirtualThreadService.getJavaMajorVersion() >= VirtualThreadService.minimumJavaMajorVersionWithoutFeaturePreview && BeastConfig.virtualThreadForAsyncExecutor) {
+             try {
+-                Method newThreadPerTaskExecutor = Executors.class.getMethod("newThreadPerTaskExecutor", ThreadFactory.class);
+-                asyncExecutor = (Executor) newThreadPerTaskExecutor.invoke(null, VirtualThreadService.get().createFactory());
++                asyncExecutor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("Paper Async Task Handler Thread - %1$d").setThreadFactory(VirtualThreadService.get().createFactory()).build());
+             } catch (Exception ignored) {
+                 System.err.println("Failed to create Virtual Thread executor! Fallback to default executor.");
++                asyncExecutor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("Paper Async Task Handler Thread - %1$d").build());
+             }
+         }
+-        asyncExecutor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("Paper Async Task Handler Thread - %1$d").build());
+     }
+ 
+     private MCUtil() {}
