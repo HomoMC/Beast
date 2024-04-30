@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: HaHaWTH <id_cn00@outlook.com>
+Date: Wed, 1 May 2024 02:53:15 +0800
+Subject: [PATCH] virtual-thread-for-chunkio
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java b/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
+index cf1258c559ce47bfb0f3dbd94302eacfd5fc08a0..80313bfaaca8b2e1fd3c4eaa86ebe49742b09747 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
+@@ -217,7 +217,7 @@ public final class AsynchronousExecutor<P, T, C, E extends Throwable> {
+     final CallBackProvider<P, T, C, E> provider;
+     final Queue<Task> finished = new ConcurrentLinkedQueue<Task>();
+     final Map<P, Task> tasks = new HashMap<P, Task>();
+-    final ThreadPoolExecutor pool;
++    ThreadPoolExecutor pool;
+ 
+     /**
+      * Uses a thread pool to pass executions to the provider.
+@@ -226,7 +226,17 @@ public final class AsynchronousExecutor<P, T, C, E extends Throwable> {
+     public AsynchronousExecutor(final CallBackProvider<P, T, C, E> provider, final int coreSize) {
+         Validate.notNull(provider, "Provider cannot be null");
+         this.provider = provider;
+-
++        // Beast start - Virtual Threads for async executor
++        if (com.homomc.beast.virtualthreads.VirtualThreadService.getJavaMajorVersion() >= com.homomc.beast.virtualthreads.VirtualThreadService.minimumJavaMajorVersionWithoutFeaturePreview && com.homomc.beast.BeastConfig.virtualThreadForAsyncExecutor) {
++            try {
++                pool = new ThreadPoolExecutor(coreSize, Integer.MAX_VALUE, 60l, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), provider);
++                pool.setThreadFactory(com.homomc.beast.virtualthreads.VirtualThreadService.get().createFactory());
++                return;
++            } catch (Exception e) {
++                System.err.println("Failed to create Virtual Thread executor! Fallback to default executor.");
++            }
++        }
++        // Beast end
+         // We have an unbound queue size so do not need a max thread size
+         pool = new ThreadPoolExecutor(coreSize, Integer.MAX_VALUE, 60l, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), provider);
+     }
