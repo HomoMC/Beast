@@ -19,6 +19,7 @@ A Paper 1.12.2 fork aims to provide extreme performance, bug fixes, and improvem
 - **More events make your server more fun**.
 - **Support Virtual Threads which is introduced in Java 21**
 - Pause server when no players online(configurable)
+- Configurable 1.8 old combat method
 
 ### Java >= 8 is required, Java >= 21 is recommended.
 
