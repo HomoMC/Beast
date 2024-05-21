@@ -62,7 +62,7 @@ Beast-Server maven dependency:
 
 ### Great thanks to these projects:
 
-- Reaper (which is the base of Beast)
+- **Reaper (which is the base of Beast)**
 - Leaf
 - Polpot
 - Randar Explanation
